@@ -1,5 +1,3 @@
-- Releases slide: make clickable/link to real releases in GH
-- Specify link to "view full roadmap and milestones on github" via config
 - Welcome slide: "OWASP Project" - include optional maturity level (fixed selection)
 - Community highlights: subtitle, feels very marketing-ish
 - Community highlights: Talks / mentions - rename, include things like interop tools as well

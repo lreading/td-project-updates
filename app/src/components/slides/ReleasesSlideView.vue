@@ -3,11 +3,17 @@ import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 
-import type { GeneratedPresentationData, PresentationDeck, ReleasesSlide } from '../../types/content'
+import type {
+  GeneratedPresentationData,
+  PresentationDeck,
+  ReleasesSlide,
+  SiteContent,
+} from '../../types/content'
 
 const props = defineProps<{
   deck: PresentationDeck
   generated: GeneratedPresentationData
+  site: SiteContent
   slide: ReleasesSlide
   slideNumber: number
   slideTotal: number
@@ -15,8 +21,14 @@ const props = defineProps<{
 
 const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' })
 const releases = computed(() =>
-  props.generated.releases.filter((release) => props.slide.featured_release_ids.includes(release.id)),
+  props.generated.releases
+    .filter((release) => props.slide.featured_release_ids.includes(release.id))
+    .map((release) => ({
+      ...release,
+      githubUrl: release.url || `${props.site.links.repository.url}/releases/tag/${release.version}`,
+    })),
 )
+const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`)
 </script>
 
 <template>
@@ -29,7 +41,15 @@ const releases = computed(() =>
   >
     <div class="timeline-container">
       <div class="timeline-line"></div>
-      <div v-for="(release, index) in releases" :key="release.id" class="release-card" :class="{ latest: index === 0 }">
+      <a
+        v-for="(release, index) in releases"
+        :key="release.id"
+        class="release-card"
+        :class="{ latest: index === 0 }"
+        :href="release.githubUrl"
+        target="_blank"
+        rel="noreferrer"
+      >
         <div class="timeline-node"></div>
         <div class="card-header">
           <div class="flex items-center">
@@ -43,10 +63,10 @@ const releases = computed(() =>
         <ul class="changelog-list">
           <li v-for="item in release.summary_bullets" :key="item" class="changelog-item">{{ item }}</li>
         </ul>
-      </div>
+      </a>
 
       <div class="cta-container">
-        <a class="github-link" href="https://github.com/OWASP/threat-dragon/releases" target="_blank" rel="noreferrer">
+        <a class="github-link" :href="releasesUrl" target="_blank" rel="noreferrer">
           <FontAwesomeIcon :icon="['fab', 'github']" /> View all releases on GitHub
         </a>
       </div>
@@ -87,6 +107,7 @@ const releases = computed(() =>
     transform 0.2s,
     border-color 0.2s;
   margin-left: 20px;
+  text-decoration: none;
 }
 
 .release-card:hover {

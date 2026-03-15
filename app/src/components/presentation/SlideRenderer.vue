@@ -45,6 +45,7 @@ defineProps<{
     v-else-if="slide.kind === 'releases'"
     :deck="record.deck"
     :generated="record.generated"
+    :site="site"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
