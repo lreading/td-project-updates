@@ -1,0 +1,146 @@
+@import "@fontsource/poppins/latin-300.css";
+@import "@fontsource/poppins/latin-400.css";
+@import "@fontsource/poppins/latin-500.css";
+@import "@fontsource/poppins/latin-600.css";
+@import "@fontsource/poppins/latin-700.css";
+@import "@fontsource/roboto-mono/latin-400.css";
+@import "@fontsource/roboto-mono/latin-500.css";
+@import "@fontsource/roboto-mono/latin-700.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-background: #121824;
+  --panel-background: rgba(18, 24, 36, 0.92);
+  --accent-color: #e8341c;
+  --accent-soft: #ff8d78;
+  --primary-text: #f5f7ff;
+  --secondary-text: #d0d7e8;
+  --muted-text: #93a0bd;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Roboto Mono", "SFMono-Regular", ui-monospace, monospace;
+  color: var(--primary-text);
+  background-color: var(--page-background);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top left, rgba(232, 52, 28, 0.14), transparent 24rem),
+    linear-gradient(180deg, #121824 0%, #1b2434 100%);
+}
+
+body,
+button,
+input,
+textarea,
+select,
+a {
+  color: var(--primary-text);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.page {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.page--centered {
+  align-items: center;
+  justify-items: center;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.page-eyebrow {
+  color: var(--accent-soft);
+  font: 600 0.875rem/1.2 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.button:hover {
+  border-color: rgba(232, 52, 28, 0.5);
+}
+
+.button--primary {
+  background-color: rgba(232, 52, 28, 0.15);
+}
+
+.button--secondary {
+  background-color: rgba(28, 35, 51, 0.84);
+}
+
+@media (min-width: 960px) {
+  .page {
+    padding: 2rem;
+  }
+}

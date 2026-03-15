@@ -1,0 +1,17 @@
+site:
+  title: Threat Dragon Quarterly Updates
+  tagline: making threat modeling less threatening
+  eyebrow: OWASP Project
+  home_intro: Quarterly community updates, published as a static presentation app.
+  home_cta_label: View latest presentation
+  archive_cta_label: Browse previous presentations
+  links:
+    repository:
+      label: GitHub Repo
+      url: https://github.com/OWASP/threat-dragon
+    docs:
+      label: Threat Dragon Docs
+      url: https://threatdragon.com/docs
+    owasp:
+      label: OWASP Project
+      url: https://owasp.org/www-project-threat-dragon/

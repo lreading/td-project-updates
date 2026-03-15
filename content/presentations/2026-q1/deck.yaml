@@ -1,0 +1,134 @@
+presentation:
+  id: 2026-q1
+  year: 2026
+  quarter: 1
+  title: OWASP Threat Dragon Quarterly Community Update
+  subtitle: Q1 2026
+  slides:
+    - kind: title
+      enabled: true
+      quote: making threat modeling less threatening
+    - kind: agenda
+      enabled: true
+      subtitle: Overview of today's update
+    - kind: recent-updates
+      enabled: true
+      subtitle: Summary of key activities and progress
+      sections:
+        - title: Fixes and improvements
+          bullets:
+            - Performance optimization for large threat models
+            - Resolved rendering issues in diagram editor
+            - Updated electron dependencies to latest stable version
+            - Enhanced PDF report generation speed
+            - Fixed keyboard shortcut conflicts on MacOS
+        - title: New features
+          bullets:
+            - Dark mode support for desktop application
+            - Custom threat rule templates integration
+            - Enhanced GitHub authentication flow
+            - New diagram shapes for cloud infrastructure
+            - Auto-save functionality for local files
+        - title: Community activity
+          bullets:
+            - 15 new contributors welcomed this quarter
+            - Hosted 2 community workshops on Discord
+            - Launched new documentation portal theme
+            - Translated UI into 3 new languages
+            - Over 500 new stars on GitHub repository
+    - kind: releases
+      enabled: true
+      subtitle: Recent version history and changelog
+      featured_release_ids:
+        - v2.3.0
+        - v2.2.1
+        - v2.2.0
+    - kind: roadmap
+      enabled: true
+      subtitle: Future direction and upcoming milestones
+      milestones:
+        - label: Completed
+          status: completed
+          items:
+            - v2.3 release
+            - Dark mode UI
+        - label: In progress
+          status: in-progress
+          items:
+            - Cloud integrations
+            - Template engine
+        - label: Planned
+          status: planned
+          items:
+            - Collaborative editing
+            - GitHub Actions integration
+        - label: Future
+          status: future
+          items:
+            - AI Threat Suggestions
+            - Mobile Companion App
+      themes:
+        - category: UX & Documentation
+          target: Complete overhaul of getting started guides and interactive tutorials
+        - category: Model Engine
+          target: Performance optimization for complex nested diagrams (100+ elements)
+        - category: Integrations
+          target: Native support for GitLab and Bitbucket repositories alongside GitHub
+    - kind: contributor-spotlight
+      enabled: true
+      subtitle: Recognizing our top community contributors this quarter
+      spotlight:
+        - login: schen_dev
+          focus_area: UI & Accessibility
+          summary: Led the complete overhaul of the dark mode color system and fixed 12 accessibility issues in the diagram editor, making Threat Dragon usable for everyone.
+        - login: mjohnson_sec
+          focus_area: Core Engine
+          summary: Implemented the new custom rule template engine that allows organizations to define their own threat libraries and compliance checks.
+        - login: erodriguez_docs
+          focus_area: Documentation
+          summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
+    - kind: community-highlights
+      enabled: true
+      subtitle: Engagement and growth metrics for Q1 2026
+      stat_keys:
+        - stars
+        - issues_closed
+        - prs_merged
+        - new_contributors
+      mentions:
+        - type: Conference talk
+          title: '"Scaling Threat Modeling with OWASP Threat Dragon" at AppSec Global 2025'
+          url_label: Watch recording on YouTube
+          url: https://www.youtube.com/
+        - type: Blog post
+          title: 'Top 5 Open Source Tools for Security Architects: Why We Choose Threat Dragon'
+          url_label: Read article on SecurityWeekly.com
+          url: https://owasp.org/
+        - type: Podcast
+          title: 'Developer Security Radio: Interview with Mike Goodwin on the future of Threat Modeling'
+          url_label: Listen on Spotify
+          url: https://owasp.org/
+    - kind: how-to-contribute
+      enabled: true
+      subtitle: Join the mission to make threat modeling less threatening
+      cards:
+        - title: Report Bugs
+          description: Found an issue? Let us know! Please include reproduction steps, environment details, and screenshots if possible.
+          url_label: Submit an issue
+          url: https://github.com/OWASP/threat-dragon/issues
+        - title: Submit Code
+          description: Pick up an issue labelled "good first issue". Fork the repository, branch off main, and submit your Pull Request.
+          url_label: Read CONTRIBUTING.md
+          url: https://github.com/OWASP/threat-dragon/blob/main/CONTRIBUTING.md
+        - title: Improve Docs
+          description: Help us make Threat Dragon easier to use. Fix typos, add user guides, or improve the API documentation.
+          url_label: Edit docs on GitHub
+          url: https://github.com/OWASP/threat-dragon
+        - title: Spread the Word
+          description: Share your threat models, write blog posts, give talks, or simply star the repository to help us grow.
+          url_label: Share & Star
+          url: https://github.com/OWASP/threat-dragon
+    - kind: thank-you
+      enabled: true
+      heading: Thank you
+      message: See you next quarter.

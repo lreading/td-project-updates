@@ -1,0 +1,239 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+
+import type {
+  CommunityHighlightsSlide,
+  GeneratedPresentationData,
+  PresentationDeck,
+} from '../../types/content'
+
+const props = defineProps<{
+  deck: PresentationDeck
+  generated: GeneratedPresentationData
+  slide: CommunityHighlightsSlide
+  slideNumber: number
+}>()
+
+const mentionIcons = ['microphone-alt', 'rss', 'podcast']
+const statIcons = ['star', 'check-circle', 'code-branch', 'user-plus']
+const trendLabels = ['+12% vs last Q', '+8% vs last Q', '+15% vs last Q', '+5 vs last Q']
+
+const stats = computed(() =>
+  props.slide.stat_keys.map((key, index) => ({
+    ...props.generated.stats[key],
+    icon: statIcons[index],
+    trend: trendLabels[index],
+  })),
+)
+</script>
+
+<template>
+  <StandardSlideLayout
+    title="Community Highlights"
+    :subtitle="slide.subtitle"
+    :slide-number="slideNumber"
+  >
+    <div class="content-grid">
+      <div class="left-column">
+        <div class="section-header">
+          <h2 class="section-title"><FontAwesomeIcon icon="bullhorn" /> Talks &amp; Mentions</h2>
+        </div>
+        <div class="mentions-list">
+          <div v-for="(mention, index) in slide.mentions" :key="mention.title" class="mention-card">
+            <div class="mention-type"><FontAwesomeIcon :icon="mentionIcons[index]" /> {{ mention.type }}</div>
+            <h3 class="mention-title">{{ mention.title }}</h3>
+            <div class="mention-link">
+              <FontAwesomeIcon icon="external-link-alt" /> {{ mention.url_label }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <div class="section-header">
+          <h2 class="section-title"><FontAwesomeIcon icon="chart-line" /> Stats This Quarter</h2>
+        </div>
+        <div class="stats-grid">
+          <div v-for="stat in stats" :key="stat.label" class="stat-card">
+            <div class="stat-icon">
+              <FontAwesomeIcon :icon="stat.icon" />
+            </div>
+            <p class="stat-value">{{ stat.current.toLocaleString() }}</p>
+            <p class="stat-label">{{ stat.label }}</p>
+            <div class="trend-indicator">
+              <FontAwesomeIcon icon="arrow-up" /> {{ stat.trend }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </StandardSlideLayout>
+</template>
+
+<style scoped>
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  flex: 1;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #333344;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.section-title i {
+  color: #e8341c;
+  margin-right: 12px;
+}
+
+.mentions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mention-card {
+  background-color: #252535;
+  border-radius: 8px;
+  padding: 20px;
+  border-left: 3px solid #333344;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.mention-card:hover {
+  border-left-color: #e8341c;
+  background-color: #2a2a3e;
+  transform: translateX(5px);
+}
+
+.mention-type {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: #e8341c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.mention-type i {
+  margin-right: 6px;
+}
+
+.mention-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.mention-link {
+  font-size: 13px;
+  color: #8888aa;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.mention-link i {
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-content: start;
+}
+
+.stat-card {
+  background-color: #252535;
+  border-radius: 8px;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #333344;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  border-color: #e8341c;
+  background-color: #2a2a3e;
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(232, 52, 28, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  color: #e8341c;
+  font-size: 20px;
+}
+
+.stat-value {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 5px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #8888aa;
+  margin: 0;
+}
+
+.trend-indicator {
+  font-size: 12px;
+  color: #4ade80;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.trend-indicator i {
+  margin-right: 4px;
+}
+
+@media (max-width: 959px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

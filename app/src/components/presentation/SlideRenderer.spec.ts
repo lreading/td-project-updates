@@ -1,0 +1,39 @@
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+
+import { contentRepository } from '../../content/ContentRepository'
+import SlideRenderer from './SlideRenderer.vue'
+
+describe('SlideRenderer', () => {
+  const site = contentRepository.getSiteContent()
+  const record = contentRepository.getPresentation('2026-q1')
+  const slides = record.deck.slides.filter((slide) => slide.enabled)
+
+  it('renders every enabled slide kind from the YAML deck', () => {
+    const headings = [
+      'OWASP Threat Dragon Quarterly Community Update',
+      'Agenda',
+      'What Happened Since Last Update',
+      'Releases',
+      'Roadmap',
+      'Contributor Spotlight',
+      'Community Highlights',
+      'How to Contribute',
+      'Thank You',
+    ]
+
+    slides.forEach((slide, index) => {
+      const wrapper = mount(SlideRenderer, {
+        props: {
+          record,
+          site,
+          slide,
+          slideNumber: index + 1,
+          slideTotal: slides.length,
+        },
+      })
+
+      expect(wrapper.text()).toContain(headings[index])
+    })
+  })
+})
