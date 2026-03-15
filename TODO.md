@@ -1,5 +1,3 @@
-- Contributor spotlight - single contributor, information next to it in a card
-- Agenda slide: roadmap, while multiple slides, should just be 1 section for "roadmap"
 - Releases slide: make clickable/link to real releases in GH
 - Specify link to "view full roadmap and milestones on github" via config
 - Welcome slide: "OWASP Project" - include optional maturity level (fixed selection)

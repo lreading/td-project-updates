@@ -13,11 +13,24 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const agendaItems = computed(() =>
-  props.deck.slides
+const agendaItems = computed(() => {
+  let roadmapIncluded = false
+
+  return props.deck.slides
     .filter((entry) => entry.enabled && entry.kind !== 'title' && entry.kind !== 'agenda')
-    .map((entry) => getSlideLabel(entry, props.deck)),
-)
+    .flatMap((entry) => {
+      if (entry.kind === 'roadmap') {
+        if (roadmapIncluded) {
+          return []
+        }
+
+        roadmapIncluded = true
+        return ['Roadmap']
+      }
+
+      return [getSlideLabel(entry, props.deck)]
+    })
+})
 </script>
 
 <template>
