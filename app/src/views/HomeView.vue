@@ -45,8 +45,7 @@ const badge = computed(() => getProjectBadgeDisplay(site))
           :to="{ name: 'presentation', params: { presentationId: featuredPresentation.id } }"
           class="hero-cta hero-cta--primary"
         >
-          <span class="hero-cta__label">{{ site.home_cta_label }}</span>
-          <span class="hero-cta__meta">{{ featuredPresentation.subtitle }}</span>
+          <span class="hero-cta__single">{{ site.home_cta_label }}</span>
         </RouterLink>
         <RouterLink :to="{ name: 'archive' }" class="hero-cta hero-cta--secondary">
           <span class="hero-cta__single">{{ site.archive_cta_label }}</span>
@@ -292,8 +291,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 }
 
 .hero-cta--primary {
-  flex-direction: column;
-  gap: 0.08rem;
   color: #fff7f3;
   background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
   border-color: rgba(255, 133, 108, 0.65);
@@ -322,21 +319,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 .hero-cta--secondary:hover {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.08) 100%);
   border-color: rgba(255, 255, 255, 0.26);
-}
-
-.hero-cta__label {
-  display: block;
-  font-size: 1.05rem;
-  line-height: 1.05;
-  font-weight: 500;
-}
-
-.hero-cta__meta {
-  display: block;
-  font-size: 0.95rem;
-  line-height: 1.05;
-  font-weight: 700;
-  letter-spacing: -0.01em;
 }
 
 .hero-cta__single {

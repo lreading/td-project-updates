@@ -104,27 +104,30 @@ defineEmits<{
 }
 
 .toolbar-mode-button {
-  border: 1px solid rgba(232, 52, 28, 0.28);
+  border: 1px solid rgba(255, 133, 108, 0.65);
   border-radius: 999px;
-  background:
-    linear-gradient(135deg, rgba(232, 52, 28, 0.16), rgba(232, 52, 28, 0.08)),
-    rgba(28, 35, 51, 0.9);
-  box-shadow: 0 10px 30px rgba(232, 52, 28, 0.12);
-  color: var(--primary-text);
-  padding: 0.8rem 1.2rem;
+  background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(232, 52, 28, 0.28);
+  color: #fff7f3;
+  padding: 0.85rem 1.35rem;
+  font-weight: 500;
   cursor: pointer;
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
+    box-shadow 160ms ease,
     transform 160ms ease;
 }
 
 .toolbar-mode-button:hover {
   transform: translateY(-1px);
-  border-color: rgba(232, 52, 28, 0.6);
-  background:
-    linear-gradient(135deg, rgba(232, 52, 28, 0.22), rgba(232, 52, 28, 0.1)),
-    rgba(28, 35, 51, 0.94);
+  border-color: rgba(255, 160, 138, 0.75);
+  background: linear-gradient(180deg, #f45d44 0%, #ea3c22 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 14px 30px rgba(232, 52, 28, 0.34);
 }
 
 @media (max-width: 640px) {

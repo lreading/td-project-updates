@@ -49,6 +49,10 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Q3 2026')
+    expect(wrapper.findAllComponents(RouterLinkStub)[0].props('to')).toEqual({
+      name: 'presentation',
+      params: { presentationId: '2026-q3' },
+    })
+    expect(wrapper.text()).not.toContain('Q3 2026')
   })
 })

@@ -308,6 +308,13 @@ function goToPage(page: number): void {
 
 .archive-link {
   padding: 0.75rem 1rem;
+  border-color: rgba(255, 133, 108, 0.65);
+  background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(232, 52, 28, 0.28);
+  font-size: 1.02rem;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -323,6 +330,14 @@ function goToPage(page: number): void {
   background-color: rgba(232, 52, 28, 0.2);
   color: #ffffff;
   transform: translateY(-1px);
+}
+
+.archive-link:hover {
+  border-color: rgba(255, 160, 138, 0.75);
+  background: linear-gradient(180deg, #f45d44 0%, #ea3c22 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 14px 30px rgba(232, 52, 28, 0.34);
 }
 
 .archive-page-button:disabled {
