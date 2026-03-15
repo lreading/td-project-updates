@@ -5,6 +5,9 @@ site:
     label: OWASP Lab Project
     fa_icon: fa-flask
     icon_position: before
+  presentation_logo:
+    url: /cupcake-logo.png
+    alt: Threat Dragon logo
   home_intro: Quarterly community updates, published as a static presentation app.
   home_cta_label: View latest presentation
   archive_cta_label: Browse previous presentations

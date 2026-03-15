@@ -11,6 +11,9 @@ site:
     label: Demo
     fa_icon: fa-flask
     icon_position: before
+  presentation_logo:
+    url: /favicon.ico
+    alt: Demo logo
   home_intro: Intro
   home_cta_label: Open
   archive_cta_label: Archive

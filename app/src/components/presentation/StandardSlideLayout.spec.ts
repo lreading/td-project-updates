@@ -1,9 +1,14 @@
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi, afterEach } from 'vitest'
 
+import { contentRepository } from '../../content/ContentRepository'
 import StandardSlideLayout from './StandardSlideLayout.vue'
 
 describe('StandardSlideLayout', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('renders title, subtitle, dots, and slot content by default', () => {
     const wrapper = mount(StandardSlideLayout, {
       props: {
@@ -21,6 +26,7 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.text()).toContain('Future direction')
     expect(wrapper.text()).toContain('4/12')
     expect(wrapper.find('.bg-dots').exists()).toBe(true)
+    expect(wrapper.find('.logo-image').attributes('src')).toBe('/cupcake-logo.png')
     expect(wrapper.find('.slot-marker').exists()).toBe(true)
   })
 
@@ -37,5 +43,57 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.text()).toContain('Agenda')
     expect(wrapper.find('.subtitle').exists()).toBe(false)
     expect(wrapper.find('.bg-dots').exists()).toBe(false)
+  })
+
+  it('falls back to the dragon icon when no presentation logo is configured', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Updates',
+      tagline: 'Quarterly updates',
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://example.com/repo',
+        },
+      },
+    })
+
+    const wrapper = mount(StandardSlideLayout, {
+      props: {
+        title: 'Agenda',
+        slideNumber: 2,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.logo-image').exists()).toBe(false)
+    expect(wrapper.findComponent({ name: 'FontAwesomeIcon' }).exists()).toBe(true)
+  })
+
+  it('uses the site title as alt text when the logo alt is blank', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Updates',
+      tagline: 'Quarterly updates',
+      presentation_logo: {
+        url: 'https://example.com/logo.png',
+        alt: '   ',
+      },
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://example.com/repo',
+        },
+      },
+    })
+
+    const wrapper = mount(StandardSlideLayout, {
+      props: {
+        title: 'Agenda',
+        slideNumber: 2,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.logo-image').attributes('src')).toBe('https://example.com/logo.png')
+    expect(wrapper.find('.logo-image').attributes('alt')).toBe('Threat Dragon Updates')
   })
 })

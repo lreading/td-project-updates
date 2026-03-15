@@ -3,6 +3,11 @@ export interface SiteLink {
   url: string
 }
 
+export interface PresentationLogo {
+  url?: string
+  alt?: string
+}
+
 export interface ProjectBadge {
   label?: string
   fa_icon?: string
@@ -13,6 +18,7 @@ export interface SiteContent {
   title: string
   tagline: string
   project_badge?: ProjectBadge
+  presentation_logo?: PresentationLogo
   home_intro: string
   home_cta_label: string
   archive_cta_label: string

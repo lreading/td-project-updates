@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
+import { contentRepository } from '../../content/ContentRepository'
+
 withDefaults(
   defineProps<{
     title: string
@@ -14,6 +18,10 @@ withDefaults(
     showDots: true,
   },
 )
+
+const site = contentRepository.getSiteContent()
+const logoUrl = computed(() => site.presentation_logo?.url?.trim() || undefined)
+const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || site.title)
 </script>
 
 <template>
@@ -21,7 +29,13 @@ withDefaults(
     <div class="layout-grid">
       <div class="sidebar">
         <div class="logo-icon">
-          <FontAwesomeIcon icon="dragon" />
+          <img
+            v-if="logoUrl"
+            :src="logoUrl"
+            :alt="logoAlt"
+            class="logo-image"
+          />
+          <FontAwesomeIcon v-else icon="dragon" />
         </div>
         <div class="slide-number">{{ slideNumber }}/{{ slideTotal }}</div>
       </div>
@@ -102,6 +116,12 @@ withDefaults(
   color: #e8341c;
   border: 2px solid #e8341c;
   margin-bottom: auto;
+}
+
+.logo-image {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
 }
 
 .slide-number {
