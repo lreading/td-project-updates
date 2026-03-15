@@ -47,8 +47,8 @@ const badge = computed(() => getProjectBadgeDisplay(site))
         >
           <span class="hero-cta__single">{{ site.home_cta_label }}</span>
         </RouterLink>
-        <RouterLink :to="{ name: 'archive' }" class="hero-cta hero-cta--secondary">
-          <span class="hero-cta__single">{{ site.archive_cta_label }}</span>
+        <RouterLink :to="{ name: 'presentations' }" class="hero-cta hero-cta--secondary">
+          <span class="hero-cta__single">{{ site.presentations_cta_label }}</span>
         </RouterLink>
       </div>
 
@@ -203,6 +203,7 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 
 .mascot-glow {
   filter: drop-shadow(0 0 20px rgba(232, 52, 28, 0.4));
+  animation: float 6s ease-in-out infinite;
 }
 
 .hero-copy {
@@ -257,6 +258,18 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   line-height: 1.7;
   color: #9ca3af;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .hero-actions {

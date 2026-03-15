@@ -2,16 +2,16 @@ import { mount, RouterLinkStub } from '@vue/test-utils'
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
 
 import { contentRepository } from '../content/ContentRepository'
-import ArchiveView from './ArchiveView.vue'
+import PresentationsView from './PresentationsView.vue'
 
-describe('ArchiveView', () => {
+describe('PresentationsView', () => {
   beforeEach(() => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
       tagline: 'Tagline',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
-      archive_cta_label: 'Archive',
+      presentations_cta_label: 'Presentations',
       links: {},
     })
   })
@@ -34,7 +34,7 @@ describe('ArchiveView', () => {
       },
     ])
 
-    const wrapper = mount(ArchiveView, {
+    const wrapper = mount(PresentationsView, {
       global: {
         stubs: {
           RouterLink: RouterLinkStub,
@@ -70,7 +70,7 @@ describe('ArchiveView', () => {
       },
     ])
 
-    const wrapper = mount(ArchiveView, {
+    const wrapper = mount(PresentationsView, {
       global: {
         stubs: {
           RouterLink: RouterLinkStub,
@@ -78,11 +78,11 @@ describe('ArchiveView', () => {
       },
     })
 
-    await wrapper.get('.archive-input').setValue('weekly')
+    await wrapper.get('.presentations-input').setValue('weekly')
     expect(wrapper.text()).toContain('Weekly Update 10')
     expect(wrapper.text()).not.toContain('Quarterly Review')
 
-    await wrapper.get('.archive-select').setValue('2025')
+    await wrapper.get('.presentations-select').setValue('2025')
     expect(wrapper.text()).toContain('No matching presentations')
   })
 
@@ -100,7 +100,7 @@ describe('ArchiveView', () => {
       })),
     )
 
-    const wrapper = mount(ArchiveView, {
+    const wrapper = mount(PresentationsView, {
       global: {
         stubs: {
           RouterLink: RouterLinkStub,
@@ -110,7 +110,7 @@ describe('ArchiveView', () => {
 
     expect(wrapper.text()).toContain('13 presentations total')
     expect(wrapper.text()).toContain('Page 1 of 2 · Showing 1-12')
-    await wrapper.get('.archive-page-button:last-child').trigger('click')
+    await wrapper.get('.presentations-page-button:last-child').trigger('click')
     expect(wrapper.text()).toContain('Page 2 of 2 · Showing 13-13')
     expect(wrapper.text()).toContain('Weekly Update 13')
   })
@@ -123,13 +123,13 @@ describe('ArchiveView', () => {
         quarter: 1,
         title: `Presentation ${index + 1}`,
         subtitle: 'Q1 2026',
-        summary: 'Large archive test',
+        summary: 'Large presentations test',
         published: true,
         featured: false,
       })),
     )
 
-    const wrapper = mount(ArchiveView, {
+    const wrapper = mount(PresentationsView, {
       global: {
         stubs: {
           RouterLink: RouterLinkStub,
@@ -138,7 +138,7 @@ describe('ArchiveView', () => {
     })
 
     const labels = wrapper
-      .findAll('.archive-page-button')
+      .findAll('.presentations-page-button')
       .map((button) => button.text())
 
     expect(labels).toEqual(['Previous', '1', '2', '…', '517', 'Next'])

@@ -21,7 +21,7 @@ export interface SiteContent {
   presentation_logo?: PresentationLogo
   home_intro: string
   home_cta_label: string
-  archive_cta_label: string
+  presentations_cta_label: string
   links: Record<string, SiteLink>
 }
 

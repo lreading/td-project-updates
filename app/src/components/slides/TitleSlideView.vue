@@ -217,13 +217,25 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
 
 .mascot-glow {
   filter: drop-shadow(0 0 20px rgba(232, 52, 28, 0.4));
-  transition: transform 0.3s ease;
+  animation: float 6s ease-in-out infinite;
 }
 
 .mascot {
   width: 12rem;
   height: 12rem;
   object-fit: contain;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .text-block {

@@ -1,4 +1,4 @@
-export interface ArchivePaginationItem {
+export interface PresentationPaginationItem {
   key: string
   label: string
   page: number | null
@@ -6,7 +6,7 @@ export interface ArchivePaginationItem {
   ellipsis: boolean
 }
 
-export function buildArchivePagination(totalPages: number, currentPage: number): ArchivePaginationItem[] {
+export function buildPresentationPagination(totalPages: number, currentPage: number): PresentationPaginationItem[] {
   if (totalPages <= 1) {
     return [
       {
@@ -24,7 +24,7 @@ export function buildArchivePagination(totalPages: number, currentPage: number):
     .filter((page) => page >= 1 && page <= totalPages)
     .sort((left, right) => left - right)
 
-  const items: ArchivePaginationItem[] = []
+  const items: PresentationPaginationItem[] = []
 
   filteredPages.forEach((page, index) => {
     const previous = filteredPages[index - 1]

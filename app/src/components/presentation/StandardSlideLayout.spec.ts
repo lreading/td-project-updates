@@ -51,7 +51,7 @@ describe('StandardSlideLayout', () => {
       tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
-      archive_cta_label: 'Archive',
+      presentations_cta_label: 'Presentations',
       links: {
         repository: {
           label: 'Repo',
@@ -78,7 +78,7 @@ describe('StandardSlideLayout', () => {
       tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
-      archive_cta_label: 'Archive',
+      presentations_cta_label: 'Presentations',
       presentation_logo: {
         url: 'https://example.com/logo.png',
         alt: '   ',

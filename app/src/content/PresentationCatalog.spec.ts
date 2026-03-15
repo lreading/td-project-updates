@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ArchiveCatalog } from './ArchiveCatalog'
+import { PresentationCatalog } from './PresentationCatalog'
 
 const entries = [
   {
@@ -39,21 +39,21 @@ const entries = [
     quarter: 3,
     title: 'Security Weekly',
     subtitle: 'Q3 2025',
-    summary: 'Weekly cadence archive test',
+    summary: 'Weekly cadence presentations test',
     published: true,
     featured: false,
   },
 ]
 
-describe('ArchiveCatalog', () => {
+describe('PresentationCatalog', () => {
   it('lists distinct years in descending order', () => {
-    const catalog = new ArchiveCatalog(entries)
+    const catalog = new PresentationCatalog(entries)
 
     expect(catalog.listYears()).toEqual([2026, 2025])
   })
 
   it('filters by year and search text', () => {
-    const catalog = new ArchiveCatalog(entries)
+    const catalog = new PresentationCatalog(entries)
 
     expect(
       catalog.getPage({
@@ -66,7 +66,7 @@ describe('ArchiveCatalog', () => {
   })
 
   it('paginates and clamps out-of-range page numbers', () => {
-    const catalog = new ArchiveCatalog(entries)
+    const catalog = new PresentationCatalog(entries)
 
     const page = catalog.getPage({
       page: 99,

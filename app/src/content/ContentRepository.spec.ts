@@ -16,7 +16,7 @@ site:
     alt: Demo logo
   home_intro: Intro
   home_cta_label: Open
-  archive_cta_label: Archive
+  presentations_cta_label: Presentations
   links: {}
 `,
   '/virtual/presentations/index.yaml': `

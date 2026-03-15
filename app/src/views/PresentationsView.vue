@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
-import { ArchiveCatalog } from '../content/ArchiveCatalog'
-import { buildArchivePagination } from '../content/ArchivePagination'
+import { PresentationCatalog } from '../content/PresentationCatalog'
+import { buildPresentationPagination } from '../content/PresentationPagination'
 import { contentRepository } from '../content/ContentRepository'
 
 const presentations = contentRepository.listPresentations()
-const catalog = new ArchiveCatalog(presentations)
+const catalog = new PresentationCatalog(presentations)
 
 const search = ref('')
 const selectedYear = ref<string>('all')
@@ -26,7 +26,7 @@ const pageResult = computed(() =>
   }),
 )
 const paginationItems = computed(() =>
-  buildArchivePagination(pageResult.value.totalPages, pageResult.value.page),
+  buildPresentationPagination(pageResult.value.totalPages, pageResult.value.page),
 )
 
 watch([search, selectedYear], () => {
@@ -46,27 +46,27 @@ function goToPage(page: number): void {
 
 <template>
   <main class="page">
-    <div class="page-header archive-header">
-      <div class="archive-heading">
-        <p class="archive-eyebrow">All presentations</p>
+    <div class="page-header presentations-header">
+      <div class="presentations-heading">
+        <p class="presentations-eyebrow">All presentations</p>
       </div>
     </div>
 
-    <section class="archive-panel">
-      <div class="archive-toolbar">
-        <label class="archive-field">
-          <span class="archive-field__label">Search</span>
+    <section class="presentations-panel">
+      <div class="presentations-toolbar">
+        <label class="presentations-field">
+          <span class="presentations-field__label">Search</span>
           <input
             v-model="search"
-            class="archive-input"
+            class="presentations-input"
             type="search"
             placeholder="Search title, summary, quarter, or year"
           />
         </label>
 
-        <label class="archive-field archive-field--year">
-          <span class="archive-field__label">Year</span>
-          <select v-model="selectedYear" class="archive-select">
+        <label class="presentations-field presentations-field--year">
+          <span class="presentations-field__label">Year</span>
+          <select v-model="selectedYear" class="presentations-select">
             <option value="all">All years</option>
             <option v-for="year in availableYears" :key="year" :value="String(year)">
               {{ year }}
@@ -75,7 +75,7 @@ function goToPage(page: number): void {
         </label>
       </div>
 
-      <div class="archive-results-summary">
+      <div class="presentations-results-summary">
         <p>
           <strong>{{ pageResult.totalItems }}</strong> presentation{{
             pageResult.totalItems === 1 ? '' : 's'
@@ -88,22 +88,22 @@ function goToPage(page: number): void {
         </p>
       </div>
 
-      <div v-if="pageResult.items.length" class="archive-list">
-        <article v-for="entry in pageResult.items" :key="entry.id" class="archive-row">
-          <div class="archive-meta">
-            <p class="archive-quarter">Q{{ entry.quarter }} {{ entry.year }}</p>
-            <p class="archive-id">{{ entry.id }}</p>
+      <div v-if="pageResult.items.length" class="presentations-list">
+        <article v-for="entry in pageResult.items" :key="entry.id" class="presentations-row">
+          <div class="presentations-meta">
+            <p class="presentations-quarter">Q{{ entry.quarter }} {{ entry.year }}</p>
+            <p class="presentations-id">{{ entry.id }}</p>
           </div>
 
-          <div class="archive-copy">
-            <h2 class="archive-title">{{ entry.title }}</h2>
-            <p class="archive-summary">{{ entry.summary }}</p>
+          <div class="presentations-copy">
+            <h2 class="presentations-title">{{ entry.title }}</h2>
+            <p class="presentations-summary">{{ entry.summary }}</p>
           </div>
 
-          <div class="archive-actions">
+          <div class="presentations-actions">
             <RouterLink
               :to="{ name: 'presentation', params: { presentationId: entry.id } }"
-              class="archive-link"
+              class="presentations-link"
             >
               Open presentation
             </RouterLink>
@@ -111,14 +111,14 @@ function goToPage(page: number): void {
         </article>
       </div>
 
-      <div v-else class="archive-empty">
+      <div v-else class="presentations-empty">
         <h2>No matching presentations</h2>
         <p>Try a different year or a broader search term.</p>
       </div>
 
-      <div v-if="pageResult.totalPages > 1" class="archive-pagination">
+      <div v-if="pageResult.totalPages > 1" class="presentations-pagination">
         <button
-          class="archive-page-button"
+          class="presentations-page-button"
           :disabled="pageResult.page === 1"
           type="button"
           @click="goToPage(pageResult.page - 1)"
@@ -129,10 +129,10 @@ function goToPage(page: number): void {
         <button
           v-for="item in paginationItems"
           :key="item.key"
-          class="archive-page-button"
+          class="presentations-page-button"
           :class="{
-            'archive-page-button--active': item.current,
-            'archive-page-button--ellipsis': item.ellipsis,
+            'presentations-page-button--active': item.current,
+            'presentations-page-button--ellipsis': item.ellipsis,
           }"
           :disabled="item.ellipsis"
           type="button"
@@ -142,7 +142,7 @@ function goToPage(page: number): void {
         </button>
 
         <button
-          class="archive-page-button"
+          class="presentations-page-button"
           :disabled="pageResult.page === pageResult.totalPages"
           type="button"
           @click="goToPage(pageResult.page + 1)"
@@ -155,22 +155,22 @@ function goToPage(page: number): void {
 </template>
 
 <style scoped>
-.archive-id,
-.archive-summary,
-.archive-results-summary p {
+.presentations-id,
+.presentations-summary,
+.presentations-results-summary p {
   margin: 0;
 }
 
-.archive-header {
+.presentations-header {
   gap: 1.5rem;
   align-items: end;
 }
 
-.archive-heading {
+.presentations-heading {
   display: grid;
 }
 
-.archive-eyebrow {
+.presentations-eyebrow {
   color: var(--accent-soft);
   font: 700 0.95rem/1.2 var(--font-mono);
   letter-spacing: 0.08em;
@@ -178,7 +178,7 @@ function goToPage(page: number): void {
   opacity: 0.95;
 }
 
-.archive-panel {
+.presentations-panel {
   display: grid;
   gap: 1.25rem;
   padding: 1.25rem;
@@ -189,26 +189,26 @@ function goToPage(page: number): void {
     rgba(18, 24, 36, 0.92);
 }
 
-.archive-toolbar {
+.presentations-toolbar {
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(0, 1fr) 180px;
 }
 
-.archive-field {
+.presentations-field {
   display: grid;
   gap: 1.2rem;
 }
 
-.archive-field__label {
+.presentations-field__label {
   color: var(--secondary-text);
   font: 600 0.8rem/1.2 var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.archive-input,
-.archive-select {
+.presentations-input,
+.presentations-select {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.75rem 0.9rem;
@@ -219,18 +219,18 @@ function goToPage(page: number): void {
   font: inherit;
 }
 
-.archive-input::placeholder {
+.presentations-input::placeholder {
   color: rgba(208, 208, 232, 0.45);
 }
 
-.archive-input:focus,
-.archive-select:focus {
+.presentations-input:focus,
+.presentations-select:focus {
   outline: 2px solid rgba(232, 52, 28, 0.45);
   outline-offset: 2px;
   border-color: rgba(232, 52, 28, 0.35);
 }
 
-.archive-results-summary {
+.presentations-results-summary {
   display: flex;
   gap: 0.75rem;
   align-items: baseline;
@@ -239,12 +239,12 @@ function goToPage(page: number): void {
   font-size: 0.95rem;
 }
 
-.archive-list {
+.presentations-list {
   display: grid;
   gap: 0.9rem;
 }
 
-.archive-row {
+.presentations-row {
   display: grid;
   gap: 1rem;
   align-items: center;
@@ -255,43 +255,43 @@ function goToPage(page: number): void {
   background-color: rgba(37, 37, 53, 0.78);
 }
 
-.archive-meta {
+.presentations-meta {
   display: grid;
   gap: 0.35rem;
 }
 
-.archive-quarter {
+.presentations-quarter {
   color: var(--accent-soft);
   font: 600 0.875rem/1.2 var(--font-mono);
   margin: 0;
 }
 
-.archive-id {
+.presentations-id {
   color: rgba(208, 208, 232, 0.55);
   font: 500 0.78rem/1.2 var(--font-mono);
 }
 
-.archive-title {
+.presentations-title {
   margin: 0;
   font-size: 1.15rem;
 }
 
-.archive-summary {
+.presentations-summary {
   color: var(--secondary-text);
 }
 
-.archive-copy {
+.presentations-copy {
   display: grid;
   gap: 0.45rem;
 }
 
-.archive-actions {
+.presentations-actions {
   display: flex;
   justify-content: flex-end;
 }
 
-.archive-link,
-.archive-page-button {
+.presentations-link,
+.presentations-page-button {
   appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
@@ -306,7 +306,7 @@ function goToPage(page: number): void {
     transform 0.2s ease;
 }
 
-.archive-link {
+.presentations-link {
   padding: 0.75rem 1rem;
   border-color: rgba(255, 133, 108, 0.65);
   background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
@@ -318,21 +318,21 @@ function goToPage(page: number): void {
   white-space: nowrap;
 }
 
-.archive-page-button {
+.presentations-page-button {
   padding: 0.55rem 0.9rem;
   font: 600 0.9rem/1 var(--font-mono);
 }
 
-.archive-link:hover,
-.archive-page-button:hover:not(:disabled),
-.archive-page-button--active {
+.presentations-link:hover,
+.presentations-page-button:hover:not(:disabled),
+.presentations-page-button--active {
   border-color: rgba(232, 52, 28, 0.5);
   background-color: rgba(232, 52, 28, 0.2);
   color: #ffffff;
   transform: translateY(-1px);
 }
 
-.archive-link:hover {
+.presentations-link:hover {
   border-color: rgba(255, 160, 138, 0.75);
   background: linear-gradient(180deg, #f45d44 0%, #ea3c22 100%);
   box-shadow:
@@ -340,25 +340,25 @@ function goToPage(page: number): void {
     0 14px 30px rgba(232, 52, 28, 0.34);
 }
 
-.archive-page-button:disabled {
+.presentations-page-button:disabled {
   cursor: not-allowed;
   opacity: 0.45;
 }
 
-.archive-page-button--ellipsis {
+.presentations-page-button--ellipsis {
   border-color: transparent;
   background-color: transparent;
   transform: none;
 }
 
-.archive-pagination {
+.presentations-pagination {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-end;
 }
 
-.archive-empty {
+.presentations-empty {
   display: grid;
   gap: 0.35rem;
   padding: 2rem 1rem;
@@ -368,28 +368,28 @@ function goToPage(page: number): void {
   color: var(--secondary-text);
 }
 
-.archive-empty h2 {
+.presentations-empty h2 {
   margin: 0;
   color: var(--primary-text);
 }
 
 @media (max-width: 900px) {
-  .archive-header {
+  .presentations-header {
     align-items: start;
   }
 
-  .archive-toolbar,
-  .archive-row {
+  .presentations-toolbar,
+  .presentations-row {
     grid-template-columns: 1fr;
   }
 
-  .archive-results-summary {
+  .presentations-results-summary {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .archive-actions,
-  .archive-pagination {
+  .presentations-actions,
+  .presentations-pagination {
     justify-content: flex-start;
   }
 }

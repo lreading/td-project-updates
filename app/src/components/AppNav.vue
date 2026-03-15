@@ -50,9 +50,9 @@ watch(
           Home
         </RouterLink>
         <RouterLink
-          :to="{ name: 'archive' }"
+          :to="{ name: 'presentations' }"
           class="app-nav__link"
-          :class="{ 'app-nav__link--active': route.name === 'archive' }"
+          :class="{ 'app-nav__link--active': route.name === 'presentations' }"
         >
           Presentations
         </RouterLink>

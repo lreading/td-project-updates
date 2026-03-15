@@ -52,7 +52,7 @@ describe('HowToContributeSlideView', () => {
       tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
-      archive_cta_label: 'Browse previous presentations',
+      presentations_cta_label: 'View all presentations',
       links: {
         repository: {
           label: 'View source on GitHub',
@@ -81,7 +81,7 @@ describe('HowToContributeSlideView', () => {
       tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
-      archive_cta_label: 'Browse previous presentations',
+      presentations_cta_label: 'View all presentations',
       links: {},
     }
 

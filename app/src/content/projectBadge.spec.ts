@@ -15,7 +15,7 @@ describe('getProjectBadgeDisplay', () => {
         },
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
-        archive_cta_label: 'Browse previous presentations',
+        presentations_cta_label: 'View all presentations',
         links: {},
       }),
     ).toEqual({
@@ -35,7 +35,7 @@ describe('getProjectBadgeDisplay', () => {
         },
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
-        archive_cta_label: 'Browse previous presentations',
+        presentations_cta_label: 'View all presentations',
         links: {},
       }),
     ).toEqual({
@@ -52,7 +52,7 @@ describe('getProjectBadgeDisplay', () => {
         tagline: 'making threat modeling less threatening',
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
-        archive_cta_label: 'Browse previous presentations',
+        presentations_cta_label: 'View all presentations',
         links: {},
       }),
     ).toBeNull()
@@ -67,7 +67,7 @@ describe('getProjectBadgeDisplay', () => {
         },
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
-        archive_cta_label: 'Browse previous presentations',
+        presentations_cta_label: 'View all presentations',
         links: {},
       }),
     ).toBeNull()
@@ -85,7 +85,7 @@ describe('getProjectBadgeDisplay', () => {
         },
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
-        archive_cta_label: 'Browse previous presentations',
+        presentations_cta_label: 'View all presentations',
         links: {},
       }),
     ).toEqual({

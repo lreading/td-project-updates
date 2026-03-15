@@ -17,7 +17,7 @@ export interface ArchivePageResult {
   endItem: number
 }
 
-export class ArchiveCatalog {
+export class PresentationCatalog {
   private readonly entries: PresentationIndexEntry[]
 
   public constructor(entries: PresentationIndexEntry[]) {
