@@ -9,7 +9,7 @@ describe('HomeView', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders the landing page hero and CTA links', () => {
+  it('renders the landing page hero, footer links, and CTA links', () => {
     const wrapper = mount(HomeView, {
       global: {
         stubs: {
@@ -18,8 +18,11 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Threat Dragon Quarterly Updates')
-    expect(wrapper.text()).toContain('View latest presentation')
+    expect(wrapper.text()).toContain('OWASP Threat Dragon')
+    expect(wrapper.text()).toContain('Community Update')
+    expect(wrapper.text()).toContain('View latest update')
+    expect(wrapper.text()).toContain('Browse archive')
+    expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')
   })
 
   it('falls back to the first presentation when none are featured', () => {
@@ -44,6 +47,6 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Fallback Quarterly Update')
+    expect(wrapper.text()).toContain('Q3 2026')
   })
 })

@@ -1,5 +1,4 @@
-- Home page does not match welcome slide at all
-- No navigation - build a nav bar that's mobile friendly
+- Add a footer with a link to the GH for this app
 - Presentation: presentation mode should be only option, enable fullscreen when selected
 - Do not include slide controls in full-screen/presentation mode
 - Slide controls are ugly, make small hover buttons (like scroll up style)
@@ -21,6 +20,7 @@
 - Thank you: make links and titles configurable
 - Add real favicon from docs/site
 - Add a real root level README
+- Archive page needs some love
 
 # Future
 - Add presenter notes? Might be a lot of work cuz of fullscreen constraints
