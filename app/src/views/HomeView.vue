@@ -45,11 +45,11 @@ const badge = computed(() => getProjectBadgeDisplay(site))
           :to="{ name: 'presentation', params: { presentationId: featuredPresentation.id } }"
           class="hero-cta hero-cta--primary"
         >
-          <span class="hero-cta__label">View latest update</span>
+          <span class="hero-cta__label">{{ site.home_cta_label }}</span>
           <span class="hero-cta__meta">{{ featuredPresentation.subtitle }}</span>
         </RouterLink>
         <RouterLink :to="{ name: 'archive' }" class="hero-cta hero-cta--secondary">
-          <span class="hero-cta__single">Browse archive</span>
+          <span class="hero-cta__single">{{ site.archive_cta_label }}</span>
         </RouterLink>
       </div>
 

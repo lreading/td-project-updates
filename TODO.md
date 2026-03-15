@@ -1,4 +1,5 @@
-- Archive page needs some love, ui isn't great.  Could also get unruly if project updates happen weekly or something and it goes for a long time.  Probably need pagination, POTENTIALLY search? idk, but current state ain't great.
+- Agenda needs max-height for cards
+- Hot to contribute needs max-height for cards
 
 # Scripts
 - Start fleshing out what data can be pulled dynamically
