@@ -55,14 +55,17 @@ const agendaItems = computed(() => {
 .agenda-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 20px;
-  flex: 1;
 }
 
 .agenda-card {
   background-color: #252535;
   border-radius: 8px;
   padding: 20px 24px;
+  min-height: 88px;
+  max-height: 104px;
   display: flex;
   align-items: center;
   transition:
@@ -98,6 +101,10 @@ const agendaItems = computed(() => {
 
 .card-text {
   flex: 1;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-right: 0.25rem;
   font-size: 18px;
   color: #e0e0e0;
   font-weight: 500;

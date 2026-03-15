@@ -1,5 +1,4 @@
-- Agenda needs max-height for cards
-- Hot to contribute needs max-height for cards
+- Design language inconsistent: buttons with the darker transparent background are less obvious.  Switch to the same red we use for the CTA on the home page.
 
 # Scripts
 - Start fleshing out what data can be pulled dynamically

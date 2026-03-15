@@ -65,9 +65,9 @@ const repositoryLink = computed(() => props.site.links.repository)
 .contribution-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 25px;
-  flex: 1;
   margin-bottom: 25px;
 }
 
@@ -75,6 +75,8 @@ const repositoryLink = computed(() => props.site.links.repository)
   background-color: #252535;
   border-radius: 12px;
   padding: 25px;
+  min-height: 184px;
+  max-height: 220px;
   display: flex;
   align-items: flex-start;
   border: 1px solid #333344;
@@ -125,10 +127,11 @@ const repositoryLink = computed(() => props.site.links.repository)
 
 .card-content {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 100%;
+  justify-content: flex-start;
+  height: auto;
 }
 
 .card-title {
@@ -142,6 +145,10 @@ const repositoryLink = computed(() => props.site.links.repository)
   font-size: 14px;
   color: #d0d0e8;
   line-height: 1.5;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.25rem;
   margin: 0 0 12px;
 }
 
