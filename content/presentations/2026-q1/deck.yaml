@@ -4,6 +4,68 @@ presentation:
   quarter: 1
   title: OWASP Threat Dragon Quarterly Community Update
   subtitle: Q1 2026
+  roadmap:
+    sections:
+      completed:
+        label: Completed
+        summary: Foundational work shipped this quarter and is already improving daily use.
+        items:
+          - Released v2.3 with the refreshed desktop shell and updated packaging pipeline.
+          - Shipped dark mode polish across the editor, report views, and supporting dialogs.
+          - Simplified first-run setup so new users can open sample models faster.
+          - Closed long-running rendering bugs affecting larger diagrams and export stability.
+        themes:
+          - category: UX & Documentation
+            target: Reworked onboarding flows and clarified setup guidance for new contributors.
+          - category: Release Engineering
+            target: Tightened packaging, smoke testing, and release validation across supported builds.
+          - category: Product Quality
+            target: Reduced editor regressions and improved confidence in quarter-end release trains.
+      in-progress:
+        label: In Progress
+        summary: Active workstreams are focused on collaboration and better project interoperability.
+        items:
+          - Building cloud-backed project sync experiments for teams that work across devices.
+          - Iterating on reusable diagram templates for common architecture and threat-model patterns.
+          - Improving import/export fidelity so richer models survive handoff between environments.
+          - Tightening contributor workflows around issue triage, reviews, and milestone tracking.
+        themes:
+          - category: Collaboration
+            target: Make it easier for distributed teams to share, review, and refine threat models.
+          - category: Templates
+            target: Provide opinionated starting points for common deployment patterns and domains.
+          - category: Workflow
+            target: Reduce maintenance overhead by standardizing contributor and reviewer flows.
+      planned:
+        label: Planned
+        summary: The next planned wave is centered on integrations and smoother team-scale adoption.
+        items:
+          - Add collaborative editing milestones after the current sync foundation stabilizes.
+          - Expand CI and Git hosting integrations to reduce manual project synchronization.
+          - Improve reporting outputs so presentations and status updates are easier to prepare.
+          - Formalize roadmap review checkpoints to keep community priorities visible each quarter.
+        themes:
+          - category: Team Adoption
+            target: Lower friction for teams using Threat Dragon as part of regular delivery workflows.
+          - category: Integrations
+            target: Connect repository events, reviews, and generated outputs more cleanly.
+          - category: Reporting
+            target: Turn project activity into presentation-ready summaries with less manual effort.
+      future:
+        label: Future
+        summary: Longer-horizon exploration remains focused on extending reach without adding runtime complexity.
+        items:
+          - Explore companion experiences that make threat-model review easier on smaller devices.
+          - Evaluate advanced assistant-like workflows without making the core product depend on AI.
+          - Investigate richer analysis helpers for large model libraries and repeated review cycles.
+          - Map out future maintainer tooling needed to support a broader contributor base.
+        themes:
+          - category: Platform Reach
+            target: Extend the product to more environments while keeping the core workflow familiar.
+          - category: Analysis
+            target: Surface more guidance for large projects without compromising explainability.
+          - category: Sustainability
+            target: Grow maintainer leverage so roadmap execution remains steady quarter over quarter.
   slides:
     - kind: title
       enabled: true
@@ -45,35 +107,16 @@ presentation:
         - v2.2.0
     - kind: roadmap
       enabled: true
-      subtitle: Future direction and upcoming milestones
-      milestones:
-        - label: Completed
-          status: completed
-          items:
-            - v2.3 release
-            - Dark mode UI
-        - label: In progress
-          status: in-progress
-          items:
-            - Cloud integrations
-            - Template engine
-        - label: Planned
-          status: planned
-          items:
-            - Collaborative editing
-            - GitHub Actions integration
-        - label: Future
-          status: future
-          items:
-            - AI Threat Suggestions
-            - Mobile Companion App
-      themes:
-        - category: UX & Documentation
-          target: Complete overhaul of getting started guides and interactive tutorials
-        - category: Model Engine
-          target: Performance optimization for complex nested diagrams (100+ elements)
-        - category: Integrations
-          target: Native support for GitLab and Bitbucket repositories alongside GitHub
+      stage: completed
+    - kind: roadmap
+      enabled: true
+      stage: in-progress
+    - kind: roadmap
+      enabled: true
+      stage: planned
+    - kind: roadmap
+      enabled: true
+      stage: future
     - kind: contributor-spotlight
       enabled: true
       subtitle: Recognizing our top community contributors this quarter

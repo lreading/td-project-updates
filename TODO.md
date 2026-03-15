@@ -1,5 +1,4 @@
 - Contributor spotlight: Add link to "(n) contributors"
-- Roadmap should have separate sections that follows the timeline widget (1 slide per item)
 - Specify link to "view full roadmap and milestones on github" via config
 - Contributor spotlight - single contributor, information next to it in a card
 - Welcome slide - make links confgiurable and clickable

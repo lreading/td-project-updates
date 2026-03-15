@@ -45,7 +45,7 @@ const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
         <p>Open Source and Community Driven</p>
       </div>
       <a class="repo-link" href="https://github.com/OWASP/threat-dragon" target="_blank" rel="noreferrer">
-        <FontAwesomeIcon icon="code" /> github.com/OWASP/threat-dragon
+        <FontAwesomeIcon icon="code" class="mr-3" /> github.com/OWASP/threat-dragon
       </a>
     </div>
   </StandardSlideLayout>

@@ -62,8 +62,7 @@ export interface ReleasesSlide extends BaseSlide {
 
 export interface RoadmapSlide extends BaseSlide {
   kind: 'roadmap'
-  milestones: RoadmapMilestone[]
-  themes: RoadmapTheme[]
+  stage: RoadmapStageStatus
 }
 
 export interface ContributorSpotlightSlide extends BaseSlide {
@@ -105,6 +104,7 @@ export interface PresentationDeck {
   quarter: number
   title: string
   subtitle: string
+  roadmap?: RoadmapContent
   slides: PresentationSlide[]
 }
 
@@ -113,15 +113,22 @@ export interface ContentSection {
   bullets: string[]
 }
 
-export interface RoadmapMilestone {
-  label: string
-  status: 'completed' | 'in-progress' | 'planned' | 'future'
-  items: string[]
-}
+export type RoadmapStageStatus = 'completed' | 'in-progress' | 'planned' | 'future'
 
 export interface RoadmapTheme {
   category: string
   target: string
+}
+
+export interface RoadmapStageContent {
+  label: string
+  summary: string
+  items: string[]
+  themes: RoadmapTheme[]
+}
+
+export interface RoadmapContent {
+  sections: Record<RoadmapStageStatus, RoadmapStageContent>
 }
 
 export interface SpotlightEntry {

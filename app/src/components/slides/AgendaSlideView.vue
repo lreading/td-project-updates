@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 
-import { slideLabels } from '../../content/slideLabels'
+import { getSlideLabel } from '../../content/slideLabels'
 import type { AgendaSlide, PresentationDeck } from '../../types/content'
 
 const props = defineProps<{
@@ -16,7 +16,7 @@ const props = defineProps<{
 const agendaItems = computed(() =>
   props.deck.slides
     .filter((entry) => entry.enabled && entry.kind !== 'title' && entry.kind !== 'agenda')
-    .map((entry) => slideLabels[entry.kind]),
+    .map((entry) => getSlideLabel(entry, props.deck)),
 )
 </script>
 

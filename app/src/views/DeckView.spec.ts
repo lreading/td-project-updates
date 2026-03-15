@@ -58,7 +58,7 @@ describe('DeckView', () => {
 
     await flushPromises()
 
-    expect(router.currentRoute.value.query.slide).toBe('9')
+    expect(router.currentRoute.value.query.slide).toBe('12')
     expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(false)
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
@@ -105,7 +105,7 @@ describe('DeckView', () => {
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }))
     await flushPromises()
-    expect(router.currentRoute.value.query.slide).toBe('9')
+    expect(router.currentRoute.value.query.slide).toBe('12')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
