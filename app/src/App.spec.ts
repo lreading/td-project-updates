@@ -27,6 +27,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('Home')
     expect(wrapper.text()).toContain('Presentations')
     expect(wrapper.text()).toContain('Current Deck')
+    expect(wrapper.text()).toContain('td-project-updates')
   })
 
   it('hides the nav during fullscreen presentation', async () => {
@@ -48,6 +49,7 @@ describe('App', () => {
     })
 
     expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(true)
 
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
@@ -58,6 +60,7 @@ describe('App', () => {
     await flushPromises()
 
     expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(false)
+    expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(false)
   })
 
   it('removes the fullscreen listener when unmounted', async () => {

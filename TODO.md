@@ -1,4 +1,3 @@
-- Add a footer with a link to the GH for this app
 - Presentation: presentation mode should be only option, enable fullscreen when selected
 - Do not include slide controls in full-screen/presentation mode
 - Slide controls are ugly, make small hover buttons (like scroll up style)

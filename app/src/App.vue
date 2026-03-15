@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
+import AppFooter from './components/AppFooter.vue'
 import AppNav from './components/AppNav.vue'
 
 const route = useRoute()
@@ -11,7 +12,7 @@ const syncFullscreenState = (): void => {
   fullscreenActive.value = Boolean(document.fullscreenElement)
 }
 
-const showNav = computed(
+const showChrome = computed(
   () => !(route.name === 'presentation' && fullscreenActive.value),
 )
 
@@ -27,23 +28,28 @@ onUnmounted(() => {
 
 <template>
   <div class="app-shell">
-    <AppNav v-if="showNav" />
-    <div class="app-shell__view" :class="{ 'app-shell__view--nav-hidden': !showNav }">
+    <AppNav v-if="showChrome" />
+    <div class="app-shell__view" :class="{ 'app-shell__view--nav-hidden': !showChrome }">
       <RouterView />
     </div>
+    <AppFooter v-if="showChrome" />
   </div>
 </template>
 
 <style scoped>
 .app-shell {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-shell__view {
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
 }
 
 .app-shell__view--nav-hidden {
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
 }
 </style>

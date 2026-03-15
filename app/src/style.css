@@ -96,7 +96,7 @@ a {
 .page--centered {
   align-items: center;
   justify-items: center;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .page-header {

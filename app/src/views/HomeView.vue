@@ -83,7 +83,8 @@ const featuredPresentation = computed(() => presentations.find((entry) => entry.
 <style scoped>
 .home-page {
   width: 100%;
-  min-height: calc(100vh - 72px);
+  min-height: 100%;
+  flex: 1;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -92,7 +93,7 @@ const featuredPresentation = computed(() => presentations.find((entry) => entry.
   overflow: hidden;
   background-color: #1e1e2e;
   color: #ffffff;
-  padding: 3rem var(--page-gutter) 5rem;
+  padding: 2.5rem var(--page-gutter) 3.5rem;
 }
 
 .bg-pattern {
@@ -224,6 +225,8 @@ const featuredPresentation = computed(() => presentations.find((entry) => entry.
 
 .hero-description {
   max-width: 44rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1.5rem;
   margin: 0 auto;
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   line-height: 1.7;
@@ -369,7 +372,7 @@ const featuredPresentation = computed(() => presentations.find((entry) => entry.
 @media (max-width: 767px) {
   .home-page {
     justify-content: flex-start;
-    padding-top: 3.5rem;
+    padding-top: 3rem;
   }
 
   .hero-shell {
