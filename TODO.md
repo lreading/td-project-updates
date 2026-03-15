@@ -1,5 +1,3 @@
-- How to Contribute: Make sure links are configurable
-- Add a real root level README
 - Archive page needs some love, ui isn't great.  Could also get unruly if project updates happen weekly or something and it goes for a long time.  Probably need pagination, POTENTIALLY search? idk, but current state ain't great.
 
 # Scripts

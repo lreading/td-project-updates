@@ -78,6 +78,7 @@ defineProps<{
   <HowToContributeSlideView
     v-else-if="slide.kind === 'how-to-contribute'"
     :deck="record.deck"
+    :site="site"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

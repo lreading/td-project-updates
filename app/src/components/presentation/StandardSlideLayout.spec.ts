@@ -49,6 +49,9 @@ describe('StandardSlideLayout', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
       tagline: 'Quarterly updates',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      archive_cta_label: 'Archive',
       links: {
         repository: {
           label: 'Repo',
@@ -73,6 +76,9 @@ describe('StandardSlideLayout', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
       tagline: 'Quarterly updates',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      archive_cta_label: 'Archive',
       presentation_logo: {
         url: 'https://example.com/logo.png',
         alt: '   ',

@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 
-import type { HowToContributeSlide, PresentationDeck } from '../../types/content'
+import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
 
-defineProps<{
+const props = defineProps<{
   deck: PresentationDeck
+  site: SiteContent
   slide: HowToContributeSlide
   slideNumber: number
   slideTotal: number
@@ -12,6 +15,7 @@ defineProps<{
 
 const icons = ['bug', 'code-branch', 'book', 'bullhorn']
 const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
+const repositoryLink = computed(() => props.site.links.repository)
 </script>
 
 <template>
@@ -44,8 +48,14 @@ const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
         <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
         <p>Open Source and Community Driven</p>
       </div>
-      <a class="repo-link" href="https://github.com/OWASP/threat-dragon" target="_blank" rel="noreferrer">
-        <FontAwesomeIcon icon="code" class="mr-3" /> github.com/OWASP/threat-dragon
+      <a
+        v-if="repositoryLink"
+        class="repo-link"
+        :href="repositoryLink.url"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <FontAwesomeIcon icon="code" class="mr-3" /> {{ repositoryLink.label }}
       </a>
     </div>
   </StandardSlideLayout>
