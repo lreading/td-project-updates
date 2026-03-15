@@ -20,11 +20,18 @@ const slideNumber = computed(() => navigator.value.resolve(route.query.slide))
 const currentSlide = computed(() => slides.value[slideNumber.value - 1])
 const isPresentationMode = computed(() => route.query.mode === 'presentation')
 const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(document.fullscreenEnabled)
+const isPresentationActive = computed(() =>
+  isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value,
+)
 const onKeydown = (event: KeyboardEvent): void => {
   void handleKeydown(event)
 }
-const onFullscreenChange = (): void => {
+const syncFullscreenState = (): void => {
   fullscreenActive.value = Boolean(document.fullscreenElement)
+
+  if (!fullscreenActive.value && isPresentationMode.value && isFullscreenAvailable) {
+    void updateRoute(slideNumber.value, false)
+  }
 }
 
 const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): Promise<void> => {
@@ -36,21 +43,30 @@ const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): 
   })
 }
 
-const toggleMode = async (): Promise<void> => {
-  await updateRoute(slideNumber.value, !isPresentationMode.value)
-}
-
-const toggleFullscreen = async (): Promise<void> => {
-  if (!isFullscreenAvailable) {
-    return
+const enterPresentationMode = async (): Promise<void> => {
+  if (isFullscreenAvailable && !document.fullscreenElement) {
+    await document.documentElement.requestFullscreen()
   }
 
+  await updateRoute(slideNumber.value, true)
+}
+
+const exitPresentationMode = async (): Promise<void> => {
   if (document.fullscreenElement) {
     await document.exitFullscreen()
     return
   }
 
-  await document.documentElement.requestFullscreen()
+  await updateRoute(slideNumber.value, false)
+}
+
+const toggleMode = async (): Promise<void> => {
+  if (isPresentationMode.value || document.fullscreenElement) {
+    await exitPresentationMode()
+    return
+  }
+
+  await enterPresentationMode()
 }
 
 const handleKeydown = async (event: KeyboardEvent): Promise<void> => {
@@ -82,23 +98,17 @@ const handleKeydown = async (event: KeyboardEvent): Promise<void> => {
       event.preventDefault()
       await updateRoute(navigator.value.last())
       break
-    case 'f':
-    case 'F':
-      event.preventDefault()
-      await toggleFullscreen()
-      break
     case 'p':
     case 'P':
+    case 'f':
+    case 'F':
       event.preventDefault()
       await toggleMode()
       break
     case 'Escape':
-      if (document.fullscreenElement) {
+      if (document.fullscreenElement || isPresentationMode.value) {
         event.preventDefault()
-        await document.exitFullscreen()
-      } else if (isPresentationMode.value) {
-        event.preventDefault()
-        await updateRoute(slideNumber.value, false)
+        await exitPresentationMode()
       }
       break
   }
@@ -117,54 +127,87 @@ watch(
 )
 
 onMounted(() => {
-  fullscreenActive.value = Boolean(document.fullscreenElement)
+  syncFullscreenState()
   window.addEventListener('keydown', onKeydown)
-  document.addEventListener('fullscreenchange', onFullscreenChange)
+  window.addEventListener('resize', syncFullscreenState)
+  document.addEventListener('fullscreenchange', syncFullscreenState)
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
-  document.removeEventListener('fullscreenchange', onFullscreenChange)
+  window.removeEventListener('resize', syncFullscreenState)
+  document.removeEventListener('fullscreenchange', syncFullscreenState)
 })
 </script>
 
 <template>
-  <main class="page" :class="{ 'page--presentation': isPresentationMode }">
-    <div v-if="!isPresentationMode" class="page-header">
-      <div>
-        <p class="page-eyebrow">{{ record.index.subtitle }}</p>
-        <h1 class="page-title">{{ record.index.title }}</h1>
-      </div>
-    </div>
-
+  <main class="page deck-page" :class="{ 'deck-page--presentation': isPresentationActive }">
     <PresentationToolbar
-      :is-presentation-mode="isPresentationMode"
-      :is-fullscreen-available="isFullscreenAvailable"
-      :is-fullscreen-active="fullscreenActive"
+      v-if="!isPresentationActive"
       :slide-number="slideNumber"
       :slide-total="slides.length"
-      @first="updateRoute(navigator.first())"
       @previous="updateRoute(navigator.previous(slideNumber))"
       @next="updateRoute(navigator.next(slideNumber))"
-      @last="updateRoute(navigator.last())"
       @toggle-mode="toggleMode"
-      @toggle-fullscreen="toggleFullscreen"
     />
 
-    <SlideRenderer
-      v-if="currentSlide"
-      :record="record"
-      :site="site"
-      :slide="currentSlide"
-      :slide-number="slideNumber"
-      :slide-total="slides.length"
-    />
+    <div class="slide-stage" :class="{ 'slide-stage--presentation': isPresentationActive }">
+      <SlideRenderer
+        v-if="currentSlide"
+        :record="record"
+        :site="site"
+        :slide="currentSlide"
+        :slide-number="slideNumber"
+        :slide-total="slides.length"
+      />
+    </div>
   </main>
 </template>
 
 <style scoped>
-.page--presentation {
-  gap: 1rem;
-  padding: 1rem;
+.deck-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.slide-stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.slide-stage :deep(.slide-container) {
+  width: 100%;
+}
+
+.deck-page--presentation {
+  gap: 0;
+  padding: 0.35rem;
+  overflow: hidden;
+}
+
+.deck-page--presentation .slide-stage {
+  overflow: hidden;
+}
+
+.slide-stage--presentation :deep(.slide-container) {
+  width: 100%;
+  height: calc(100dvh - 0.7rem);
+  min-height: calc(100dvh - 0.7rem);
+  max-height: calc(100dvh - 0.7rem);
+}
+
+@media (max-width: 767px) {
+  .deck-page--presentation {
+    padding: 0.25rem;
+  }
+
+  .slide-stage--presentation :deep(.slide-container) {
+    height: calc(100dvh - 0.5rem);
+    min-height: calc(100dvh - 0.5rem);
+    max-height: calc(100dvh - 0.5rem);
+  }
 }
 </style>

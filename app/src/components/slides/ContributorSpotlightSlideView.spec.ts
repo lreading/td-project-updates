@@ -21,6 +21,7 @@ describe('ContributorSpotlightSlideView', () => {
         generated: record.generated,
         slide,
         slideNumber: 6,
+        slideTotal: 12,
       },
     })
 
@@ -48,6 +49,7 @@ describe('ContributorSpotlightSlideView', () => {
         generated: record.generated,
         slide: fallbackSlide,
         slideNumber: 6,
+        slideTotal: 12,
       },
     })
 

@@ -14,6 +14,7 @@ const props = defineProps<{
   generated: GeneratedPresentationData
   slide: CommunityHighlightsSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const mentionIcons = ['microphone-alt', 'rss', 'podcast']
@@ -34,6 +35,7 @@ const stats = computed(() =>
     title="Community Highlights"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
   >
     <div class="content-grid">

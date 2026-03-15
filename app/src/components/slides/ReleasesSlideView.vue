@@ -10,6 +10,7 @@ const props = defineProps<{
   generated: GeneratedPresentationData
   slide: ReleasesSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' })
@@ -23,6 +24,7 @@ const releases = computed(() =>
     title="Releases"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
   >
     <div class="timeline-container">

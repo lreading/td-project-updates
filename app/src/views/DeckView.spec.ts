@@ -59,7 +59,7 @@ describe('DeckView', () => {
     await flushPromises()
 
     expect(router.currentRoute.value.query.slide).toBe('9')
-    expect(wrapper.find('.page-header').exists()).toBe(false)
+    expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(false)
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     await flushPromises()
@@ -68,7 +68,7 @@ describe('DeckView', () => {
     wrapper.unmount()
   })
 
-  it('supports first, last, and fullscreen shortcuts', async () => {
+  it('supports first, last, and fullscreen-backed presentation shortcuts', async () => {
     const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
     const exitFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
@@ -110,6 +110,7 @@ describe('DeckView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).toHaveBeenCalledTimes(1)
+    expect(router.currentRoute.value.query.mode).toBe('presentation')
 
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
@@ -119,10 +120,30 @@ describe('DeckView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     await flushPromises()
     expect(exitFullscreen).toHaveBeenCalled()
+
+    Object.defineProperty(document, 'fullscreenElement', {
+      configurable: true,
+      value: null,
+    })
+    document.dispatchEvent(new Event('fullscreenchange'))
+    await flushPromises()
+
+    expect(router.currentRoute.value.query.mode).toBeUndefined()
     wrapper.unmount()
   })
 
   it('ignores modified shortcuts and toggles presentation mode with p', async () => {
+    const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
+
+    Object.defineProperty(document, 'fullscreenEnabled', {
+      configurable: true,
+      value: true,
+    })
+    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+      configurable: true,
+      value: requestFullscreen,
+    })
+
     const router = createAppRouter(true)
 
     await router.push('/presentations/2026-q1?slide=2')
@@ -143,12 +164,13 @@ describe('DeckView', () => {
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p' }))
     await flushPromises()
+    expect(requestFullscreen).toHaveBeenCalledTimes(1)
     expect(router.currentRoute.value.query.mode).toBe('presentation')
 
     wrapper.unmount()
   })
 
-  it('does nothing for fullscreen requests when fullscreen is unavailable', async () => {
+  it('falls back to route-only presentation mode when fullscreen is unavailable', async () => {
     const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
     Object.defineProperty(document, 'fullscreenEnabled', {
@@ -177,6 +199,27 @@ describe('DeckView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).not.toHaveBeenCalled()
+    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    wrapper.unmount()
+  })
+
+  it('does not render the large page header in normal deck view', async () => {
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?slide=2')
+    await router.isReady()
+
+    const wrapper = mount(DeckView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.find('.page-header').exists()).toBe(false)
+    expect(wrapper.find('.slide-stage').exists()).toBe(true)
     wrapper.unmount()
   })
 })

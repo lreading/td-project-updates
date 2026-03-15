@@ -10,6 +10,7 @@ const props = defineProps<{
   deck: PresentationDeck
   slide: AgendaSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const agendaItems = computed(() =>
@@ -24,6 +25,7 @@ const agendaItems = computed(() =>
     title="Agenda"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
   >
     <div class="agenda-grid">

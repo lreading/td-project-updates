@@ -7,6 +7,7 @@ defineProps<{
   deck: PresentationDeck
   slide: HowToContributeSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const icons = ['bug', 'code-branch', 'book', 'bullhorn']
@@ -18,6 +19,7 @@ const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
     title="How to Contribute"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
     content-padding="50px 80px"
     :show-dots="false"

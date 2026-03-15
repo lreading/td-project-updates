@@ -21,6 +21,7 @@ describe('CommunityHighlightsSlideView', () => {
         generated: record.generated,
         slide,
         slideNumber: 7,
+        slideTotal: 12,
       },
     })
 
@@ -43,6 +44,7 @@ describe('CommunityHighlightsSlideView', () => {
         generated: record.generated,
         slide: reorderedSlide,
         slideNumber: 7,
+        slideTotal: 12,
       },
     })
 

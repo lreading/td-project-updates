@@ -7,9 +7,6 @@ describe('PresentationToolbar', () => {
   it('emits navigation and mode events', async () => {
     const wrapper = mount(PresentationToolbar, {
       props: {
-        isPresentationMode: false,
-        isFullscreenAvailable: true,
-        isFullscreenActive: false,
         slideNumber: 2,
         slideTotal: 9,
       },
@@ -20,30 +17,23 @@ describe('PresentationToolbar', () => {
     await buttons[0].trigger('click')
     await buttons[1].trigger('click')
     await buttons[2].trigger('click')
-    await buttons[3].trigger('click')
-    await buttons[4].trigger('click')
-    await buttons[5].trigger('click')
-
-    expect(wrapper.emitted('first')).toHaveLength(1)
     expect(wrapper.emitted('previous')).toHaveLength(1)
     expect(wrapper.emitted('next')).toHaveLength(1)
-    expect(wrapper.emitted('last')).toHaveLength(1)
     expect(wrapper.emitted('toggleMode')).toHaveLength(1)
-    expect(wrapper.emitted('toggleFullscreen')).toHaveLength(1)
   })
 
-  it('hides the fullscreen button when fullscreen is unavailable', () => {
+  it('renders compact slide controls and a presentation trigger', () => {
     const wrapper = mount(PresentationToolbar, {
       props: {
-        isPresentationMode: true,
-        isFullscreenAvailable: false,
-        isFullscreenActive: false,
         slideNumber: 1,
         slideTotal: 3,
       },
     })
 
-    expect(wrapper.text()).toContain('Exit presentation')
-    expect(wrapper.text()).not.toContain('Fullscreen')
+    expect(wrapper.findAll('button')).toHaveLength(3)
+    expect(wrapper.find('[aria-label="Previous slide"]').exists()).toBe(true)
+    expect(wrapper.find('[aria-label="Next slide"]').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Presentation mode')
+    expect(wrapper.text()).toContain('1 / 3')
   })
 })

@@ -7,6 +7,7 @@ defineProps<{
   deck: PresentationDeck
   slide: RoadmapSlide
   slideNumber: number
+  slideTotal: number
 }>()
 </script>
 
@@ -15,6 +16,7 @@ defineProps<{
     title="Roadmap"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
     content-padding="50px 80px"
   >

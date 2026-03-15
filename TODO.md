@@ -1,8 +1,3 @@
-- Presentation: presentation mode should be only option, enable fullscreen when selected
-- Do not include slide controls in full-screen/presentation mode
-- Slide controls are ugly, make small hover buttons (like scroll up style)
-- Full-screen we should TRY to avoid vertical scrolling if possible (fine if we must)
-- Remove home/archive buttons from presentation view, use nav instead
 - Contributor spotlight: Add link to "(n) contributors"
 - Roadmap should have separate sections that follows the timeline widget (1 slide per item)
 - Specify link to "view full roadmap and milestones on github" via config
@@ -14,12 +9,11 @@
 - Community highlights: Make links optional per item, clicking card opens link new tab
 - Presentation: Replace red weird logo with configurable logo (global config?)
 - How to Contribute: Make sure links are configurable
-- Presentation: Slide number + total slides, not just slide number, (eg, 10/11)
-- Thank you slide: ui bug, buttons cover subtitle
-- Thank you: make links and titles configurable
 - Add real favicon from docs/site
 - Add a real root level README
 - Archive page needs some love
 
 # Future
 - Add presenter notes? Might be a lot of work cuz of fullscreen constraints
+- Make all icons, logos, text part of config
+- Publish an npm package that takes a config and generates a static site so others can use this if they so choose.

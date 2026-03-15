@@ -14,6 +14,7 @@ const props = defineProps<{
   generated: GeneratedPresentationData
   slide: ContributorSpotlightSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const avatarIcons = ['user-astronaut', 'user-ninja', 'user-secret']
@@ -36,6 +37,7 @@ const contributors = computed(() =>
     title="Contributor Spotlight"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
   >
     <div class="profiles-grid">

@@ -19,10 +19,12 @@ const showChrome = computed(
 onMounted(() => {
   syncFullscreenState()
   document.addEventListener('fullscreenchange', syncFullscreenState)
+  window.addEventListener('resize', syncFullscreenState)
 })
 
 onUnmounted(() => {
   document.removeEventListener('fullscreenchange', syncFullscreenState)
+  window.removeEventListener('resize', syncFullscreenState)
 })
 </script>
 
@@ -38,17 +40,21 @@ onUnmounted(() => {
 
 <style scoped>
 .app-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
 .app-shell__view {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
 }
 
 .app-shell__view--nav-hidden {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
 }

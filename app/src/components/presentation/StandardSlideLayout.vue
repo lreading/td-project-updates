@@ -4,6 +4,7 @@ withDefaults(
     title: string
     subtitle?: string
     slideNumber: number
+    slideTotal: number
     deckSubtitle?: string
     contentPadding?: string
     showDots?: boolean
@@ -22,7 +23,7 @@ withDefaults(
         <div class="logo-icon">
           <FontAwesomeIcon icon="dragon" />
         </div>
-        <div class="slide-number">{{ String(slideNumber).padStart(2, '0') }}</div>
+        <div class="slide-number">{{ slideNumber }}/{{ slideTotal }}</div>
       </div>
 
       <div class="main-content" :style="{ padding: contentPadding }">

@@ -7,6 +7,7 @@ defineProps<{
   deck: PresentationDeck
   slide: RecentUpdatesSlide
   slideNumber: number
+  slideTotal: number
 }>()
 
 const icons = ['wrench', 'star', 'users']
@@ -17,6 +18,7 @@ const icons = ['wrench', 'star', 'users']
     title="What Happened Since Last Update"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :slide-total="slideTotal"
     :deck-subtitle="deck.subtitle"
   >
     <div class="feature-grid">

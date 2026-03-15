@@ -10,6 +10,7 @@ describe('StandardSlideLayout', () => {
         title: 'Roadmap',
         subtitle: 'Future direction',
         slideNumber: 4,
+        slideTotal: 12,
       },
       slots: {
         default: '<div class="slot-marker">Body</div>',
@@ -18,7 +19,7 @@ describe('StandardSlideLayout', () => {
 
     expect(wrapper.text()).toContain('Roadmap')
     expect(wrapper.text()).toContain('Future direction')
-    expect(wrapper.text()).toContain('04')
+    expect(wrapper.text()).toContain('4/12')
     expect(wrapper.find('.bg-dots').exists()).toBe(true)
     expect(wrapper.find('.slot-marker').exists()).toBe(true)
   })
@@ -28,6 +29,7 @@ describe('StandardSlideLayout', () => {
       props: {
         title: 'Agenda',
         slideNumber: 2,
+        slideTotal: 12,
         showDots: false,
       },
     })

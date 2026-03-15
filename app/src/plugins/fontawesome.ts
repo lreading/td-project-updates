@@ -2,6 +2,7 @@ import { config, library } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
+  faArrowLeft,
   faArrowRight,
   faArrowUp,
   faBook,
@@ -39,6 +40,7 @@ config.autoAddCss = false
 
 library.add(
   faArrowRight,
+  faArrowLeft,
   faArrowUp,
   faBook,
   faBug,

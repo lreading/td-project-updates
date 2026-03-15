@@ -138,7 +138,7 @@ defineProps<{
   gap: 2.5rem;
   width: 100%;
   max-width: 64rem;
-  padding: 0 2rem;
+  padding: clamp(1.5rem, 4vh, 2.75rem) 2rem 6.5rem;
 }
 
 .mascot-wrap {
@@ -212,7 +212,7 @@ defineProps<{
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -267,7 +267,10 @@ defineProps<{
 }
 
 .footer-wrap {
-  padding-top: 2rem;
+  position: absolute;
+  right: 0;
+  bottom: 0.9rem;
+  left: 0;
   width: 100%;
   z-index: 10;
   text-align: center;
@@ -288,7 +291,7 @@ defineProps<{
 .deck-mark {
   position: absolute;
   right: 2rem;
-  bottom: 2rem;
+  bottom: 1.7rem;
   z-index: 10;
   display: inline-flex;
   align-items: baseline;
@@ -337,7 +340,7 @@ defineProps<{
 
   .content-wrap {
     gap: 2rem;
-    padding: 0 1.5rem;
+    padding: 0 1.5rem 5.5rem;
   }
 
   .mascot {
@@ -365,8 +368,10 @@ defineProps<{
 
   .footer-wrap {
     position: relative;
+    right: auto;
     bottom: auto;
-    margin-top: 2rem;
+    left: auto;
+    margin-top: 1rem;
   }
 
   .deck-mark {
