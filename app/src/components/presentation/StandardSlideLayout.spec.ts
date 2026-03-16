@@ -86,7 +86,7 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.findComponent({ name: 'FontAwesomeIcon' }).exists()).toBe(true)
   })
 
-  it('uses the site title as alt text when the logo alt is blank', () => {
+  it('omits the alt text when the logo alt is blank', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
       tagline: 'Quarterly updates',
@@ -114,19 +114,16 @@ describe('StandardSlideLayout', () => {
     })
 
     expect(wrapper.find('.logo-image').attributes('src')).toBe('https://example.com/logo.png')
-    expect(wrapper.find('.logo-image').attributes('alt')).toBe('Threat Dragon Updates')
+    expect(wrapper.find('.logo-image').attributes('alt')).toBeUndefined()
   })
 
-  it('falls back to the navigation brand when no presentation mark label is configured', () => {
+  it('omits the presentation mark when no explicit chrome label is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
       tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
-      navigation: {
-        brand_title: 'Threat Dragon Updates',
-      },
       links: {
         repository: {
           label: 'Repo',
@@ -144,6 +141,6 @@ describe('StandardSlideLayout', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Threat Dragon Updates')
+    expect(wrapper.find('.deck-mark').exists()).toBe(false)
   })
 })

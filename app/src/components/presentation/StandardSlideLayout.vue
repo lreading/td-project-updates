@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import { contentRepository } from '../../content/ContentRepository'
+import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
 
 withDefaults(
   defineProps<{
@@ -21,10 +22,8 @@ withDefaults(
 
 const site = contentRepository.getSiteContent()
 const logoUrl = computed(() => site.presentation_logo?.url?.trim() || undefined)
-const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || site.title)
-const markLabel = computed(
-  () => site.presentation_chrome?.mark_label?.trim() || site.navigation?.brand_title?.trim() || site.title,
-)
+const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || undefined)
+const markLabel = computed(() => resolvePresentationChromeLabel(site))
 </script>
 
 <template>
@@ -58,7 +57,7 @@ const markLabel = computed(
           <slot />
         </div>
 
-        <div v-if="presentationSubtitle" class="deck-mark z-10">
+        <div v-if="presentationSubtitle && markLabel" class="deck-mark z-10">
           <span class="deck-mark__name">{{ markLabel }}</span>
           <span class="deck-mark__subtitle">{{ presentationSubtitle }}</span>
         </div>
