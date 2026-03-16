@@ -31,7 +31,7 @@ watch(
   <header class="app-nav">
     <div class="app-nav__inner">
       <RouterLink :to="{ name: 'home' }" class="app-nav__brand">
-        <span class="app-nav__title">{{ navigationContent.brand_title }}</span>
+        <span v-if="navigationContent.brand_title" class="app-nav__title">{{ navigationContent.brand_title }}</span>
       </RouterLink>
 
       <button
@@ -48,10 +48,16 @@ watch(
       </button>
 
       <nav id="app-nav-links" class="app-nav__links" :class="{ 'app-nav__links--open': mobileOpen }">
-        <RouterLink :to="{ name: 'home' }" class="app-nav__link" :class="{ 'app-nav__link--active': route.name === 'home' }">
+        <RouterLink
+          v-if="navigationContent.home_label"
+          :to="{ name: 'home' }"
+          class="app-nav__link"
+          :class="{ 'app-nav__link--active': route.name === 'home' }"
+        >
           {{ navigationContent.home_label }}
         </RouterLink>
         <RouterLink
+          v-if="navigationContent.presentations_label"
           :to="{ name: 'presentations' }"
           class="app-nav__link"
           :class="{ 'app-nav__link--active': route.name === 'presentations' }"
@@ -59,6 +65,7 @@ watch(
           {{ navigationContent.presentations_label }}
         </RouterLink>
         <RouterLink
+          v-if="navigationContent.latest_presentation_label"
           :to="presentationRoute"
           class="app-nav__link"
           :class="{ 'app-nav__link--active': isPresentationActive }"

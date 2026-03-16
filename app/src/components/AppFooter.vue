@@ -9,7 +9,10 @@ const footerLink = computed(() => resolveAppFooterContent(site))
 </script>
 
 <template>
-  <footer class="app-footer">
+  <footer
+    v-if="footerLink.repository_url && footerLink.repository_label"
+    class="app-footer"
+  >
     <a
       :href="footerLink.repository_url"
       target="_blank"

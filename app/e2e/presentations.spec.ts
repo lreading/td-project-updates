@@ -10,7 +10,7 @@ const featured = presentations.find((entry) => entry.featured) ?? presentations[
 test('renders the presentations listing and opens the selected presentation', async ({ page }) => {
   await page.goto('/presentations')
 
-  await expect(page.getByText(site.presentations_page_title ?? 'All presentations')).toBeVisible()
+  await expect(page.getByText(site.presentations_page?.title ?? '')).toBeVisible()
   await expect(page.getByLabel('Search')).toBeVisible()
   await expect(page.getByLabel('Year')).toBeVisible()
   await expect(page.getByText(`${presentations.length} presentation`)).toBeVisible()

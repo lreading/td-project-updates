@@ -76,7 +76,6 @@ export interface SiteContent {
   home_intro: string
   home_cta_label: string
   presentations_cta_label: string
-  presentations_page_title?: string
   presentations_page?: PresentationsPageContent
   links: Record<string, SiteLink>
 }

@@ -12,7 +12,6 @@ import { resolveRoadmapLabels } from '../../content/contentDefaults'
 import type {
   PresentationDeck,
   RoadmapSlide,
-  RoadmapStageContent,
   RoadmapStageStatus,
   SiteContent,
 } from '../../types/content'
@@ -26,13 +25,6 @@ const props = defineProps<{
 }>()
 
 const stageOrder: RoadmapStageStatus[] = ['completed', 'in-progress', 'planned', 'future']
-const fallbackSection: RoadmapStageContent = {
-  label: 'Roadmap',
-  summary: 'Roadmap details are not available.',
-  items: [],
-  themes: [],
-}
-
 const sections = computed(() => props.presentation.roadmap?.sections)
 const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.stage))
 const timelineStages = computed(() =>
@@ -47,20 +39,20 @@ const timelineStages = computed(() =>
 
     return {
       status,
-      section: sections.value?.[status] ?? fallbackSection,
+      section: sections.value?.[status],
       isActive: status === props.slide.stage,
       progressState,
     }
   }),
 )
-const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallbackSection)
+const activeStage = computed(() => sections.value?.[props.slide.stage])
 const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
 </script>
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? `Roadmap: ${activeStage.label}`"
-    :subtitle="slide.subtitle ?? activeStage.summary"
+    :title="slide.title"
+    :subtitle="slide.subtitle ?? activeStage?.summary"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
     :presentation-subtitle="presentation.subtitle"
@@ -70,29 +62,30 @@ const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
       <ProgressTimeline
         :items="timelineStages.map((entry) => ({
           key: entry.status,
-          title: entry.section.label,
-          summary: entry.section.summary,
+          title: entry.section?.label ?? '',
+          summary: entry.section?.summary ?? '',
           state: entry.progressState,
         }))"
       />
 
       <div class="details-grid">
         <section class="detail-card detail-card--primary">
-          <p class="card-eyebrow">{{ activeStage.label }}</p>
-          <h2 class="card-title">{{ roadmapLabels.deliverables }}</h2>
-          <ContentList :items="activeStage.items" marker="icon" icon="chevron-right" class="detail-list" />
+          <p v-if="activeStage?.label" class="card-eyebrow">{{ activeStage.label }}</p>
+          <h2 v-if="roadmapLabels.deliverables" class="card-title">{{ roadmapLabels.deliverables }}</h2>
+          <ContentList :items="activeStage?.items ?? []" marker="icon" icon="chevron-right" class="detail-list" />
         </section>
 
         <section class="detail-card detail-card--secondary">
-          <SectionHeading icon="bullseye" :title="roadmapLabels.focusAreas" />
+          <SectionHeading v-if="roadmapLabels.focusAreas" icon="bullseye" :title="roadmapLabels.focusAreas" />
           <KeyValueRows
-            :rows="activeStage.themes.map((theme) => ({ key: theme.category, value: theme.target }))"
+            :rows="(activeStage?.themes ?? []).map((theme) => ({ key: theme.category, value: theme.target }))"
             class="themes-grid"
           />
         </section>
       </div>
 
       <FooterActionLink
+        v-if="roadmapLabels.footerLink"
         class="footer-link"
         :href="site.links.repository.url"
         :icon="['fab', 'github']"

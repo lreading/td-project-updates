@@ -5,6 +5,8 @@ import { contentRepository } from '../content/ContentRepository'
 import HomeView from './HomeView.vue'
 
 describe('HomeView', () => {
+  const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -18,14 +20,16 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('OWASP Threat Dragon')
-    expect(wrapper.text()).toContain('Community Updates')
-    expect(wrapper.text()).toContain('Quarterly community updates, published as a static presentation app.')
-    expect(wrapper.text()).toContain('OWASP Lab Project')
+    const text = normalizeText(wrapper.text())
+
+    expect(text).toContain('OWASP Threat Dragon')
+    expect(text).toContain('Community Updates')
+    expect(text).toContain('Quarterly community updates, published as a static presentation app.')
+    expect(text).toContain('OWASP Lab Project')
     expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
-    expect(wrapper.text()).toContain('View latest presentation')
-    expect(wrapper.text()).toContain('View all presentations')
-    expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')
+    expect(text).toContain('View latest presentation')
+    expect(text).toContain('View all presentations')
+    expect(text).toContain('github.com/OWASP/threat-dragon')
   })
 
   it('falls back to the first presentation when none are featured', () => {
@@ -56,7 +60,7 @@ describe('HomeView', () => {
     })
   })
 
-  it('falls back to default home hero text when hero config is missing', () => {
+  it('omits home hero headings when hero config is missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
       tagline: 'making threat modeling less threatening',
@@ -79,8 +83,8 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('OWASP Threat Dragon')
-    expect(wrapper.text()).toContain('Community Updates')
+    expect(wrapper.find('.hero-title').exists()).toBe(false)
+    expect(wrapper.find('.hero-subtitle').exists()).toBe(false)
     expect(wrapper.text()).toContain('Fallback intro')
   })
 })

@@ -6,6 +6,7 @@ import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
 import ResourcePillLink from '../ui/ResourcePillLink.vue'
+import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
 
 import type {
   GeneratedPresentationData,
@@ -21,12 +22,7 @@ const props = defineProps<{
   slide: ThankYouSlide
 }>()
 
-const markLabel = computed(
-  () =>
-    props.site.presentation_chrome?.mark_label?.trim()
-    || props.site.navigation?.brand_title?.trim()
-    || props.site.title,
-)
+const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
 </script>
 
 <template>
@@ -80,7 +76,7 @@ const markLabel = computed(
       <p class="footer-quote">"{{ slide.quote ?? site.tagline }}"</p>
     </div>
 
-    <div class="deck-mark">
+    <div v-if="markLabel" class="deck-mark">
       <span class="deck-mark__name">{{ markLabel }}</span>
       <span class="deck-mark__subtitle">{{ presentation.subtitle }}</span>
     </div>

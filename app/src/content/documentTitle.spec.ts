@@ -65,4 +65,22 @@ describe('resolveDocumentTitle', () => {
     expect(afterEach).toHaveBeenCalledOnce()
     expect(document.title).toBe('All presentations | Threat Dragon Quarterly Updates')
   })
+
+  it('falls back to the site title when the presentations-page title is not configured', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Quarterly Updates',
+      tagline: 'Tagline',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      presentations_cta_label: 'Presentations',
+      presentations_page: {
+        title: '   ',
+      },
+      links: {},
+    })
+
+    expect(resolveDocumentTitle({ name: 'presentations', params: {} })).toBe(
+      'Threat Dragon Quarterly Updates',
+    )
+  })
 })

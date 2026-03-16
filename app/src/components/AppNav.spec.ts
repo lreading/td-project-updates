@@ -96,7 +96,7 @@ describe('AppNav', () => {
     })
   })
 
-  it('falls back to default navigation labels when config values are blank', async () => {
+  it('hides navigation labels when config values are blank', async () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
       tagline: 'Quarterly updates',
@@ -131,10 +131,10 @@ describe('AppNav', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Threat Dragon Updates')
-    expect(wrapper.text()).toContain('Home')
-    expect(wrapper.text()).toContain('Presentations')
-    expect(wrapper.text()).toContain('Latest Presentation')
-    expect(wrapper.get('.app-nav__toggle').attributes('aria-label')).toBe('Toggle navigation')
+    expect(wrapper.text()).not.toContain('Threat Dragon Updates')
+    expect(wrapper.text()).not.toContain('Home')
+    expect(wrapper.text()).not.toContain('Presentations')
+    expect(wrapper.text()).not.toContain('Latest Presentation')
+    expect(wrapper.get('.app-nav__toggle').attributes('aria-label')).toBeUndefined()
   })
 })

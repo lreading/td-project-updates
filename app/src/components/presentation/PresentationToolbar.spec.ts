@@ -45,4 +45,16 @@ describe('PresentationToolbar', () => {
     expect(wrapper.text()).toContain('Presentation mode')
     expect(wrapper.text()).toContain('1 / 3')
   })
+
+  it('omits controls whose labels are not configured', () => {
+    const wrapper = mount(PresentationToolbar, {
+      props: {
+        slideNumber: 1,
+        slideTotal: 3,
+      },
+    })
+
+    expect(wrapper.findAll('button')).toHaveLength(0)
+    expect(wrapper.text()).toContain('1 / 3')
+  })
 })

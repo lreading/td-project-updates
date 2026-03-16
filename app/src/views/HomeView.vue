@@ -44,14 +44,19 @@ const heroContent = computed(() => resolveHomeHeroContent(site))
       </div>
 
       <div class="hero-copy">
-        <h1 class="hero-title">
-          {{ heroContent.title_primary }} <span class="accent-text">{{ heroContent.title_accent }}</span>
+        <h1
+          v-if="heroContent.title_primary || heroContent.title_accent"
+          class="hero-title"
+        >
+          <span v-if="heroContent.title_primary">{{ heroContent.title_primary }}</span>
+          <span v-if="heroContent.title_primary && heroContent.title_accent">&nbsp;</span>
+          <span v-if="heroContent.title_accent" class="accent-text">{{ heroContent.title_accent }}</span>
         </h1>
-        <AccentDivider />
-        <h2 class="hero-subtitle">
+        <AccentDivider v-if="heroContent.title_primary || heroContent.title_accent || heroContent.subtitle" />
+        <h2 v-if="heroContent.subtitle" class="hero-subtitle">
           {{ heroContent.subtitle }}
         </h2>
-        <p class="hero-description">
+        <p v-if="site.home_intro" class="hero-description">
           {{ site.home_intro }}
         </p>
       </div>

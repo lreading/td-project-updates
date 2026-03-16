@@ -48,10 +48,9 @@ describe('contentDefaults', () => {
     expect(resolvePresentationChromeLabel(site)).toBe('Threat Dragon')
   })
 
-  it('falls back when optional site content is missing or blank', () => {
-    const fallbackSite = {
+  it('returns undefined for blank optional site content instead of using defaults', () => {
+    const blankSite = {
       ...site,
-      title: 'Threat Dragon Quarterly Updates',
       navigation: {
         brand_title: '   ',
         home_label: '   ',
@@ -94,22 +93,17 @@ describe('contentDefaults', () => {
         presentation_singular_label: '   ',
         presentation_plural_label: '   ',
       },
-      presentations_page_title: '   ',
     }
 
-    expect(resolveNavigationContent(fallbackSite).brand_title).toBe('Threat Dragon Updates')
-    expect(resolveAppFooterContent(fallbackSite).repository_label).toBe(
-      'github.com/lreading/td-project-updates',
-    )
-    expect(resolvePresentationToolbarContent(fallbackSite).presentation_mode_label).toBe(
-      'Presentation mode',
-    )
-    expect(resolvePresentationsPageContent(fallbackSite).title).toBe('All presentations')
-    expect(resolveHomeHeroContent(fallbackSite).title_primary).toBe('OWASP')
-    expect(resolvePresentationChromeLabel(fallbackSite)).toBe('Threat Dragon Quarterly Updates')
+    expect(resolveNavigationContent(blankSite).brand_title).toBeUndefined()
+    expect(resolveAppFooterContent(blankSite).repository_label).toBeUndefined()
+    expect(resolvePresentationToolbarContent(blankSite).presentation_mode_label).toBeUndefined()
+    expect(resolvePresentationsPageContent(blankSite).title).toBeUndefined()
+    expect(resolveHomeHeroContent(blankSite).title_primary).toBeUndefined()
+    expect(resolvePresentationChromeLabel(blankSite)).toBeUndefined()
   })
 
-  it('normalizes slide and roadmap defaults', () => {
+  it('normalizes authored slide and roadmap labels', () => {
     expect(resolveTitleSlideContent(titleSlide)).toEqual({
       titlePrimary: 'OWASP',
       titleAccent: 'Threat Dragon',
@@ -122,7 +116,7 @@ describe('contentDefaults', () => {
     })
   })
 
-  it('falls back for blank title-slide and roadmap labels', () => {
+  it('returns undefined for blank title-slide and roadmap labels', () => {
     expect(
       resolveTitleSlideContent({
         ...titleSlide,
@@ -131,9 +125,9 @@ describe('contentDefaults', () => {
         subtitle_prefix: '   ',
       }),
     ).toEqual({
-      titlePrimary: 'OWASP',
-      titleAccent: 'Threat Dragon',
-      subtitlePrefix: 'Quarterly Community Update',
+      titlePrimary: undefined,
+      titleAccent: undefined,
+      subtitlePrefix: undefined,
     })
 
     expect(
@@ -147,9 +141,9 @@ describe('contentDefaults', () => {
         },
       }),
     ).toEqual({
-      deliverables: 'Key deliverables',
-      focusAreas: 'Focus areas',
-      footerLink: 'View full roadmap & milestones on GitHub',
+      deliverables: undefined,
+      focusAreas: undefined,
+      footerLink: undefined,
     })
   })
 })

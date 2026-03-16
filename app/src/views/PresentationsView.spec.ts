@@ -5,6 +5,8 @@ import { contentRepository } from '../content/ContentRepository'
 import PresentationsView from './PresentationsView.vue'
 
 describe('PresentationsView', () => {
+  const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+
   beforeEach(() => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
@@ -12,6 +14,23 @@ describe('PresentationsView', () => {
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
+      presentations_page: {
+        title: 'All presentations',
+        search_label: 'Search',
+        search_placeholder: 'Search presentations...',
+        year_label: 'Year',
+        all_years_label: 'All years',
+        open_presentation_label: 'Open presentation',
+        empty_title: 'No matching presentations',
+        empty_message: 'Try a different year or a broader search term.',
+        previous_page_label: 'Previous',
+        next_page_label: 'Next',
+        page_label: 'Page',
+        showing_label: 'Showing',
+        total_label: 'total',
+        presentation_singular_label: 'presentation',
+        presentation_plural_label: 'presentations',
+      },
       links: {},
     })
   })
@@ -108,11 +127,11 @@ describe('PresentationsView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('13 presentations total')
-    expect(wrapper.text()).toContain('Page 1 of 2 · Showing 1-12')
+    expect(normalizeText(wrapper.text())).toContain('13 presentations total')
+    expect(normalizeText(wrapper.text())).toContain('Page 1 of 2 · Showing 1-12')
     await wrapper.get('.presentations-page-button:last-child').trigger('click')
-    expect(wrapper.text()).toContain('Page 2 of 2 · Showing 13-13')
-    expect(wrapper.text()).toContain('Weekly Update 13')
+    expect(normalizeText(wrapper.text())).toContain('Page 2 of 2 · Showing 13-13')
+    expect(normalizeText(wrapper.text())).toContain('Weekly Update 13')
   })
 
   it('renders condensed pagination for very large archives', () => {
@@ -142,5 +161,57 @@ describe('PresentationsView', () => {
       .map((button) => button.text())
 
     expect(labels).toEqual(['Previous', '1', '2', '…', '517', 'Next'])
+  })
+
+  it('omits configurable chrome when presentations-page labels are missing', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Updates',
+      tagline: 'Tagline',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      presentations_cta_label: 'Presentations',
+      presentations_page: {
+        title: '   ',
+        search_label: '   ',
+        search_placeholder: '   ',
+        year_label: '   ',
+        all_years_label: '   ',
+        open_presentation_label: '   ',
+        empty_title: '   ',
+        empty_message: '   ',
+        previous_page_label: '   ',
+        next_page_label: '   ',
+        page_label: '   ',
+        showing_label: '   ',
+        total_label: '   ',
+        presentation_singular_label: '   ',
+        presentation_plural_label: '   ',
+      },
+      links: {},
+    })
+    vi.spyOn(contentRepository, 'listPresentations').mockReturnValue([
+      {
+        id: '2026-q1',
+        year: 2026,
+        quarter: 1,
+        title: 'Q1 2026',
+        subtitle: 'Q1 2026',
+        summary: 'Latest quarterly update',
+        published: true,
+        featured: true,
+      },
+    ])
+
+    const wrapper = mount(PresentationsView, {
+      global: {
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.find('.presentations-eyebrow').exists()).toBe(false)
+    expect(wrapper.find('.presentations-field__label').exists()).toBe(false)
+    expect(wrapper.find('.presentations-link').text()).toBe('')
   })
 })

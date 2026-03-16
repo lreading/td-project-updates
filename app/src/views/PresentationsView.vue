@@ -52,14 +52,14 @@ function goToPage(page: number): void {
   <main class="page">
     <div class="page-header presentations-header">
       <div class="presentations-heading">
-        <p class="presentations-eyebrow">{{ pageContent.title }}</p>
+        <p v-if="pageContent.title" class="presentations-eyebrow">{{ pageContent.title }}</p>
       </div>
     </div>
 
     <section class="presentations-panel">
       <div class="presentations-toolbar">
         <label class="presentations-field">
-          <span class="presentations-field__label">{{ pageContent.search_label }}</span>
+          <span v-if="pageContent.search_label" class="presentations-field__label">{{ pageContent.search_label }}</span>
           <input
             v-model="search"
             class="presentations-input"
@@ -69,7 +69,7 @@ function goToPage(page: number): void {
         </label>
 
         <label class="presentations-field presentations-field--year">
-          <span class="presentations-field__label">{{ pageContent.year_label }}</span>
+          <span v-if="pageContent.year_label" class="presentations-field__label">{{ pageContent.year_label }}</span>
           <select v-model="selectedYear" class="presentations-select">
             <option value="all">{{ pageContent.all_years_label }}</option>
             <option v-for="year in availableYears" :key="year" :value="String(year)">
@@ -83,10 +83,11 @@ function goToPage(page: number): void {
         <p>
           <strong>{{ pageResult.totalItems }}</strong>
           {{ pageResult.totalItems === 1 ? pageContent.presentation_singular_label : pageContent.presentation_plural_label }}
-          {{ pageContent.total_label }}
+          <template v-if="pageContent.total_label"> {{ pageContent.total_label }}</template>
         </p>
         <p v-if="pageResult.totalItems > 0">
-          {{ pageContent.page_label }} {{ pageResult.page }} of {{ pageResult.totalPages }} · {{ pageContent.showing_label }}
+          {{ pageContent.page_label }} {{ pageResult.page }} of {{ pageResult.totalPages }}
+          <template v-if="pageContent.showing_label"> · {{ pageContent.showing_label }}</template>
           {{ pageResult.startItem }}-{{ pageResult.endItem }}
         </p>
       </div>
@@ -116,7 +117,7 @@ function goToPage(page: number): void {
 
       <div v-else class="presentations-empty">
         <h2>{{ pageContent.empty_title }}</h2>
-        <p>{{ pageContent.empty_message }}</p>
+        <p v-if="pageContent.empty_message">{{ pageContent.empty_message }}</p>
       </div>
 
       <div v-if="pageResult.totalPages > 1" class="presentations-pagination">

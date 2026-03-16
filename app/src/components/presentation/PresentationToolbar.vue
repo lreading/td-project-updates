@@ -4,10 +4,10 @@ import ActionButton from '../ui/ActionButton.vue'
 defineProps<{
   slideNumber: number
   slideTotal: number
-  navigationLabel: string
-  previousSlideLabel: string
-  nextSlideLabel: string
-  presentationModeLabel: string
+  navigationLabel?: string
+  previousSlideLabel?: string
+  nextSlideLabel?: string
+  presentationModeLabel?: string
 }>()
 
 defineEmits<{
@@ -21,6 +21,7 @@ defineEmits<{
   <div class="toolbar">
     <div class="toolbar-group toolbar-group--nav" :aria-label="navigationLabel">
       <button
+        v-if="previousSlideLabel"
         type="button"
         class="toolbar-icon-button"
         :aria-label="previousSlideLabel"
@@ -33,6 +34,7 @@ defineEmits<{
       <span class="toolbar-counter">{{ slideNumber }} / {{ slideTotal }}</span>
 
       <button
+        v-if="nextSlideLabel"
         type="button"
         class="toolbar-icon-button"
         :aria-label="nextSlideLabel"
@@ -44,7 +46,12 @@ defineEmits<{
     </div>
 
     <div class="toolbar-group toolbar-group--meta">
-      <ActionButton type="button" class="toolbar-mode-button" @click="$emit('toggleMode')">
+      <ActionButton
+        v-if="presentationModeLabel"
+        type="button"
+        class="toolbar-mode-button"
+        @click="$emit('toggleMode')"
+      >
         {{ presentationModeLabel }}
       </ActionButton>
     </div>

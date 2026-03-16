@@ -5,6 +5,8 @@ import { contentRepository } from '../../content/ContentRepository'
 import SlideRenderer from './SlideRenderer.vue'
 
 describe('SlideRenderer', () => {
+  const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+
   const site = contentRepository.getSiteContent()
   const record = contentRepository.getPresentation('2026-q1')
   const slides = record.presentation.slides.filter((slide) => slide.enabled)
@@ -36,7 +38,7 @@ describe('SlideRenderer', () => {
         },
       })
 
-      expect(wrapper.text()).toContain(headings[index])
+      expect(normalizeText(wrapper.text())).toContain(headings[index])
     })
   })
 })

@@ -34,15 +34,19 @@ const slideContent = computed(() => resolveTitleSlideContent(props.slide))
       </div>
 
       <div class="text-block">
-        <h1 class="hero-title">
-          {{ slideContent.titlePrimary }} <span class="accent-text">{{ slideContent.titleAccent }}</span>
+        <h1 v-if="slideContent.titlePrimary || slideContent.titleAccent" class="hero-title">
+          <span v-if="slideContent.titlePrimary">{{ slideContent.titlePrimary }}</span>
+          <span v-if="slideContent.titlePrimary && slideContent.titleAccent">&nbsp;</span>
+          <span v-if="slideContent.titleAccent" class="accent-text">{{ slideContent.titleAccent }}</span>
         </h1>
-        <AccentDivider />
-        <h2 class="hero-subtitle">
+        <AccentDivider
+          v-if="slideContent.titlePrimary || slideContent.titleAccent || slideContent.subtitlePrefix"
+        />
+        <h2 v-if="slideContent.subtitlePrefix" class="hero-subtitle">
           {{ slideContent.subtitlePrefix }} —
           <span class="hero-subtitle-strong">{{ presentation.subtitle }}</span>
         </h2>
-        <p class="hero-quote">"{{ slide.quote }}"</p>
+        <p v-if="slide.quote" class="hero-quote">"{{ slide.quote }}"</p>
       </div>
     </div>
 

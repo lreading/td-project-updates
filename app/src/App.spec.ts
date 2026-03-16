@@ -5,6 +5,8 @@ import App from './App.vue'
 import { createAppRouter } from './router'
 
 describe('App', () => {
+  const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+
   it('renders the app nav and the routed home view', async () => {
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
@@ -22,12 +24,14 @@ describe('App', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Threat Dragon Updates')
-    expect(wrapper.text()).toContain('OWASP Threat Dragon')
-    expect(wrapper.text()).toContain('Home')
-    expect(wrapper.text()).toContain('Presentations')
-    expect(wrapper.text()).toContain('Latest Presentation')
-    expect(wrapper.text()).toContain('td-project-updates')
+    const text = normalizeText(wrapper.text())
+
+    expect(text).toContain('Threat Dragon Updates')
+    expect(text).toContain('OWASP Threat Dragon')
+    expect(text).toContain('Home')
+    expect(text).toContain('Presentations')
+    expect(text).toContain('Latest Presentation')
+    expect(text).toContain('td-project-updates')
   })
 
   it('hides the nav during fullscreen presentation', async () => {

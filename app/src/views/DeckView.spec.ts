@@ -5,6 +5,8 @@ import { createAppRouter } from '../router'
 import DeckView from './DeckView.vue'
 
 describe('DeckView', () => {
+  const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+
   beforeEach(() => {
     Object.defineProperty(document, 'fullscreenEnabled', {
       configurable: true,
@@ -31,7 +33,7 @@ describe('DeckView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('OWASP Threat Dragon')
+    expect(normalizeText(wrapper.text())).toContain('OWASP Threat Dragon')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
     await flushPromises()

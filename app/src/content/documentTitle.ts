@@ -22,7 +22,7 @@ export const resolveDocumentTitle = (
 
   if (route.name === 'presentations') {
     const pageTitle = resolvePresentationsPageContent(site).title
-    return `${pageTitle} | ${site.title}`
+    return pageTitle ? `${pageTitle} | ${site.title}` : site.title
   }
 
   return getBaseTitle()

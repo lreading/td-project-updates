@@ -18,7 +18,7 @@ describe('AppFooter', () => {
     expect(wrapper.text()).toContain('github.com/lreading/td-project-updates')
   })
 
-  it('falls back to default repository values when footer config is missing', () => {
+  it('hides the footer link when footer config is missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
       tagline: 'Quarterly updates',
@@ -35,9 +35,6 @@ describe('AppFooter', () => {
 
     const wrapper = mount(AppFooter)
 
-    expect(wrapper.get('.app-footer__link').attributes('href')).toBe(
-      'https://github.com/lreading/td-project-updates',
-    )
-    expect(wrapper.text()).toContain('github.com/lreading/td-project-updates')
+    expect(wrapper.find('.app-footer').exists()).toBe(false)
   })
 })

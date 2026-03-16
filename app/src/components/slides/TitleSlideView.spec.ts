@@ -35,7 +35,7 @@ describe('TitleSlideView', () => {
     expect(wrapper.text()).toContain('owasp.org/www-project-threat-dragon')
   })
 
-  it('falls back to default hero labels when title config is missing', () => {
+  it('omits hero headings when title config is missing', () => {
     const wrapper = mount(TitleSlideView, {
       props: {
         presentation: record.presentation,
@@ -49,7 +49,7 @@ describe('TitleSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('OWASP Threat Dragon')
-    expect(wrapper.text()).toContain('Quarterly Community Update')
+    expect(wrapper.find('.hero-title').exists()).toBe(false)
+    expect(wrapper.find('.hero-subtitle').exists()).toBe(false)
   })
 })

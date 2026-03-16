@@ -31,8 +31,8 @@ site:
   home_intro: Quarterly community updates, published as a static presentation app.
   home_cta_label: View latest presentation
   presentations_cta_label: View all presentations
-  presentations_page_title: All presentations
   presentations_page:
+    title: All presentations
     search_label: Search
     search_placeholder: Search presentations...
     year_label: Year

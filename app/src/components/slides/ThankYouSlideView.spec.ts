@@ -29,7 +29,7 @@ describe('ThankYouSlideView', () => {
     expect(wrapper.text()).toContain('Q1 2026')
   })
 
-  it('falls back to the site tagline and navigation brand when chrome content is missing', () => {
+  it('uses the site tagline and omits the deck mark when chrome content is missing', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
         presentation: record.presentation,
@@ -50,10 +50,10 @@ describe('ThankYouSlideView', () => {
     })
 
     expect(wrapper.text()).toContain('making threat modeling less threatening')
-    expect(wrapper.text()).toContain('Threat Dragon Updates')
+    expect(wrapper.find('.deck-mark').exists()).toBe(false)
   })
 
-  it('falls back to the site title when no presentation chrome or navigation brand is configured', () => {
+  it('omits the deck mark when no presentation chrome label is configured', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
         presentation: record.presentation,
@@ -68,6 +68,6 @@ describe('ThankYouSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Threat Dragon Quarterly Updates')
+    expect(wrapper.find('.deck-mark').exists()).toBe(false)
   })
 })
