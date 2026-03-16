@@ -1,8 +1,8 @@
 import { parse } from 'yaml'
 
+import { ContentValidator } from './ContentValidator'
+
 import type {
-  GeneratedPresentationData,
-  PresentationDeck,
   PresentationIndexEntry,
   PresentationRecord,
   SiteContent,
@@ -17,35 +17,26 @@ const rawContentFiles = Object.fromEntries(
   Object.entries(globbedContentFiles).map(([path, source]) => [path, String(source)]),
 )
 
-interface PresentationIndexDocument {
-  presentations: PresentationIndexEntry[]
-}
-
-interface SiteDocument {
-  site: SiteContent
-}
-
-interface DeckDocument {
-  presentation: PresentationDeck
-}
-
-interface GeneratedDocument {
-  generated: GeneratedPresentationData
-}
-
 export class ContentRepository {
   private readonly files: Record<string, string>
+  private readonly validator: ContentValidator
 
   public constructor(files: Record<string, string> = rawContentFiles) {
     this.files = files
+    this.validator = new ContentValidator()
   }
 
   public getSiteContent(): SiteContent {
-    return this.readDocument<SiteDocument>('site.yaml').site
+    const document = this.readDocument('site.yaml')
+    this.validator.validateSiteDocument(document)
+    return document.site
   }
 
   public listPresentations(): PresentationIndexEntry[] {
-    return this.readDocument<PresentationIndexDocument>('presentations/index.yaml').presentations
+    const document = this.readDocument('presentations/index.yaml')
+    this.validator.validatePresentationIndexDocument(document)
+
+    return document.presentations
       .filter((entry) => entry.published)
       .sort((left, right) => this.toSortValue(right) - this.toSortValue(left))
   }
@@ -57,21 +48,32 @@ export class ContentRepository {
       throw new Error(`Unknown presentation "${id}".`)
     }
 
+    const presentationDocument = this.readDocument(`presentations/${id}/deck.yaml`)
+    const generatedDocument = this.readDocument(`presentations/${id}/generated.yaml`)
+
+    this.validator.validatePresentationDocument(presentationDocument)
+    this.validator.validateGeneratedDocument(generatedDocument)
+    this.validator.validatePresentationRecordConsistency(
+      index,
+      presentationDocument.presentation,
+      generatedDocument.generated,
+    )
+
     return {
       index,
-      presentation: this.readDocument<DeckDocument>(`presentations/${id}/deck.yaml`).presentation,
-      generated: this.readDocument<GeneratedDocument>(`presentations/${id}/generated.yaml`).generated,
+      presentation: presentationDocument.presentation,
+      generated: generatedDocument.generated,
     }
   }
 
-  private readDocument<T>(suffix: string): T {
+  private readDocument(suffix: string): unknown {
     const entry = Object.entries(this.files).find(([path]) => path.endsWith(suffix))
 
     if (!entry) {
       throw new Error(`Missing content file "${suffix}".`)
     }
 
-    return parse(entry[1]) as T
+    return parse(entry[1])
   }
 
   private toSortValue(entry: PresentationIndexEntry): number {

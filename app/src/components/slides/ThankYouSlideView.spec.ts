@@ -29,7 +29,7 @@ describe('ThankYouSlideView', () => {
     expect(wrapper.text()).toContain('Q1 2026')
   })
 
-  it('uses the site tagline and omits the deck mark when chrome content is missing', () => {
+  it('omits the footer quote and deck mark when authored chrome content is missing', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
         presentation: record.presentation,
@@ -49,7 +49,7 @@ describe('ThankYouSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('making threat modeling less threatening')
+    expect(wrapper.find('.footer-quote').exists()).toBe(false)
     expect(wrapper.find('.deck-mark').exists()).toBe(false)
   })
 

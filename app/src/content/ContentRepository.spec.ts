@@ -110,4 +110,26 @@ describe('ContentRepository', () => {
 
     expect(() => repository.getPresentation('missing')).toThrow('Unknown presentation "missing".')
   })
+
+  it('throws when presentation documents do not match the index entry', () => {
+    const repository = new ContentRepository({
+      ...files,
+      '/virtual/presentations/2026-q1/generated.yaml': `
+generated:
+  id: 2026-q2
+  period:
+    start: 2026-01-01
+    end: 2026-03-31
+  stats: {}
+  releases: []
+  contributors:
+    total: 0
+    authors: []
+`,
+    })
+
+    expect(() => repository.getPresentation('2026-q1')).toThrow(
+      'Presentation id mismatch between index "2026-q1" and generated "2026-q2".',
+    )
+  })
 })

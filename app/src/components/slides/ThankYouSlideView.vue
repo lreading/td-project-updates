@@ -72,8 +72,8 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
       </div>
     </div>
 
-    <div class="footer-wrap">
-      <p class="footer-quote">"{{ slide.quote ?? site.tagline }}"</p>
+    <div v-if="slide.quote" class="footer-wrap">
+      <p class="footer-quote">"{{ slide.quote }}"</p>
     </div>
 
     <div v-if="markLabel" class="deck-mark">

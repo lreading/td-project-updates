@@ -77,6 +77,15 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
           await expect(page.getByText(bullet)).toBeVisible()
         }
       }
+      if (releasesSlide.latest_badge_label) {
+        await expect(page.getByText(releasesSlide.latest_badge_label, { exact: true })).toBeVisible()
+      }
+      if (releasesSlide.footer_link_label) {
+        await expect(page.getByRole('link', { name: releasesSlide.footer_link_label })).toHaveAttribute(
+          'href',
+          `${site.links.repository.url}/releases`,
+        )
+      }
       break
     }
     case 'roadmap': {
@@ -183,7 +192,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         'href',
         site.links.owasp.url,
       )
-      await expect(page.getByText(`"${slide.quote ?? site.tagline}"`)).toBeVisible()
+      if (slide.quote) {
+        await expect(page.getByText(`"${slide.quote}"`)).toBeVisible()
+      }
       await expect(
         page.getByText(site.presentation_chrome?.mark_label ?? site.navigation?.brand_title ?? site.title, {
           exact: true,

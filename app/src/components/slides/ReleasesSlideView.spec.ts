@@ -31,8 +31,30 @@ describe('ReleasesSlideView', () => {
     expect(releaseCards[0]?.attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/releases/tag/v2.3.0',
     )
+    expect(wrapper.text()).toContain('Latest')
     expect(wrapper.get('.github-link').attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/releases',
     )
+    expect(wrapper.text()).toContain('View all releases on GitHub')
+  })
+
+  it('omits optional authored labels when they are absent', () => {
+    const wrapper = mount(ReleasesSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: record.generated,
+        site,
+        slide: {
+          ...slide,
+          latest_badge_label: undefined,
+          footer_link_label: undefined,
+        },
+        slideNumber: 4,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).not.toContain('Latest')
+    expect(wrapper.find('.github-link').exists()).toBe(false)
   })
 })

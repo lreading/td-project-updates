@@ -53,15 +53,15 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
         :date="formatter.format(new Date(release.published_at))"
         :items="release.summary_bullets"
         :highlighted="index === 0"
-        :badge-label="index === 0 ? 'Latest' : undefined"
+        :badge-label="index === 0 ? slide.latest_badge_label : undefined"
       />
 
-      <div class="cta-container">
+      <div v-if="slide.footer_link_label" class="cta-container">
         <FooterActionLink
           class="github-link"
           :href="releasesUrl"
           :icon="['fab', 'github']"
-          label="View all releases on GitHub"
+          :label="slide.footer_link_label"
         />
       </div>
     </div>

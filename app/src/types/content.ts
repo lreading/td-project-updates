@@ -129,6 +129,8 @@ export interface RecentUpdatesSlide extends BaseSlide {
 
 export interface ReleasesSlide extends BaseSlide {
   kind: 'releases'
+  latest_badge_label?: string
+  footer_link_label?: string
   featured_release_ids: string[]
 }
 
