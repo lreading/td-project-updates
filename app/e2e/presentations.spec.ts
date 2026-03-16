@@ -35,6 +35,7 @@ test('supports search and empty-state filtering on the presentations page', asyn
   await search.fill('q1 2026')
   await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   await expect(page.getByText('1 presentation total')).toBeVisible()
+  await expect(page.getByText(/Page 1 of 1/)).toBeVisible()
 
   await search.fill('no such presentation')
   await expect(page.getByRole('heading', { name: 'No matching presentations' })).toBeVisible()

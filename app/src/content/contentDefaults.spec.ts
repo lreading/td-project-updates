@@ -40,6 +40,7 @@ describe('contentDefaults', () => {
       presentation_mode_label: 'Presentation mode',
     })
     expect(resolvePresentationsPageContent(site).search_placeholder).toBe('Search presentations...')
+    expect(resolvePresentationsPageContent(site).page_of_label).toBe('of')
     expect(resolveHomeHeroContent(site)).toEqual({
       title_primary: 'OWASP',
       title_accent: 'Threat Dragon',
@@ -88,6 +89,7 @@ describe('contentDefaults', () => {
         previous_page_label: '   ',
         next_page_label: '   ',
         page_label: '   ',
+        page_of_label: '   ',
         showing_label: '   ',
         total_label: '   ',
         presentation_singular_label: '   ',

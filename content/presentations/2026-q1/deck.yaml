@@ -154,6 +154,7 @@ presentation:
       subtitle: Notable community activity and ecosystem updates from Q1 2026
       section_heading: Community Activity
       stats_heading: Stats This Quarter
+      trend_suffix: vs last presentation
       stat_keys:
         - stars
         - issues_closed

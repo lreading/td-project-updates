@@ -23,19 +23,25 @@ const props = defineProps<{
 const mentionIcons = ['microphone-alt', 'rss', 'podcast']
 const statIcons = ['star', 'check-circle', 'code-branch', 'user-plus']
 
-function formatTrendLabel(previous: number, delta: number): string | undefined {
+function formatTrendLabel(
+  previous: number,
+  delta: number,
+  trendSuffix?: string,
+): string | undefined {
   if (delta === 0) {
     return undefined
   }
 
+  const suffix = trendSuffix?.trim()
+
   if (previous > 0) {
     const percent = Math.round((Math.abs(delta) / previous) * 100)
     const direction = delta > 0 ? '+' : '-'
-    return `${direction}${percent}% vs last presentation`
+    return suffix ? `${direction}${percent}% ${suffix}` : `${direction}${percent}%`
   }
 
   const direction = delta > 0 ? '+' : '-'
-  return `${direction}${Math.abs(delta)} vs last presentation`
+  return suffix ? `${direction}${Math.abs(delta)} ${suffix}` : `${direction}${Math.abs(delta)}`
 }
 
 const stats = computed(() =>
@@ -45,6 +51,7 @@ const stats = computed(() =>
     trend: formatTrendLabel(
       props.generated.stats[key].previous,
       props.generated.stats[key].delta,
+      props.slide.trend_suffix,
     ),
   })),
 )

@@ -86,7 +86,10 @@ function goToPage(page: number): void {
           <template v-if="pageContent.total_label"> {{ pageContent.total_label }}</template>
         </p>
         <p v-if="pageResult.totalItems > 0">
-          {{ pageContent.page_label }} {{ pageResult.page }} of {{ pageResult.totalPages }}
+          <template v-if="pageContent.page_label">{{ pageContent.page_label }} </template>
+          {{ pageResult.page }}
+          <template v-if="pageContent.page_of_label"> {{ pageContent.page_of_label }} </template>
+          {{ pageResult.totalPages }}
           <template v-if="pageContent.showing_label"> · {{ pageContent.showing_label }}</template>
           {{ pageResult.startItem }}-{{ pageResult.endItem }}
         </p>

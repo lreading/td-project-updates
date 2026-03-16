@@ -28,7 +28,7 @@ describe('CommunityHighlightsSlideView', () => {
     expect(wrapper.text()).toContain('Community Activity')
     expect(wrapper.findAll('.mention-card')).toHaveLength(slide.mentions.length)
     expect(wrapper.findAll('.stat-card')).toHaveLength(slide.stat_keys.length)
-    expect(wrapper.text()).toContain('+12% vs last presentation')
+    expect(wrapper.text()).toContain(`+12% ${slide.trend_suffix}`)
     expect(wrapper.text()).toContain('GitHub Stars')
     expect(wrapper.findAll('a.mention-card')).toHaveLength(slide.mentions.length)
     expect(wrapper.text()).toContain('Interop tool')
@@ -60,10 +60,10 @@ describe('CommunityHighlightsSlideView', () => {
       'GitHub Stars',
     ])
     expect(trends).toEqual([
-      '+50% vs last presentation',
-      '+15% vs last presentation',
-      '+8% vs last presentation',
-      '+12% vs last presentation',
+      `+50% ${slide.trend_suffix}`,
+      `+15% ${slide.trend_suffix}`,
+      `+8% ${slide.trend_suffix}`,
+      `+12% ${slide.trend_suffix}`,
     ])
   })
 
@@ -117,7 +117,35 @@ describe('CommunityHighlightsSlideView', () => {
       },
     })
 
-    expect(wrapper.find('.metric-stat-card__trend').text()).toBe('+42 vs last presentation')
+    expect(wrapper.find('.metric-stat-card__trend').text()).toBe(`+42 ${slide.trend_suffix}`)
+  })
+
+  it('renders a suffix-free trend when no trend suffix is configured', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: {
+          ...record.generated,
+          stats: {
+            ...record.generated.stats,
+            stars: {
+              ...record.generated.stats.stars,
+              previous: 0,
+              delta: 42,
+            },
+          },
+        },
+        slide: {
+          ...slide,
+          trend_suffix: undefined,
+          stat_keys: ['stars'],
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.metric-stat-card__trend').text()).toBe('+42')
   })
 
   it('renders mention cards without links when a URL is not provided', () => {

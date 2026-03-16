@@ -57,6 +57,7 @@ export interface PresentationsPageContent {
   previous_page_label?: string
   next_page_label?: string
   page_label?: string
+  page_of_label?: string
   showing_label?: string
   total_label?: string
   presentation_singular_label?: string
@@ -148,6 +149,7 @@ export interface CommunityHighlightsSlide extends BaseSlide {
   kind: 'community-highlights'
   section_heading?: string
   stats_heading?: string
+  trend_suffix?: string
   stat_keys: string[]
   mentions: CommunityMention[]
 }

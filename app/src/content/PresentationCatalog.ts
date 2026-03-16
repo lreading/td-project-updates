@@ -1,13 +1,13 @@
 import type { PresentationIndexEntry } from '../types/content'
 
-export interface ArchivePageInput {
+export interface PresentationPageInput {
   page: number
   pageSize: number
   search: string
   year: number | null
 }
 
-export interface ArchivePageResult {
+export interface PresentationPageResult {
   items: PresentationIndexEntry[]
   page: number
   pageSize: number
@@ -28,7 +28,7 @@ export class PresentationCatalog {
     return [...new Set(this.entries.map((entry) => entry.year))].sort((left, right) => right - left)
   }
 
-  public getPage(input: ArchivePageInput): ArchivePageResult {
+  public getPage(input: PresentationPageInput): PresentationPageResult {
     const filtered = this.filterEntries(input.search, input.year)
     const totalItems = filtered.length
     const totalPages = Math.max(1, Math.ceil(totalItems / input.pageSize))

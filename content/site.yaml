@@ -43,6 +43,7 @@ site:
     previous_page_label: Previous
     next_page_label: Next
     page_label: Page
+    page_of_label: of
     showing_label: Showing
     total_label: total
     presentation_singular_label: presentation

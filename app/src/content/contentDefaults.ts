@@ -69,6 +69,7 @@ export const resolvePresentationsPageContent = (
   previous_page_label: trimOrUndefined(site.presentations_page?.previous_page_label),
   next_page_label: trimOrUndefined(site.presentations_page?.next_page_label),
   page_label: trimOrUndefined(site.presentations_page?.page_label),
+  page_of_label: trimOrUndefined(site.presentations_page?.page_of_label),
   showing_label: trimOrUndefined(site.presentations_page?.showing_label),
   total_label: trimOrUndefined(site.presentations_page?.total_label),
   presentation_singular_label: trimOrUndefined(site.presentations_page?.presentation_singular_label),
