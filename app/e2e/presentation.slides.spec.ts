@@ -29,6 +29,12 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
   switch (slide.kind) {
     case 'title':
       await expect(page.getByRole('heading', { name: /owasp threat dragon/i })).toBeVisible()
+      await expect(
+        page.getByRole('heading', {
+          name: new RegExp(`${slide.title_primary ?? ''}\\s+${slide.title_accent ?? ''}`, 'i'),
+        }),
+      ).toBeVisible()
+      await expect(page.getByText(slide.subtitle_prefix ?? '')).toBeVisible()
       await expect(page.getByText(record.deck.subtitle)).toBeVisible()
       await expect(page.getByText(String(slide.quote))).toBeVisible()
       for (const link of Object.values(site.links)) {
@@ -46,77 +52,136 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       break
     case 'recent-updates': {
       const recentSlide: RecentUpdatesSlide = slide
+      await expect(page.getByText(recentSlide.title ?? '')).toBeVisible()
       await expect(page.getByText(recentSlide.subtitle ?? '')).toBeVisible()
-      await expect(page.getByText(recentSlide.sections[0].title)).toBeVisible()
-      await expect(page.getByText(recentSlide.sections[0].bullets[0])).toBeVisible()
+      for (const section of recentSlide.sections) {
+        await expect(page.getByText(section.title)).toBeVisible()
+        for (const bullet of section.bullets) {
+          await expect(page.getByText(bullet)).toBeVisible()
+        }
+      }
       break
     }
     case 'releases': {
       const releasesSlide: ReleasesSlide = slide
-      const release = record.generated.releases.find(
-        (entry) => entry.id === releasesSlide.featured_release_ids[0],
-      )
+      const releases = releasesSlide.featured_release_ids
+        .map((id) => record.generated.releases.find((entry) => entry.id === id))
+        .filter((entry) => entry !== undefined)
       await expect(page.getByText(releasesSlide.subtitle ?? '')).toBeVisible()
-      await expect(page.getByRole('link', { name: release?.version ?? '' })).toHaveAttribute(
-        'href',
-        release?.url ?? '',
-      )
-      await expect(page.getByText(release?.summary_bullets[0] ?? '')).toBeVisible()
+      for (const release of releases) {
+        await expect(page.getByRole('link', { name: release.version })).toHaveAttribute(
+          'href',
+          release.url,
+        )
+        for (const bullet of release.summary_bullets) {
+          await expect(page.getByText(bullet)).toBeVisible()
+        }
+      }
       break
     }
     case 'roadmap': {
       const roadmapSlide: RoadmapSlide = slide
       const section = record.deck.roadmap?.sections[roadmapSlide.stage]
       await expect(page.getByText(`Roadmap: ${section?.label}`)).toBeVisible()
+      await expect(page.getByText('Key deliverables')).toBeVisible()
+      await expect(page.getByText('Focus areas')).toBeVisible()
+      for (const stage of Object.values(record.deck.roadmap?.sections ?? {})) {
+        await expect(page.getByText(stage.label, { exact: true }).first()).toBeVisible()
+      }
       await expect(page.getByText(section?.summary ?? '', { exact: true }).first()).toBeVisible()
-      await expect(page.getByText(section?.items[0] ?? '')).toBeVisible()
-      await expect(
-        page.getByText(section?.themes[0].category ?? '', { exact: true }).first(),
-      ).toBeVisible()
+      for (const item of section?.items ?? []) {
+        await expect(page.getByText(item)).toBeVisible()
+      }
+      for (const theme of section?.themes ?? []) {
+        await expect(page.getByText(theme.category, { exact: true }).first()).toBeVisible()
+        await expect(page.getByText(theme.target)).toBeVisible()
+      }
+      await expect(page.getByRole('link', { name: /view full roadmap & milestones on github/i })).toHaveAttribute(
+        'href',
+        site.links.repository.url,
+      )
       break
     }
     case 'contributor-spotlight': {
       const contributorSlide: ContributorSpotlightSlide = slide
-      const spotlight = contributorSlide.spotlight[0]
-      const contributor = record.generated.contributors.authors.find(
-        (entry) => entry.login === spotlight.login,
-      )
       await expect(page.getByText(contributorSlide.subtitle ?? '')).toBeVisible()
-      await expect(page.getByRole('heading', { name: contributor?.name ?? '' })).toBeVisible()
-      await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
-        'href',
-        `https://github.com/${spotlight.login}`,
-      )
-      await expect(page.getByText(spotlight.summary)).toBeVisible()
+      for (const spotlight of contributorSlide.spotlight) {
+        const contributor = record.generated.contributors.authors.find(
+          (entry) => entry.login === spotlight.login,
+        )
+        await expect(page.getByRole('heading', { name: contributor?.name ?? '' })).toBeVisible()
+        await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
+          'href',
+          `https://github.com/${spotlight.login}`,
+        )
+        await expect(page.getByText(spotlight.summary)).toBeVisible()
+      }
+      await expect(
+        page.getByRole('link', { name: new RegExp(`all ${record.generated.contributors.total} contributors`, 'i') }),
+      ).toHaveAttribute('href', `${site.links.repository.url}/graphs/contributors`)
       break
     }
     case 'community-highlights': {
       const communitySlide: CommunityHighlightsSlide = slide
+      await expect(page.getByText(communitySlide.title ?? '')).toBeVisible()
       await expect(page.getByText(communitySlide.subtitle ?? '')).toBeVisible()
       await expect(
         page.getByText(communitySlide.section_heading ?? '', { exact: true }).first(),
       ).toBeVisible()
-      await expect(page.getByText(record.generated.stats[communitySlide.stat_keys[0]].label)).toBeVisible()
-      await expect(page.getByText(communitySlide.mentions[0].title)).toBeVisible()
+      await expect(page.getByText('Stats This Quarter')).toBeVisible()
+      for (const statKey of communitySlide.stat_keys) {
+        const stat = record.generated.stats[statKey]
+        await expect(page.getByText(stat.label)).toBeVisible()
+        await expect(page.getByText(stat.current.toLocaleString(), { exact: true })).toBeVisible()
+      }
+      for (const mention of communitySlide.mentions) {
+        await expect(page.getByText(mention.type)).toBeVisible()
+        await expect(page.getByText(mention.title)).toBeVisible()
+        if (mention.url && mention.url_label) {
+          await expect(page.getByRole('link', { name: new RegExp(mention.url_label, 'i') }).first()).toHaveAttribute(
+            'href',
+            mention.url,
+          )
+        }
+      }
       break
     }
     case 'how-to-contribute': {
       const contributeSlide: HowToContributeSlide = slide
+      await expect(page.getByText(contributeSlide.title ?? '')).toBeVisible()
       await expect(page.getByText(contributeSlide.subtitle ?? '')).toBeVisible()
-      await expect(page.getByText(contributeSlide.cards[0].title)).toBeVisible()
-      await expect(page.getByRole('link', { name: contributeSlide.cards[0].url_label })).toHaveAttribute(
+      for (const card of contributeSlide.cards) {
+        await expect(page.getByText(card.title)).toBeVisible()
+        await expect(page.getByText(card.description)).toBeVisible()
+        await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
+      }
+      await expect(page.getByText('Open Source and Community Driven')).toBeVisible()
+      await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
-        contributeSlide.cards[0].url,
+        site.links.repository.url,
       )
       break
     }
     case 'thank-you':
       await expect(page.getByRole('heading', { name: /thank you/i })).toBeVisible()
-      await expect(page.getByText(/see you next quarter/i)).toBeVisible()
+      await expect(page.getByText(slide.message)).toBeVisible()
+      await expect(page.getByText('Source Code')).toBeVisible()
+      await expect(page.getByText('Documentation')).toBeVisible()
+      await expect(page.getByText('Foundation')).toBeVisible()
       await expect(page.getByRole('link', { name: 'GitHub Repo' })).toHaveAttribute(
         'href',
         site.links.repository.url,
       )
+      await expect(page.getByRole('link', { name: 'Read the Docs' })).toHaveAttribute(
+        'href',
+        site.links.docs.url,
+      )
+      await expect(page.getByRole('link', { name: 'OWASP Project' })).toHaveAttribute(
+        'href',
+        site.links.owasp.url,
+      )
+      await expect(page.getByText('"making threat modeling less threatening"')).toBeVisible()
+      await expect(page.getByText('Threat Dragon', { exact: true })).toBeVisible()
       break
   }
 }

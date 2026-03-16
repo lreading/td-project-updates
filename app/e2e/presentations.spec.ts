@@ -17,8 +17,31 @@ test('renders the presentations listing and opens the selected presentation', as
   await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   await expect(page.getByText(featured.summary)).toBeVisible()
   await expect(page.getByText(`Q${featured.quarter} ${featured.year}`)).toBeVisible()
+  await expect(page.getByRole('link', { name: /github.com\/lreading\/td-project-updates/i })).toHaveAttribute(
+    'href',
+    'https://github.com/lreading/td-project-updates',
+  )
 
   await page.getByRole('link', { name: 'Open presentation' }).click()
 
   await expect(page).toHaveURL(new RegExp(`/presentations/${featured.id}`))
+})
+
+test('supports search and empty-state filtering on the presentations page', async ({ page }) => {
+  await page.goto('/presentations')
+
+  const search = page.getByLabel('Search')
+
+  await search.fill('q1 2026')
+  await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
+  await expect(page.getByText('1 presentation total')).toBeVisible()
+
+  await search.fill('no such presentation')
+  await expect(page.getByRole('heading', { name: 'No matching presentations' })).toBeVisible()
+  await expect(page.getByText('Try a different year or a broader search term.')).toBeVisible()
+  await expect(page.getByText('0 presentations total')).toBeVisible()
+
+  await search.fill('')
+  await page.getByLabel('Year').selectOption(String(featured.year))
+  await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
 })
