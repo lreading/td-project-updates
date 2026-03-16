@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 
 import mascotUrl from '../../assets/mascot.png'
+import AccentDivider from '../ui/AccentDivider.vue'
+import FloatingMascot from '../ui/FloatingMascot.vue'
+import HeroDecor from '../ui/HeroDecor.vue'
 import ProjectBadgePill from '../ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../ui/SiteFooterLinks.vue'
 import { getProjectBadgeDisplay } from '../../content/projectBadge'
@@ -19,27 +22,18 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
 
 <template>
   <div class="slide-container">
-    <div class="bg-pattern"></div>
-
-    <svg class="decor-circle decor-circle--top-right" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
-    <svg class="decor-circle decor-circle--bottom-left" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
+    <HeroDecor />
 
     <div class="content-wrap">
       <ProjectBadgePill v-if="badge" :badge="badge" class="title-badge" />
 
       <div class="relative group">
-        <img :src="mascotUrl" alt="Cupcake Mascot" class="mascot-glow mascot" />
+        <FloatingMascot :src="mascotUrl" alt="Cupcake Mascot" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 
       <div class="text-block">
         <h1 class="hero-title">OWASP <span class="accent-text">Threat Dragon</span></h1>
-        <div class="divider-wrap">
-          <div class="divider"></div>
-        </div>
+        <AccentDivider />
         <h2 class="hero-subtitle">
           Quarterly Community Update —
           <span class="hero-subtitle-strong">{{ deck.subtitle }}</span>
@@ -51,8 +45,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
     <div class="footer-wrap">
       <SiteFooterLinks :site="site" />
     </div>
-
-    <div class="bottom-strip"></div>
   </div>
 </template>
 
@@ -72,41 +64,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.bg-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E");
-}
-
-.decor-circle {
-  position: absolute;
-  fill: #ffffff;
-  pointer-events: none;
-}
-
-.decor-circle--top-right {
-  top: 0;
-  right: 0;
-  width: 16rem;
-  height: 16rem;
-  opacity: 0.13;
-  transform: translate(33.333333%, -33.333333%);
-}
-
-.decor-circle--bottom-left {
-  bottom: 0;
-  left: 0;
-  width: 24rem;
-  height: 24rem;
-  opacity: 0.07;
-  transform: translate(-33.333333%, 33.333333%);
-}
-
 .content-wrap {
   z-index: 10;
   display: flex;
@@ -123,29 +80,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   margin-bottom: 1rem;
 }
 
-.mascot-glow {
-  filter: drop-shadow(0 0 20px rgba(232, 52, 28, 0.4));
-  animation: float 6s ease-in-out infinite;
-}
-
-.mascot {
-  width: 12rem;
-  height: 12rem;
-  object-fit: contain;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
 .text-block {
   text-align: center;
 }
@@ -160,20 +94,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
 
 .accent-text {
   color: #e8341c;
-}
-
-.divider-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 0;
-}
-
-.divider {
-  height: 0.25rem;
-  width: 6rem;
-  border-radius: 9999px;
-  background-color: #e8341c;
 }
 
 .hero-subtitle {
@@ -207,15 +127,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   z-index: 10;
 }
 
-.bottom-strip {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 0.25rem;
-  background-color: #e8341c;
-}
-
 @media (max-width: 959px) {
   .hero-title {
     font-size: clamp(2.75rem, 7vw, 3.75rem);
@@ -245,11 +156,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   .content-wrap {
     gap: 1.5rem;
     padding: 0 1.5rem;
-  }
-
-  .mascot {
-    width: 9rem;
-    height: 9rem;
   }
 
   .hero-title {

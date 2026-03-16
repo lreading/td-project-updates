@@ -2,7 +2,10 @@
 import { computed } from 'vue'
 
 import mascotUrl from '../assets/mascot.png'
+import AccentDivider from '../components/ui/AccentDivider.vue'
 import ActionButton from '../components/ui/ActionButton.vue'
+import FloatingMascot from '../components/ui/FloatingMascot.vue'
+import HeroDecor from '../components/ui/HeroDecor.vue'
 import ProjectBadgePill from '../components/ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../components/ui/SiteFooterLinks.vue'
 import { getProjectBadgeDisplay } from '../content/projectBadge'
@@ -17,14 +20,7 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 
 <template>
   <main class="home-page">
-    <div class="bg-pattern"></div>
-
-    <svg class="decor-circle decor-circle--top-right" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
-    <svg class="decor-circle decor-circle--bottom-left" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
+    <HeroDecor :primary-opacity="0.5" :secondary-opacity="0.3" />
 
     <div class="hero-shell">
       <ProjectBadgePill v-if="badge" :badge="badge" class="hero-badge" />
@@ -42,14 +38,12 @@ const badge = computed(() => getProjectBadgeDisplay(site))
       </div>
 
       <div class="mascot-wrap">
-        <img :src="mascotUrl" alt="Cupcake Mascot" class="mascot-glow mascot" />
+        <FloatingMascot :src="mascotUrl" alt="Cupcake Mascot" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 
       <div class="hero-copy">
         <h1 class="hero-title">OWASP <span class="accent-text">Threat Dragon</span></h1>
-        <div class="divider-wrap">
-          <div class="divider"></div>
-        </div>
+        <AccentDivider />
         <h2 class="hero-subtitle">
           Community Updates
         </h2>
@@ -62,8 +56,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
     <div class="footer-wrap">
       <SiteFooterLinks :site="site" />
     </div>
-
-    <div class="bottom-strip"></div>
   </main>
 </template>
 
@@ -81,38 +73,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   background-color: #1e1e2e;
   color: #ffffff;
   padding: 2.5rem var(--page-gutter) 3.5rem;
-}
-
-.bg-pattern {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E");
-}
-
-.decor-circle {
-  position: absolute;
-  fill: #ffffff;
-  pointer-events: none;
-}
-
-.decor-circle--top-right {
-  top: 0;
-  right: 0;
-  width: 16rem;
-  height: 16rem;
-  opacity: 0.5;
-  transform: translate(33.333333%, -33.333333%);
-}
-
-.decor-circle--bottom-left {
-  bottom: 0;
-  left: 0;
-  width: 24rem;
-  height: 24rem;
-  opacity: 0.3;
-  transform: translate(-33.333333%, 33.333333%);
 }
 
 .hero-shell {
@@ -135,17 +95,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   position: relative;
 }
 
-.mascot {
-  width: clamp(9rem, 18vw, 12rem);
-  height: clamp(9rem, 18vw, 12rem);
-  object-fit: contain;
-}
-
-.mascot-glow {
-  filter: drop-shadow(0 0 20px rgba(232, 52, 28, 0.4));
-  animation: float 6s ease-in-out infinite;
-}
-
 .hero-copy {
   display: grid;
   gap: 0.75rem;
@@ -161,20 +110,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 
 .accent-text {
   color: #e8341c;
-}
-
-.divider-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6rem 0 0.8rem;
-}
-
-.divider {
-  width: 6rem;
-  height: 0.25rem;
-  border-radius: 9999px;
-  background-color: #e8341c;
 }
 
 .hero-subtitle {
@@ -198,18 +133,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   line-height: 1.7;
   color: #9ca3af;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 .hero-actions {
@@ -239,15 +162,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   bottom: 2rem;
   left: 0;
   z-index: 1;
-}
-
-.bottom-strip {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 0.25rem;
-  background-color: #e8341c;
 }
 
 @media (max-width: 767px) {

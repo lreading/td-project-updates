@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import mascotUrl from '../../assets/mascot.png'
+import AccentDivider from '../ui/AccentDivider.vue'
+import FloatingMascot from '../ui/FloatingMascot.vue'
+import HeroDecor from '../ui/HeroDecor.vue'
 
 import type {
   GeneratedPresentationData,
@@ -18,25 +21,26 @@ defineProps<{
 
 <template>
   <div class="slide-container">
-    <div class="bg-pattern"></div>
-
-    <svg class="decor-circle decor-circle--top-left" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
-    <svg class="decor-circle decor-circle--bottom-right" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="50"></circle>
-    </svg>
+    <HeroDecor
+      primary-corner="top-left"
+      secondary-corner="bottom-right"
+      :primary-opacity="0.13"
+      :secondary-opacity="0.05"
+    />
 
     <div class="content-wrap">
       <div class="relative group mascot-wrap">
-        <img :src="mascotUrl" alt="Cupcake Mascot" class="mascot-glow mascot" />
+        <FloatingMascot
+          :src="mascotUrl"
+          alt="Cupcake Mascot"
+          size="clamp(150px, 20vw, 200px)"
+          :glow-opacity="0.5"
+        />
       </div>
 
       <div class="text-block">
         <h1 class="hero-title">Thank <span class="accent-text">You!</span></h1>
-        <div class="divider-wrap">
-          <div class="divider"></div>
-        </div>
+        <AccentDivider width="4rem" :opacity="0.8" padding="0.5rem 0" />
         <h2 class="hero-subtitle">See you next quarter 🐉</h2>
       </div>
 
@@ -73,8 +77,6 @@ defineProps<{
       <span class="deck-mark__name">Threat Dragon</span>
       <span class="deck-mark__subtitle">{{ deck.subtitle }}</span>
     </div>
-
-    <div class="bottom-strip"></div>
   </div>
 </template>
 
@@ -94,41 +96,6 @@ defineProps<{
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.bg-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0V0zm1 1h38v38H1V1z' fill='%23ffffff' fill-rule='evenodd'/%3E%3C/svg%3E");
-}
-
-.decor-circle {
-  position: absolute;
-  fill: #ffffff;
-  pointer-events: none;
-}
-
-.decor-circle--top-left {
-  top: 0;
-  left: 0;
-  width: 16rem;
-  height: 16rem;
-  opacity: 0.13;
-  transform: translate(-25%, -25%);
-}
-
-.decor-circle--bottom-right {
-  bottom: 0;
-  right: 0;
-  width: 24rem;
-  height: 24rem;
-  opacity: 0.05;
-  transform: translate(33.333333%, 33.333333%);
-}
-
 .content-wrap {
   z-index: 10;
   display: flex;
@@ -145,29 +112,6 @@ defineProps<{
   margin-bottom: 0.5rem;
 }
 
-.mascot {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-}
-
-.mascot-glow {
-  filter: drop-shadow(0 0 25px rgba(232, 52, 28, 0.5));
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
 .text-block {
   text-align: center;
 }
@@ -182,21 +126,6 @@ defineProps<{
 
 .accent-text {
   color: #e8341c;
-}
-
-.divider-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 0;
-}
-
-.divider {
-  height: 0.25rem;
-  width: 4rem;
-  border-radius: 9999px;
-  background-color: #e8341c;
-  opacity: 0.8;
 }
 
 .hero-subtitle {
@@ -312,15 +241,6 @@ defineProps<{
   font-weight: 700;
 }
 
-.bottom-strip {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 0.25rem;
-  background-color: #e8341c;
-}
-
 @media (max-width: 959px) {
   .hero-title {
     font-size: clamp(3rem, 8vw, 4.5rem);
@@ -341,11 +261,6 @@ defineProps<{
   .content-wrap {
     gap: 2rem;
     padding: 0 1.5rem 5.5rem;
-  }
-
-  .mascot {
-    width: 150px;
-    height: 150px;
   }
 
   .hero-title {
