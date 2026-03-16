@@ -2,8 +2,9 @@
 
 
 # Data
+- Rename deck to presentation, ensure consistency in naming (file and data properties)
+- Try to keep names for the data for the content in all of the different slides as consistent as possible.  We will be migrating to a "template" format.
 - Ensure that all text, except for links, comes from the data files.  This includes website title, EVERYTHING in EVERY slide, etc.
-- Try to keep names for the data for the content in all of the different slides as consistent as possible.  We might be migrating to a "template" format.
 - Create a plan on how we can use these data classes with slide TEMPLATES, so that way they aren't as tightly coupled to OSS work
 - Add data validation per template type
 - Ensure we are not duplicating data unless necessary. If a slide wants the github url, that's fine, but we could also make an exception for that to be duplicated because they may not want to reference the current project url for some reason in a given slide?
@@ -23,3 +24,4 @@
 - E2E tests
 - Separate npm module from vue implementation (generator, validator, init, etc)
 - Create "themes" (just one default), but allow users to create other themes if they want
+  - Realistically, we want templates... Templates should have their own data definitions, but can be usable by whatever.  Not all templates need to be used in a deck

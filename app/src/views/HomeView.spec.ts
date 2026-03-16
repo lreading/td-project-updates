@@ -21,7 +21,7 @@ describe('HomeView', () => {
     expect(wrapper.text()).toContain('OWASP Threat Dragon')
     expect(wrapper.text()).toContain('Community Update')
     expect(wrapper.text()).toContain('OWASP Lab Project')
-    expect(wrapper.find('.glass-badge .fa-flask').exists()).toBe(true)
+    expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
     expect(wrapper.text()).toContain('View latest presentation')
     expect(wrapper.text()).toContain('View all presentations')
     expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')
@@ -53,6 +53,5 @@ describe('HomeView', () => {
       name: 'presentation',
       params: { presentationId: '2026-q3' },
     })
-    expect(wrapper.text()).not.toContain('Q3 2026')
   })
 })

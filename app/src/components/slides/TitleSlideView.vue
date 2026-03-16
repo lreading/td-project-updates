@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 
 import mascotUrl from '../../assets/mascot.png'
+import ProjectBadgePill from '../ui/ProjectBadgePill.vue'
+import SiteFooterLinks from '../ui/SiteFooterLinks.vue'
 import { getProjectBadgeDisplay } from '../../content/projectBadge'
 
 import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
@@ -12,35 +14,6 @@ const props = defineProps<{
   slide: TitleSlide
 }>()
 
-const footerLinks = computed(() => {
-  const toDisplayLabel = (url: string): string => {
-    const parsed = new URL(url)
-    const path = parsed.pathname.replace(/\/$/, '')
-
-    return `${parsed.host}${path}`
-  }
-
-  return [
-    {
-      key: 'repository',
-      iconClass: 'fab fa-github',
-      text: toDisplayLabel(props.site.links.repository.url),
-      url: props.site.links.repository.url,
-    },
-    {
-      key: 'docs',
-      iconClass: 'fas fa-book',
-      text: toDisplayLabel(props.site.links.docs.url),
-      url: props.site.links.docs.url,
-    },
-    {
-      key: 'owasp',
-      iconClass: 'fas fa-globe',
-      text: toDisplayLabel(props.site.links.owasp.url),
-      url: props.site.links.owasp.url,
-    },
-  ]
-})
 const badge = computed(() => getProjectBadgeDisplay(props.site))
 </script>
 
@@ -56,21 +29,7 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
     </svg>
 
     <div class="content-wrap">
-      <div v-if="badge" class="glass-badge">
-        <p class="badge-text">
-          <span class="badge-text__section">
-            <i
-              v-if="badge.iconClass && badge.iconPosition === 'before'"
-              :class="[badge.iconClass, 'badge-icon']"
-            ></i>
-            <span v-if="badge.label">{{ badge.label }}</span>
-            <i
-              v-if="badge.iconClass && badge.iconPosition === 'after'"
-              :class="[badge.iconClass, 'badge-icon badge-icon--after']"
-            ></i>
-          </span>
-        </p>
-      </div>
+      <ProjectBadgePill v-if="badge" :badge="badge" class="title-badge" />
 
       <div class="relative group">
         <img :src="mascotUrl" alt="Cupcake Mascot" class="mascot-glow mascot" />
@@ -90,24 +49,7 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
     </div>
 
     <div class="footer-wrap">
-      <div class="footer-links">
-        <template v-for="(link, index) in footerLinks" :key="link.key">
-          <a
-            class="footer-link"
-            :href="link.url"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <i :class="[link.iconClass, 'footer-icon']"></i>
-            <p>{{ link.text }}</p>
-          </a>
-          <div
-            v-if="index < footerLinks.length - 1"
-            class="footer-separator"
-            aria-hidden="true"
-          ></div>
-        </template>
-      </div>
+      <SiteFooterLinks :site="site" />
     </div>
 
     <div class="bottom-strip"></div>
@@ -177,42 +119,8 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   padding: 0 2rem;
 }
 
-.glass-badge {
+.title-badge {
   margin-bottom: 1rem;
-  padding: 0.25rem 1rem;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-}
-
-.badge-text {
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 400;
-  font-family: var(--font-mono);
-  color: #d1d5db;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.badge-text__section {
-  display: inline-flex;
-  align-items: center;
-}
-
-.badge-icon {
-  margin-right: 0.5rem;
-  color: #e8341c;
-}
-
-.badge-icon--after {
-  margin-right: 0;
-  margin-left: 0.5rem;
 }
 
 .mascot-glow {
@@ -299,42 +207,6 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
   z-index: 10;
 }
 
-.footer-links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 1rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #9ca3af;
-  font-family: var(--font-mono);
-}
-
-.footer-link {
-  display: flex;
-  align-items: center;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.footer-link:hover {
-  color: #d1d5db;
-  transform: translateY(-1px);
-}
-
-.footer-icon {
-  margin-right: 0.5rem;
-}
-
-.footer-separator {
-  width: 0.25rem;
-  height: 0.25rem;
-  border-radius: 9999px;
-  background-color: #4b5563;
-}
-
 .bottom-strip {
   position: absolute;
   bottom: 0;
@@ -354,12 +226,12 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
     line-height: 1.3;
   }
 
-  .footer-links {
+  :deep(.site-footer-links) {
     flex-wrap: wrap;
     gap: 1rem;
   }
 
-  .footer-separator {
+  :deep(.site-footer-links__separator) {
     display: none;
   }
 }
@@ -399,7 +271,7 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
     margin-top: 2rem;
   }
 
-  .footer-links {
+  :deep(.site-footer-links) {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;

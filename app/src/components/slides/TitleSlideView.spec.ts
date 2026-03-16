@@ -22,14 +22,14 @@ describe('TitleSlideView', () => {
       },
     })
 
-    const links = wrapper.findAll('.footer-link')
+    const links = wrapper.findAll('.site-footer-links__link')
 
     expect(links).toHaveLength(3)
     expect(links[0].attributes('href')).toBe(site.links.repository.url)
     expect(links[1].attributes('href')).toBe(site.links.docs.url)
     expect(links[2].attributes('href')).toBe(site.links.owasp.url)
     expect(wrapper.text()).toContain('OWASP Lab Project')
-    expect(wrapper.find('.glass-badge .fa-flask').exists()).toBe(true)
+    expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
     expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')
     expect(wrapper.text()).toContain('threatdragon.com/docs')
     expect(wrapper.text()).toContain('owasp.org/www-project-threat-dragon')

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 
+import ActionButton from '../components/ui/ActionButton.vue'
 import { PresentationCatalog } from '../content/PresentationCatalog'
 import { buildPresentationPagination } from '../content/PresentationPagination'
 import { contentRepository } from '../content/ContentRepository'
@@ -101,12 +102,12 @@ function goToPage(page: number): void {
           </div>
 
           <div class="presentations-actions">
-            <RouterLink
+            <ActionButton
               :to="{ name: 'presentation', params: { presentationId: entry.id } }"
               class="presentations-link"
             >
               Open presentation
-            </RouterLink>
+            </ActionButton>
           </div>
         </article>
       </div>
@@ -290,7 +291,6 @@ function goToPage(page: number): void {
   justify-content: flex-end;
 }
 
-.presentations-link,
 .presentations-page-button {
   appearance: none;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -308,13 +308,7 @@ function goToPage(page: number): void {
 
 .presentations-link {
   padding: 0.75rem 1rem;
-  border-color: rgba(255, 133, 108, 0.65);
-  background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 10px 24px rgba(232, 52, 28, 0.28);
   font-size: 1.02rem;
-  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -323,21 +317,12 @@ function goToPage(page: number): void {
   font: 600 0.9rem/1 var(--font-mono);
 }
 
-.presentations-link:hover,
 .presentations-page-button:hover:not(:disabled),
 .presentations-page-button--active {
   border-color: rgba(232, 52, 28, 0.5);
   background-color: rgba(232, 52, 28, 0.2);
   color: #ffffff;
   transform: translateY(-1px);
-}
-
-.presentations-link:hover {
-  border-color: rgba(255, 160, 138, 0.75);
-  background: linear-gradient(180deg, #f45d44 0%, #ea3c22 100%);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 14px 30px rgba(232, 52, 28, 0.34);
 }
 
 .presentations-page-button:disabled {

@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 
 import mascotUrl from '../assets/mascot.png'
+import ActionButton from '../components/ui/ActionButton.vue'
+import ProjectBadgePill from '../components/ui/ProjectBadgePill.vue'
+import SiteFooterLinks from '../components/ui/SiteFooterLinks.vue'
 import { getProjectBadgeDisplay } from '../content/projectBadge'
 import { contentRepository } from '../content/ContentRepository'
 
@@ -24,32 +27,18 @@ const badge = computed(() => getProjectBadgeDisplay(site))
     </svg>
 
     <div class="hero-shell">
-      <div v-if="badge" class="glass-badge">
-        <p class="badge-text">
-          <span class="badge-text__section">
-            <i
-              v-if="badge.iconClass && badge.iconPosition === 'before'"
-              :class="[badge.iconClass, 'badge-icon']"
-            ></i>
-            <span v-if="badge.label">{{ badge.label }}</span>
-            <i
-              v-if="badge.iconClass && badge.iconPosition === 'after'"
-              :class="[badge.iconClass, 'badge-icon badge-icon--after']"
-            ></i>
-          </span>
-        </p>
-      </div>
+      <ProjectBadgePill v-if="badge" :badge="badge" class="hero-badge" />
 
       <div class="hero-actions">
-        <RouterLink
+        <ActionButton
           :to="{ name: 'presentation', params: { presentationId: featuredPresentation.id } }"
-          class="hero-cta hero-cta--primary"
+          class="hero-cta"
         >
           <span class="hero-cta__single">{{ site.home_cta_label }}</span>
-        </RouterLink>
-        <RouterLink :to="{ name: 'presentations' }" class="hero-cta hero-cta--secondary">
+        </ActionButton>
+        <ActionButton :to="{ name: 'presentations' }" variant="secondary" class="hero-cta">
           <span class="hero-cta__single">{{ site.presentations_cta_label }}</span>
-        </RouterLink>
+        </ActionButton>
       </div>
 
       <div class="mascot-wrap">
@@ -71,22 +60,7 @@ const badge = computed(() => getProjectBadgeDisplay(site))
     </div>
 
     <div class="footer-wrap">
-      <div class="footer-links">
-        <a :href="site.links.repository.url" target="_blank" rel="noreferrer" class="footer-link">
-          <i class="fab fa-github footer-icon"></i>
-          <p>github.com/OWASP/threat-dragon</p>
-        </a>
-        <div class="footer-separator" aria-hidden="true"></div>
-        <a :href="site.links.docs.url" target="_blank" rel="noreferrer" class="footer-link">
-          <i class="fas fa-book footer-icon"></i>
-          <p>threatdragon.com/docs</p>
-        </a>
-        <div class="footer-separator" aria-hidden="true"></div>
-        <a :href="site.links.owasp.url" target="_blank" rel="noreferrer" class="footer-link">
-          <i class="fas fa-globe footer-icon"></i>
-          <p>owasp.org</p>
-        </a>
-      </div>
+      <SiteFooterLinks :site="site" />
     </div>
 
     <div class="bottom-strip"></div>
@@ -153,42 +127,8 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   text-align: center;
 }
 
-.glass-badge {
+.hero-badge {
   margin-bottom: 1rem;
-  padding: 0.25rem 1rem;
-  border-radius: 9999px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-}
-
-.badge-text {
-  margin: 0;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 400;
-  font-family: var(--font-mono);
-  color: #d1d5db;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.badge-text__section {
-  display: inline-flex;
-  align-items: center;
-}
-
-.badge-icon {
-  margin-right: 0.5rem;
-  color: #e8341c;
-}
-
-.badge-icon--after {
-  margin-right: 0;
-  margin-left: 0.5rem;
 }
 
 .mascot-wrap {
@@ -281,57 +221,9 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 }
 
 .hero-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex: 0 0 13.5rem;
   min-width: 13rem;
   min-height: 3.8rem;
-  padding: 0.85rem 1.35rem;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  text-align: center;
-  transition:
-    border-color 120ms ease,
-    background-color 120ms ease,
-    color 120ms ease,
-    box-shadow 120ms ease,
-    transform 120ms ease;
-}
-
-.hero-cta:hover {
-  transform: translateY(-1px);
-}
-
-.hero-cta--primary {
-  color: #fff7f3;
-  background: linear-gradient(180deg, #f04d32 0%, #e8341c 100%);
-  border-color: rgba(255, 133, 108, 0.65);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 10px 24px rgba(232, 52, 28, 0.28);
-}
-
-.hero-cta--primary:hover {
-  background: linear-gradient(180deg, #f45d44 0%, #ea3c22 100%);
-  border-color: rgba(255, 160, 138, 0.75);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 14px 30px rgba(232, 52, 28, 0.34);
-}
-
-.hero-cta--secondary {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: #f3f5fb;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.hero-cta--secondary:hover {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.08) 100%);
-  border-color: rgba(255, 255, 255, 0.26);
 }
 
 .hero-cta__single {
@@ -347,39 +239,6 @@ const badge = computed(() => getProjectBadgeDisplay(site))
   bottom: 2rem;
   left: 0;
   z-index: 1;
-}
-
-.footer-links {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  padding: 0 var(--page-gutter);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-family: var(--font-mono);
-  color: #9ca3af;
-}
-
-.footer-link {
-  display: inline-flex;
-  align-items: center;
-  transition: color 120ms ease;
-}
-
-.footer-link:hover {
-  color: #ffffff;
-}
-
-.footer-icon {
-  margin-right: 0.5rem;
-}
-
-.footer-separator {
-  width: 0.25rem;
-  height: 0.25rem;
-  border-radius: 9999px;
-  background-color: #4b5563;
 }
 
 .bottom-strip {
@@ -416,13 +275,13 @@ const badge = computed(() => getProjectBadgeDisplay(site))
     margin-top: 2.5rem;
   }
 
-  .footer-links {
+  :deep(.site-footer-links) {
     flex-direction: column;
     gap: 0.75rem;
     text-align: center;
   }
 
-  .footer-separator {
+  :deep(.site-footer-links__separator) {
     display: none;
   }
 }
