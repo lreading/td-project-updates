@@ -17,7 +17,7 @@ import type {
 } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   site: SiteContent
   slide: RoadmapSlide
   slideNumber: number
@@ -32,7 +32,7 @@ const fallbackSection: RoadmapStageContent = {
   themes: [],
 }
 
-const sections = computed(() => props.deck.roadmap?.sections)
+const sections = computed(() => props.presentation.roadmap?.sections)
 const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.stage))
 const timelineStages = computed(() =>
   stageOrder.map((status, index) => {
@@ -54,9 +54,9 @@ const timelineStages = computed(() =>
 )
 const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallbackSection)
 const roadmapLabels = computed(() => ({
-  deliverables: props.deck.roadmap?.deliverables_heading?.trim() || 'Key deliverables',
-  focusAreas: props.deck.roadmap?.focus_areas_heading?.trim() || 'Focus areas',
-  footerLink: props.deck.roadmap?.footer_link_label?.trim() || 'View full roadmap & milestones on GitHub',
+  deliverables: props.presentation.roadmap?.deliverables_heading?.trim() || 'Key deliverables',
+  focusAreas: props.presentation.roadmap?.focus_areas_heading?.trim() || 'Focus areas',
+  footerLink: props.presentation.roadmap?.footer_link_label?.trim() || 'View full roadmap & milestones on GitHub',
 }))
 </script>
 
@@ -66,7 +66,7 @@ const roadmapLabels = computed(() => ({
     :subtitle="slide.subtitle ?? activeStage.summary"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
     content-padding="50px 80px"
   >
     <div class="content-wrapper">

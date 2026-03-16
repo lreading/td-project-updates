@@ -63,7 +63,7 @@ describe('HowToContributeSlideView', () => {
 
     const wrapper = mount(HowToContributeSlideView, {
       props: {
-        deck: presentation,
+        presentation,
         site,
         slide,
         slideNumber: 11,
@@ -89,7 +89,7 @@ describe('HowToContributeSlideView', () => {
 
     const wrapper = mount(HowToContributeSlideView, {
       props: {
-        deck: presentation,
+        presentation,
         site,
         slide,
         slideNumber: 11,

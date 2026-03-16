@@ -15,7 +15,7 @@ import type {
 } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ThankYouSlide
@@ -82,7 +82,7 @@ const markLabel = computed(
 
     <div class="deck-mark">
       <span class="deck-mark__name">{{ markLabel }}</span>
-      <span class="deck-mark__subtitle">{{ deck.subtitle }}</span>
+      <span class="deck-mark__subtitle">{{ presentation.subtitle }}</span>
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@ describe('TitleSlideView', () => {
   it('renders clickable footer links from site config', () => {
     const wrapper = mount(TitleSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         site,
         slide,
       },
@@ -38,7 +38,7 @@ describe('TitleSlideView', () => {
   it('falls back to default hero labels when title config is missing', () => {
     const wrapper = mount(TitleSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         site,
         slide: {
           ...slide,

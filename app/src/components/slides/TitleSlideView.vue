@@ -12,7 +12,7 @@ import { getProjectBadgeDisplay } from '../../content/projectBadge'
 import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   site: SiteContent
   slide: TitleSlide
 }>()
@@ -43,7 +43,7 @@ const subtitlePrefix = computed(
         <AccentDivider />
         <h2 class="hero-subtitle">
           {{ subtitlePrefix }} —
-          <span class="hero-subtitle-strong">{{ deck.subtitle }}</span>
+          <span class="hero-subtitle-strong">{{ presentation.subtitle }}</span>
         </h2>
         <p class="hero-quote">"{{ slide.quote }}"</p>
       </div>

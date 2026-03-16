@@ -14,7 +14,7 @@ import type {
 } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ContributorSpotlightSlide
@@ -52,7 +52,7 @@ const bannerContent = computed(() => ({
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
   >
     <div class="profiles-grid">
       <SurfaceCard

@@ -15,7 +15,7 @@ describe('RecentUpdatesSlideView', () => {
   it('renders the configured slide title and section content', () => {
     const wrapper = mount(RecentUpdatesSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         slide,
         slideNumber: 3,
         slideTotal: 12,
@@ -30,7 +30,7 @@ describe('RecentUpdatesSlideView', () => {
   it('falls back to the default title when the slide title is missing', () => {
     const wrapper = mount(RecentUpdatesSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         slide: {
           ...slide,
           title: undefined,

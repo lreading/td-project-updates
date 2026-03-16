@@ -10,7 +10,7 @@ import SurfaceCard from '../ui/SurfaceCard.vue'
 import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   site: SiteContent
   slide: HowToContributeSlide
   slideNumber: number
@@ -28,7 +28,7 @@ const repositoryLink = computed(() => props.site.links.repository)
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
     content-padding="50px 80px"
     :show-dots="false"
   >

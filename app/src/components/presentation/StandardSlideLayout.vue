@@ -9,7 +9,7 @@ withDefaults(
     subtitle?: string
     slideNumber: number
     slideTotal: number
-    deckSubtitle?: string
+    presentationSubtitle?: string
     contentPadding?: string
     showDots?: boolean
   }>(),
@@ -58,9 +58,9 @@ const markLabel = computed(
           <slot />
         </div>
 
-        <div v-if="deckSubtitle" class="deck-mark z-10">
+        <div v-if="presentationSubtitle" class="deck-mark z-10">
           <span class="deck-mark__name">{{ markLabel }}</span>
-          <span class="deck-mark__subtitle">{{ deckSubtitle }}</span>
+          <span class="deck-mark__subtitle">{{ presentationSubtitle }}</span>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ describe('StandardSlideLayout', () => {
         subtitle: 'Future direction',
         slideNumber: 4,
         slideTotal: 12,
-        deckSubtitle: 'Q1 2026',
+        presentationSubtitle: 'Q1 2026',
       },
       slots: {
         default: '<div class="slot-marker">Body</div>',
@@ -128,7 +128,7 @@ describe('StandardSlideLayout', () => {
         title: 'Agenda',
         slideNumber: 2,
         slideTotal: 12,
-        deckSubtitle: 'Q1 2026',
+        presentationSubtitle: 'Q1 2026',
       },
     })
 

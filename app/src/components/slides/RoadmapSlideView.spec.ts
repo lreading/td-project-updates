@@ -17,7 +17,7 @@ describe('RoadmapSlideView', () => {
 
     const wrapper = mount(RoadmapSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         site: contentRepository.getSiteContent(),
         slide,
         slideNumber: 5,
@@ -41,7 +41,7 @@ describe('RoadmapSlideView', () => {
 
     const wrapper = mount(RoadmapSlideView, {
       props: {
-        deck: {
+        presentation: {
           ...record.presentation,
           roadmap: undefined,
         },

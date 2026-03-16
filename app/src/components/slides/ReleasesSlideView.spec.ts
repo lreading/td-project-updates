@@ -16,7 +16,7 @@ describe('ReleasesSlideView', () => {
   it('links release cards and the footer CTA to GitHub release pages', () => {
     const wrapper = mount(ReleasesSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         site,
         slide,

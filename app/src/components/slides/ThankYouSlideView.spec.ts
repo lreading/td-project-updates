@@ -13,10 +13,10 @@ describe('ThankYouSlideView', () => {
     throw new Error('Expected thank-you slide in fixture data')
   }
 
-  it('renders the configured thank-you content and deck mark', () => {
+  it('renders the configured thank-you content and presentation mark', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         site,
         slide,
@@ -32,7 +32,7 @@ describe('ThankYouSlideView', () => {
   it('falls back to the site tagline and navigation brand when chrome content is missing', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         site: {
           ...site,
@@ -56,7 +56,7 @@ describe('ThankYouSlideView', () => {
   it('falls back to the site title when no presentation chrome or navigation brand is configured', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         site: {
           ...site,

@@ -13,7 +13,7 @@ import type {
 } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ReleasesSlide
@@ -39,7 +39,7 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
   >
     <div class="timeline-container">
       <div class="timeline-line"></div>

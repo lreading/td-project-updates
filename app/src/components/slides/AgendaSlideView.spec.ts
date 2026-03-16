@@ -15,7 +15,7 @@ describe('AgendaSlideView', () => {
   it('collapses multiple roadmap slides into a single agenda entry', () => {
     const wrapper = mount(AgendaSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         slide,
         slideNumber: 2,
         slideTotal: 12,

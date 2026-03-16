@@ -13,7 +13,7 @@ import type {
 } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   generated: GeneratedPresentationData
   slide: CommunityHighlightsSlide
   slideNumber: number
@@ -22,13 +22,31 @@ const props = defineProps<{
 
 const mentionIcons = ['microphone-alt', 'rss', 'podcast']
 const statIcons = ['star', 'check-circle', 'code-branch', 'user-plus']
-const trendLabels = ['+12% vs last Q', '+8% vs last Q', '+15% vs last Q', '+5 vs last Q']
+
+function formatTrendLabel(current: number, previous: number, delta: number): string | undefined {
+  if (delta === 0) {
+    return undefined
+  }
+
+  if (previous > 0) {
+    const percent = Math.round((Math.abs(delta) / previous) * 100)
+    const direction = delta > 0 ? '+' : '-'
+    return `${direction}${percent}% vs last presentation`
+  }
+
+  const direction = delta > 0 ? '+' : '-'
+  return `${direction}${Math.abs(delta)} vs last presentation`
+}
 
 const stats = computed(() =>
   props.slide.stat_keys.map((key, index) => ({
     ...props.generated.stats[key],
     icon: statIcons[index],
-    trend: trendLabels[index],
+    trend: formatTrendLabel(
+      props.generated.stats[key].current,
+      props.generated.stats[key].previous,
+      props.generated.stats[key].delta,
+    ),
   })),
 )
 
@@ -47,7 +65,7 @@ const mentionCards = computed(() =>
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
   >
     <div class="content-grid">
       <div class="left-column">

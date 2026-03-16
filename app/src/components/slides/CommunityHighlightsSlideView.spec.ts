@@ -17,7 +17,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('renders the configured mentions and quarterly stats', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         slide,
         slideNumber: 7,
@@ -28,7 +28,7 @@ describe('CommunityHighlightsSlideView', () => {
     expect(wrapper.text()).toContain('Community Activity')
     expect(wrapper.findAll('.mention-card')).toHaveLength(slide.mentions.length)
     expect(wrapper.findAll('.stat-card')).toHaveLength(slide.stat_keys.length)
-    expect(wrapper.text()).toContain('+12% vs last Q')
+    expect(wrapper.text()).toContain('+12% vs last presentation')
     expect(wrapper.text()).toContain('GitHub Stars')
     expect(wrapper.findAll('a.mention-card')).toHaveLength(slide.mentions.length)
     expect(wrapper.text()).toContain('Interop tool')
@@ -42,7 +42,7 @@ describe('CommunityHighlightsSlideView', () => {
 
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         slide: reorderedSlide,
         slideNumber: 7,
@@ -60,11 +60,37 @@ describe('CommunityHighlightsSlideView', () => {
       'GitHub Stars',
     ])
     expect(trends).toEqual([
-      '+12% vs last Q',
-      '+8% vs last Q',
-      '+15% vs last Q',
-      '+5 vs last Q',
+      '+50% vs last presentation',
+      '+15% vs last presentation',
+      '+8% vs last presentation',
+      '+12% vs last presentation',
     ])
+  })
+
+  it('omits the trend label when the delta is zero', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: {
+          ...record.generated,
+          stats: {
+            ...record.generated.stats,
+            stars: {
+              ...record.generated.stats.stars,
+              delta: 0,
+            },
+          },
+        },
+        slide: {
+          ...slide,
+          stat_keys: ['stars'],
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.metric-stat-card__trend').exists()).toBe(false)
   })
 
   it('renders mention cards without links when a URL is not provided', () => {
@@ -82,7 +108,7 @@ describe('CommunityHighlightsSlideView', () => {
 
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         slide: mixedLinkSlide,
         slideNumber: 7,
@@ -101,7 +127,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('falls back to the default section heading when none is configured', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         slide: {
           ...slide,
@@ -118,7 +144,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('falls back to default title, stats heading, and mention icon when optional values are missing', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.presentation,
+        presentation: record.presentation,
         generated: record.generated,
         slide: {
           ...slide,

@@ -8,7 +8,7 @@ import { getSlideLabel } from '../../content/slideLabels'
 import type { AgendaSlide, PresentationDeck } from '../../types/content'
 
 const props = defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   slide: AgendaSlide
   slideNumber: number
   slideTotal: number
@@ -17,7 +17,7 @@ const props = defineProps<{
 const agendaItems = computed(() => {
   let roadmapIncluded = false
 
-  return props.deck.slides
+  return props.presentation.slides
     .filter((entry) => entry.enabled && entry.kind !== 'title' && entry.kind !== 'agenda')
     .flatMap((entry) => {
       if (entry.kind === 'roadmap') {
@@ -29,7 +29,7 @@ const agendaItems = computed(() => {
         return ['Roadmap']
       }
 
-      return [getSlideLabel(entry, props.deck)]
+      return [getSlideLabel(entry, props.presentation)]
     })
 })
 </script>
@@ -40,7 +40,7 @@ const agendaItems = computed(() => {
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
   >
     <div class="agenda-grid">
       <SurfaceCard

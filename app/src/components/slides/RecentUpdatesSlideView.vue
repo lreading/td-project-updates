@@ -6,7 +6,7 @@ import SurfaceCard from '../ui/SurfaceCard.vue'
 import type { PresentationDeck, RecentUpdatesSlide } from '../../types/content'
 
 defineProps<{
-  deck: PresentationDeck
+  presentation: PresentationDeck
   slide: RecentUpdatesSlide
   slideNumber: number
   slideTotal: number
@@ -21,7 +21,7 @@ const icons = ['wrench', 'star', 'users']
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
-    :deck-subtitle="deck.subtitle"
+    :presentation-subtitle="presentation.subtitle"
   >
     <div class="feature-grid">
       <SurfaceCard
