@@ -7,3 +7,11 @@ presentations:
     summary: Product progress, releases, contributor recognition, and community growth.
     published: true
     featured: true
+  - id: 2025-template-sparse
+    year: 2025
+    quarter: 3
+    title: Threat Dragon Sparse Template Coverage
+    subtitle: Sparse Coverage
+    summary: Sparse authored example used to exercise optional template sections.
+    published: true
+    featured: false

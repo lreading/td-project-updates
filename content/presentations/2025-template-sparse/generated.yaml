@@ -1,0 +1,10 @@
+generated:
+  id: 2025-template-sparse
+  period:
+    start: 2025-07-01
+    end: 2025-09-30
+  stats: {}
+  releases: []
+  contributors:
+    total: 0
+    authors: []

@@ -1,0 +1,51 @@
+presentation:
+  id: 2025-template-sparse
+  year: 2025
+  quarter: 3
+  title: Threat Dragon Sparse Template Coverage
+  subtitle: Sparse Coverage
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_accent: Threat Dragon
+    - template: agenda
+      enabled: true
+      title: Agenda
+      content: {}
+    - template: section-list-grid
+      enabled: true
+      title: Minimal Updates
+      content:
+        sections: []
+    - template: timeline
+      enabled: true
+      title: Releases
+      content:
+        featured_release_ids: []
+    - template: progress-timeline
+      enabled: true
+      title: Roadmap
+      content:
+        stage: completed
+    - template: people
+      enabled: true
+      title: Contributors
+      content:
+        spotlight: []
+    - template: metrics-and-links
+      enabled: true
+      title: Community Highlights
+      content:
+        stat_keys: []
+        mentions: []
+    - template: action-cards
+      enabled: true
+      title: How to Contribute
+      content:
+        cards: []
+    - template: closing
+      enabled: true
+      content:
+        heading: Thanks
+        message: See you soon.

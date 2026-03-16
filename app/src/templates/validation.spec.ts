@@ -6,6 +6,7 @@ import type { SlideTemplateId } from './templateIds'
 
 describe('template validation', () => {
   const record = contentRepository.getPresentation('2026-q1')
+  const sparseRecord = contentRepository.getPresentation('2025-template-sparse')
 
   it('accepts every current authored slide through its template validator', () => {
     record.presentation.slides.forEach((slide, index) => {
@@ -13,6 +14,16 @@ describe('template validation', () => {
 
       expect(() =>
         definition.validate(slide as unknown as Record<string, unknown>, `slides[${index}]`),
+      ).not.toThrow()
+    })
+  })
+
+  it('accepts sparse authored slides through their template validators', () => {
+    sparseRecord.presentation.slides.forEach((slide, index) => {
+      const definition = getSlideTemplateDefinition(slide.template)
+
+      expect(() =>
+        definition.validate(slide as unknown as Record<string, unknown>, `sparseSlides[${index}]`),
       ).not.toThrow()
     })
   })

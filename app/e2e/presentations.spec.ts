@@ -22,7 +22,11 @@ test('renders the presentations listing and opens the selected presentation', as
     'https://github.com/lreading/td-project-updates',
   )
 
-  await page.getByRole('link', { name: 'Open presentation' }).click()
+  await page
+    .getByRole('article')
+    .filter({ has: page.getByRole('heading', { name: featured.title }) })
+    .getByRole('link', { name: 'Open presentation' })
+    .click()
 
   await expect(page).toHaveURL(new RegExp(`/presentations/${featured.id}`))
 })
