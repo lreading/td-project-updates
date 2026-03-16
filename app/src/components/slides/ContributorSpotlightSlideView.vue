@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import CalloutBanner from '../ui/CalloutBanner.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
@@ -83,7 +84,7 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
       </SurfaceCard>
     </div>
 
-    <div class="thank-you-banner">
+    <CalloutBanner class="thank-you-banner" variant="dashed" align="center">
       <p class="thank-you-text">
         <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" /> Special thanks to
         <a class="contributors-link" :href="contributorsUrl" target="_blank" rel="noreferrer">
@@ -92,7 +93,7 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
         who submitted PRs,
         reported bugs, and improved docs this quarter!
       </p>
-    </div>
+    </CalloutBanner>
   </StandardSlideLayout>
 </template>
 
@@ -172,22 +173,15 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
   color: rgba(232, 52, 28, 0.2);
 }
 
-.thank-you-banner {
-  margin-top: 40px;
-  background-color: rgba(232, 52, 28, 0.05);
-  border: 1px dashed rgba(232, 52, 28, 0.3);
-  border-radius: 8px;
-  padding: 15px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .thank-you-text {
   color: #d0d0e8;
   font-size: 16px;
   font-weight: 400;
   margin: 0;
+}
+
+.thank-you-banner {
+  margin-top: 40px;
 }
 
 .thank-you-text strong {

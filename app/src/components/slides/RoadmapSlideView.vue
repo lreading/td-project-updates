@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import FooterActionLink from '../ui/FooterActionLink.vue'
 import SectionHeading from '../ui/SectionHeading.vue'
 
 import type {
@@ -109,14 +110,12 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
         </section>
       </div>
 
-      <a
+      <FooterActionLink
         class="footer-link"
         :href="site.links.repository.url"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <FontAwesomeIcon :icon="['fab', 'github']" /> View full roadmap &amp; milestones on GitHub
-      </a>
+        :icon="['fab', 'github']"
+        label="View full roadmap & milestones on GitHub"
+      />
     </div>
   </StandardSlideLayout>
 </template>
@@ -340,25 +339,6 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
   border-bottom: none;
 }
 
-.footer-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  align-self: flex-end;
-  margin-top: auto;
-  padding: 0.55rem 1rem;
-  border-radius: 6px;
-  background-color: rgba(37, 37, 53, 0.92);
-  color: #8888aa;
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
-.footer-link:hover {
-  color: #d0d0e8;
-  background-color: rgba(232, 52, 28, 0.08);
-}
-
 @media (max-width: 1199px) {
   .milestones-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -389,11 +369,6 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
   .detail-card--primary,
   .detail-card--secondary {
     padding: 1.25rem;
-  }
-
-  .footer-link {
-    align-self: stretch;
-    justify-content: center;
   }
 }
 </style>

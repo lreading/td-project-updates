@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import FooterActionLink from '../ui/FooterActionLink.vue'
 
 import type {
   GeneratedPresentationData,
@@ -66,9 +67,12 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
       </a>
 
       <div class="cta-container">
-        <a class="github-link" :href="releasesUrl" target="_blank" rel="noreferrer">
-          <FontAwesomeIcon :icon="['fab', 'github']" /> View all releases on GitHub
-        </a>
+        <FooterActionLink
+          class="github-link"
+          :href="releasesUrl"
+          :icon="['fab', 'github']"
+          label="View all releases on GitHub"
+        />
       </div>
     </div>
   </StandardSlideLayout>
@@ -221,26 +225,4 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
   padding-top: 10px;
 }
 
-.github-link {
-  color: #8888aa;
-  text-decoration: none;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s;
-  padding: 8px 16px;
-  border-radius: 4px;
-  background-color: #252535;
-  border: 1px solid #333344;
-}
-
-.github-link:hover {
-  color: #ffffff;
-  border-color: #555577;
-  background-color: #2a2a3e;
-}
-
-.github-link i {
-  margin-right: 8px;
-}
 </style>

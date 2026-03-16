@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
-import IconBadge from '../ui/IconBadge.vue'
+import MetricStatCard from '../ui/MetricStatCard.vue'
 import SectionHeading from '../ui/SectionHeading.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
@@ -77,22 +77,15 @@ const mentionCards = computed(() =>
       <div class="right-column">
         <SectionHeading :icon="'chart-line'" title="Stats This Quarter" />
         <div class="stats-grid">
-          <SurfaceCard
+          <MetricStatCard
             v-for="stat in stats"
             :key="stat.label"
             class="stat-card"
-            :interactive="true"
-            hover-shift="y"
-            radius="md"
-            padding="25px 20px"
-          >
-            <IconBadge :icon="stat.icon" class="stat-icon" size="48px" icon-size="20px" />
-            <p class="stat-value">{{ stat.current.toLocaleString() }}</p>
-            <p class="stat-label">{{ stat.label }}</p>
-            <div class="trend-indicator">
-              <FontAwesomeIcon icon="arrow-up" /> {{ stat.trend }}
-            </div>
-          </SurfaceCard>
+            :icon="stat.icon"
+            :value="stat.current.toLocaleString()"
+            :label="stat.label"
+            :trend="stat.trend"
+          />
         </div>
       </div>
     </div>
@@ -159,44 +152,6 @@ const mentionCards = computed(() =>
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   align-content: start;
-}
-
-.stat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.stat-icon {
-  margin-bottom: 15px;
-}
-
-.stat-value {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 36px;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 5px;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: #8888aa;
-  margin: 0;
-}
-
-.trend-indicator {
-  font-size: 12px;
-  color: #4ade80;
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.trend-indicator i {
-  margin-right: 4px;
 }
 
 @media (max-width: 959px) {

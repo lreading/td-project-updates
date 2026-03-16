@@ -50,8 +50,8 @@ describe('CommunityHighlightsSlideView', () => {
       },
     })
 
-    const labels = wrapper.findAll('.stat-label').map((node) => node.text())
-    const trends = wrapper.findAll('.trend-indicator').map((node) => node.text())
+    const labels = wrapper.findAll('.metric-stat-card__label').map((node) => node.text())
+    const trends = wrapper.findAll('.metric-stat-card__trend').map((node) => node.text())
 
     expect(labels).toEqual([
       'New contributors',
@@ -93,8 +93,8 @@ describe('CommunityHighlightsSlideView', () => {
     const mentionCards = wrapper.findAll('.mention-card')
 
     expect(mentionCards).toHaveLength(2)
-    expect(mentionCards[0].element.tagName).toBe('A')
-    expect(mentionCards[1].element.tagName).toBe('DIV')
+    expect(mentionCards[0]?.attributes('href')).toBe(slide.mentions[0]?.url)
+    expect(mentionCards[1]?.attributes('href')).toBeUndefined()
     expect(mentionCards[1].find('.mention-link').exists()).toBe(false)
   })
 

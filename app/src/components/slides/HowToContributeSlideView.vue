@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import CalloutBanner from '../ui/CalloutBanner.vue'
+import FooterActionLink from '../ui/FooterActionLink.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
@@ -56,21 +58,15 @@ const repositoryLink = computed(() => props.site.links.repository)
       </SurfaceCard>
     </div>
 
-    <div class="footer-cta">
+    <CalloutBanner class="footer-cta">
       <div class="repo-info">
         <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
         <p>Open Source and Community Driven</p>
       </div>
-      <a
-        v-if="repositoryLink"
-        class="repo-link"
-        :href="repositoryLink.url"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <FontAwesomeIcon icon="code" class="mr-3" /> {{ repositoryLink.label }}
-      </a>
-    </div>
+      <template v-if="repositoryLink" #action>
+        <FooterActionLink :href="repositoryLink.url" icon="code" :label="repositoryLink.label" />
+      </template>
+    </CalloutBanner>
   </StandardSlideLayout>
 </template>
 
@@ -160,37 +156,9 @@ const repositoryLink = computed(() => props.site.links.repository)
   font-size: 14px;
 }
 
-.repo-link {
-  font-family: 'Roboto Mono', monospace;
-  color: #ffffff;
-  background-color: #333344;
-  padding: 8px 16px;
-  border-radius: 6px;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  transition: all 0.2s;
-  border: 1px solid transparent;
-}
-
-.repo-link:hover {
-  background-color: #e8341c;
-  color: #ffffff;
-}
-
-.repo-link i {
-  margin-right: 8px;
-}
-
 @media (max-width: 959px) {
   .contribution-grid {
     grid-template-columns: 1fr;
-  }
-
-  .footer-cta {
-    gap: 16px;
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 </style>

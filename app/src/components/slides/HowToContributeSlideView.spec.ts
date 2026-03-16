@@ -71,7 +71,9 @@ describe('HowToContributeSlideView', () => {
       },
     })
 
-    expect(wrapper.get('.repo-link').attributes('href')).toBe('https://github.com/example/project')
+    expect(wrapper.get('.footer-action-link').attributes('href')).toBe(
+      'https://github.com/example/project',
+    )
     expect(wrapper.text()).toContain('View source on GitHub')
   })
 
@@ -95,7 +97,7 @@ describe('HowToContributeSlideView', () => {
       },
     })
 
-    expect(wrapper.find('.repo-link').exists()).toBe(false)
+    expect(wrapper.find('.footer-action-link').exists()).toBe(false)
     expect(wrapper.text()).toContain('Open Source and Community Driven')
   })
 })
