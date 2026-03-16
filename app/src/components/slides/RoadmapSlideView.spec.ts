@@ -28,8 +28,8 @@ describe('RoadmapSlideView', () => {
     expect(wrapper.text()).toContain('Roadmap: In Progress')
     expect(wrapper.text()).toContain('Building cloud-backed project sync experiments')
     expect(wrapper.text()).toContain('Focus areas')
-    expect(wrapper.findAll('.milestone-node')).toHaveLength(4)
-    expect(wrapper.findAll('.milestone-node--current')).toHaveLength(1)
+    expect(wrapper.findAll('.progress-timeline__item')).toHaveLength(4)
+    expect(wrapper.findAll('.progress-timeline__item--current')).toHaveLength(1)
   })
 
   it('uses fallback copy when deck roadmap data is unavailable', () => {
