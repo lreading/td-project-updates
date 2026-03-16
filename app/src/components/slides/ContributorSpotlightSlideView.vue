@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import IconBadge from '../ui/IconBadge.vue'
+import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type {
   ContributorSpotlightSlide,
@@ -45,10 +47,27 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
     :deck-subtitle="deck.subtitle"
   >
     <div class="profiles-grid">
-      <div v-for="profile in contributors" :key="profile.login" class="profile-card">
-        <div class="avatar-container">
-          <FontAwesomeIcon :icon="profile.icon" class="avatar-icon" />
-        </div>
+      <SurfaceCard
+        v-for="profile in contributors"
+        :key="profile.login"
+        class="profile-card"
+        :interactive="true"
+        hover-shift="y"
+        accent="top"
+        accent-visibility="hover"
+        accent-size="4px"
+        radius="lg"
+        padding="30px 24px"
+      >
+        <IconBadge
+          :icon="profile.icon"
+          class="avatar-container"
+          size="100px"
+          icon-size="40px"
+          background="#1e1e2e"
+          border-color="#333344"
+          icon-color="#555577"
+        />
         <h2 class="contributor-name">{{ profile.name }}</h2>
         <a
           class="github-handle"
@@ -61,7 +80,7 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
         </a>
         <FontAwesomeIcon icon="quote-left" class="quote-icon" />
         <p class="contribution-desc">{{ profile.summary }}</p>
-      </div>
+      </SurfaceCard>
     </div>
 
     <div class="thank-you-banner">
@@ -89,50 +108,25 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
 .profile-card {
   flex: 0 1 calc((100% - 60px) / 3);
   max-width: calc((100% - 60px) / 3);
-  background-color: #252535;
-  border-radius: 12px;
-  padding: 30px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border-top: 4px solid #333344;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 .profile-card:hover {
-  transform: translateY(-5px);
-  border-top-color: #e8341c;
-  background-color: #2a2a3e;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .avatar-container {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: #1e1e2e;
-  border: 3px solid #333344;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 20px;
-  overflow: hidden;
-  position: relative;
 }
 
-.profile-card:hover .avatar-container {
+:deep(.profile-card:hover .icon-badge) {
   border-color: #e8341c;
 }
 
-.avatar-icon {
-  font-size: 40px;
-  color: #555577;
-}
-
-.profile-card:hover .avatar-icon {
+:deep(.profile-card:hover .icon-badge__icon) {
   color: #e8341c;
 }
 

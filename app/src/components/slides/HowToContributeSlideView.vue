@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import IconBadge from '../ui/IconBadge.vue'
+import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
 
@@ -29,10 +31,21 @@ const repositoryLink = computed(() => props.site.links.repository)
     :show-dots="false"
   >
     <div class="contribution-grid">
-      <div v-for="(card, index) in slide.cards" :key="card.title" class="contrib-card">
-        <div class="icon-wrapper">
-          <FontAwesomeIcon :icon="icons[index]" />
-        </div>
+      <SurfaceCard
+        v-for="(card, index) in slide.cards"
+        :key="card.title"
+        class="contrib-card"
+        :interactive="true"
+        hover-shift="y"
+        accent="left"
+        accent-visibility="hover"
+        accent-size="4px"
+        radius="lg"
+        padding="25px"
+        min-height="184px"
+        max-height="220px"
+      >
+        <IconBadge :icon="icons[index]" shape="rounded" class="icon-wrapper" icon-size="28px" />
         <div class="card-content">
           <h2 class="card-title">{{ card.title }}</h2>
           <p class="card-text">{{ card.description }}</p>
@@ -40,7 +53,7 @@ const repositoryLink = computed(() => props.site.links.repository)
             {{ card.url_label }} <FontAwesomeIcon :icon="trailingIcons[index]" />
           </a>
         </div>
-      </div>
+      </SurfaceCard>
     </div>
 
     <div class="footer-cta">
@@ -72,57 +85,16 @@ const repositoryLink = computed(() => props.site.links.repository)
 }
 
 .contrib-card {
-  background-color: #252535;
-  border-radius: 12px;
-  padding: 25px;
-  min-height: 184px;
-  max-height: 220px;
   display: flex;
   align-items: flex-start;
-  border: 1px solid #333344;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
 .contrib-card:hover {
-  border-color: #e8341c;
-  background-color: #2a2a3e;
-  transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.contrib-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background-color: #e8341c;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.contrib-card:hover::before {
-  opacity: 1;
-}
-
 .icon-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  background-color: rgba(232, 52, 28, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-right: 20px;
-  flex-shrink: 0;
-}
-
-.icon-wrapper i {
-  font-size: 28px;
-  color: #e8341c;
 }
 
 .card-content {

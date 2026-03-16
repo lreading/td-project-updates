@@ -2,7 +2,9 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import IconBadge from '../ui/IconBadge.vue'
 import SectionHeading from '../ui/SectionHeading.vue'
+import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type {
   CommunityHighlightsSlide,
@@ -51,38 +53,46 @@ const mentionCards = computed(() =>
       <div class="left-column">
         <SectionHeading :icon="'bullhorn'" :title="slide.section_heading ?? 'Community Activity'" />
         <div class="mentions-list">
-          <component
-            :is="mention.isLinked ? 'a' : 'div'"
+          <SurfaceCard
             v-for="mention in mentionCards"
             :key="mention.title"
             class="mention-card"
-            :class="{ 'mention-card--linked': mention.isLinked }"
             :href="mention.url"
-            :target="mention.isLinked ? '_blank' : undefined"
-            :rel="mention.isLinked ? 'noreferrer' : undefined"
+            :interactive="mention.isLinked"
+            hover-shift="x"
+            accent="left"
+            accent-visibility="hover"
+            radius="md"
+            padding="20px"
           >
             <div class="mention-type"><FontAwesomeIcon :icon="mention.icon" /> {{ mention.type }}</div>
             <h3 class="mention-title">{{ mention.title }}</h3>
             <div v-if="mention.url && mention.url_label" class="mention-link">
               <FontAwesomeIcon icon="external-link-alt" /> {{ mention.url_label }}
             </div>
-          </component>
+          </SurfaceCard>
         </div>
       </div>
 
       <div class="right-column">
         <SectionHeading :icon="'chart-line'" title="Stats This Quarter" />
         <div class="stats-grid">
-          <div v-for="stat in stats" :key="stat.label" class="stat-card">
-            <div class="stat-icon">
-              <FontAwesomeIcon :icon="stat.icon" />
-            </div>
+          <SurfaceCard
+            v-for="stat in stats"
+            :key="stat.label"
+            class="stat-card"
+            :interactive="true"
+            hover-shift="y"
+            radius="md"
+            padding="25px 20px"
+          >
+            <IconBadge :icon="stat.icon" class="stat-icon" size="48px" icon-size="20px" />
             <p class="stat-value">{{ stat.current.toLocaleString() }}</p>
             <p class="stat-label">{{ stat.label }}</p>
             <div class="trend-indicator">
               <FontAwesomeIcon icon="arrow-up" /> {{ stat.trend }}
             </div>
-          </div>
+          </SurfaceCard>
         </div>
       </div>
     </div>
@@ -104,23 +114,8 @@ const mentionCards = computed(() =>
 }
 
 .mention-card {
-  background-color: #252535;
-  border-radius: 8px;
-  padding: 20px;
-  border-left: 3px solid #333344;
-  transition: all 0.2s;
   display: flex;
   flex-direction: column;
-}
-
-.mention-card--linked {
-  cursor: pointer;
-}
-
-.mention-card--linked:hover {
-  border-left-color: #e8341c;
-  background-color: #2a2a3e;
-  transform: translateX(5px);
 }
 
 .mention-type {
@@ -167,34 +162,14 @@ const mentionCards = computed(() =>
 }
 
 .stat-card {
-  background-color: #252535;
-  border-radius: 8px;
-  padding: 25px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 1px solid #333344;
-  transition: all 0.2s;
-}
-
-.stat-card:hover {
-  border-color: #e8341c;
-  background-color: #2a2a3e;
-  transform: translateY(-5px);
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: rgba(232, 52, 28, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 15px;
-  color: #e8341c;
-  font-size: 20px;
 }
 
 .stat-value {

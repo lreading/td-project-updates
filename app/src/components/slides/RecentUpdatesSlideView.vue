@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import IconBadge from '../ui/IconBadge.vue'
+import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type { PresentationDeck, RecentUpdatesSlide } from '../../types/content'
 
@@ -22,15 +24,22 @@ const icons = ['wrench', 'star', 'users']
     :deck-subtitle="deck.subtitle"
   >
     <div class="feature-grid">
-      <div v-for="(section, index) in slide.sections" :key="section.title" class="feature-card">
-        <div class="icon-container">
-          <FontAwesomeIcon :icon="icons[index]" />
-        </div>
+      <SurfaceCard
+        v-for="(section, index) in slide.sections"
+        :key="section.title"
+        class="feature-card"
+        accent="left"
+        accent-visibility="always"
+        :border="false"
+        radius="md"
+        padding="30px"
+      >
+        <IconBadge :icon="icons[index]" class="icon-container" />
         <h2 class="card-title">{{ section.title }}</h2>
         <ul class="bullet-list">
           <li v-for="bullet in section.bullets" :key="bullet" class="bullet-item">{{ bullet }}</li>
         </ul>
-      </div>
+      </SurfaceCard>
     </div>
   </StandardSlideLayout>
 </template>
@@ -44,32 +53,15 @@ const icons = ['wrench', 'star', 'users']
 }
 
 .feature-card {
-  background-color: #252535;
-  border-radius: 8px;
-  padding: 30px;
   display: flex;
   flex-direction: column;
-  border-left: 3px solid #e8341c;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   height: 100%;
 }
 
 .icon-container {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(232, 52, 28, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 20px;
-  border: 1px solid rgba(232, 52, 28, 0.2);
-}
-
-.icon-container i {
-  font-size: 24px;
-  color: #e8341c;
 }
 
 .card-title {

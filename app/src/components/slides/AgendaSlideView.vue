@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import { getSlideLabel } from '../../content/slideLabels'
 import type { AgendaSlide, PresentationDeck } from '../../types/content'
@@ -42,11 +43,23 @@ const agendaItems = computed(() => {
     :deck-subtitle="deck.subtitle"
   >
     <div class="agenda-grid">
-      <div v-for="(item, index) in agendaItems" :key="item" class="agenda-card">
+      <SurfaceCard
+        v-for="(item, index) in agendaItems"
+        :key="item"
+        class="agenda-card"
+        :interactive="true"
+        hover-shift="x"
+        accent="left"
+        accent-visibility="hover"
+        :min-height="'88px'"
+        :max-height="'104px'"
+        radius="md"
+        padding="20px 24px"
+      >
         <div class="number-badge">{{ String(index + 1).padStart(2, '0') }}</div>
         <p class="card-text">{{ item }}</p>
         <FontAwesomeIcon icon="chevron-right" class="card-arrow" />
-      </div>
+      </SurfaceCard>
     </div>
   </StandardSlideLayout>
 </template>
@@ -61,25 +74,8 @@ const agendaItems = computed(() => {
 }
 
 .agenda-card {
-  background-color: #252535;
-  border-radius: 8px;
-  padding: 20px 24px;
-  min-height: 88px;
-  max-height: 104px;
   display: flex;
   align-items: center;
-  transition:
-    transform 0.2s,
-    background-color 0.2s;
-  border-left: 3px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.agenda-card:hover {
-  background-color: #2a2a3e;
-  border-left-color: #e8341c;
-  transform: translateX(5px);
 }
 
 .number-badge {
