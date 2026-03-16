@@ -11,6 +11,10 @@ export class FileSystemPaths {
     return resolve(this.cliRoot, '..')
   }
 
+  public getAppRoot(): string {
+    return resolve(this.getRepoRoot(), 'app')
+  }
+
   public getSiteConfigPath(): string {
     return resolve(this.getRepoRoot(), 'content', 'site.yaml')
   }

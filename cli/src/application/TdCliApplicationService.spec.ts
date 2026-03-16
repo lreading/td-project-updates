@@ -7,6 +7,7 @@ import type { GitHubClient } from '../github/GitHubClient.types'
 import type { SiteConfig } from '../config/Config.types'
 import type { FileSystem } from '../io/FileSystem'
 import type { GeneratedPresentationData, PresentationIndexEntry, QuarterWindow } from '../generation/Generation.types'
+import type { ProcessRunner } from '../process/ProcessRunner'
 
 class StubContentConfigLoader {
   public async loadSiteConfig(): Promise<SiteConfig> {
@@ -197,6 +198,27 @@ class StubGitHubClient implements GitHubClient {
   }
 }
 
+class StubProcessRunner implements ProcessRunner {
+  public readonly runCalls: Array<{ command: string; args: string[]; cwd: string }> = []
+  public readonly startCalls: Array<{ command: string; args: string[]; cwd: string }> = []
+
+  public async run(command: string, args: string[], options: { cwd: string }): Promise<void> {
+    this.runCalls.push({
+      command,
+      args,
+      cwd: options.cwd,
+    })
+  }
+
+  public async start(command: string, args: string[], options: { cwd: string }): Promise<void> {
+    this.startCalls.push({
+      command,
+      args,
+      cwd: options.cwd,
+    })
+  }
+}
+
 describe('TdCliApplicationService', () => {
   it('can be constructed with default dependencies', () => {
     expect(new TdCliApplicationService()).toBeInstanceOf(TdCliApplicationService)
@@ -347,7 +369,8 @@ describe('TdCliApplicationService', () => {
     expect(presentationIndexStore.writes).toHaveLength(0)
   })
 
-  it('keeps build, serve, and validate explicitly unimplemented for now', async () => {
+  it('delegates build, serve, and validate to the app project', async () => {
+    const processRunner = new StubProcessRunner()
     const service = new TdCliApplicationService({
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
@@ -357,14 +380,42 @@ describe('TdCliApplicationService', () => {
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: new StubGeneratedDataStore() as never,
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
+      processRunner,
     })
 
-    await expect(service.buildSite({ mode: 'production' })).rejects.toThrow(
-      'buildSite is not implemented yet.',
-    )
-    await expect(service.serveSite({})).rejects.toThrow('serveSite is not implemented yet.')
-    await expect(service.validateContent({})).rejects.toThrow(
-      'validateContent is not implemented yet.',
-    )
+    await expect(service.buildSite({ mode: 'production' })).resolves.toEqual({
+      outputPath: '/repo/app/dist',
+    })
+    await expect(service.serveSite({
+      host: '0.0.0.0',
+      port: 4173,
+      open: true,
+    })).resolves.toEqual({
+      url: 'http://0.0.0.0:4173/',
+    })
+    await expect(service.validateContent({ strict: true })).resolves.toEqual({
+      valid: true,
+      errors: [],
+    })
+
+    expect(processRunner.runCalls).toEqual([
+      {
+        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
+        args: ['run', 'build'],
+        cwd: '/repo/app',
+      },
+      {
+        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
+        args: ['run', 'validate:content'],
+        cwd: '/repo/app',
+      },
+    ])
+    expect(processRunner.startCalls).toEqual([
+      {
+        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
+        args: ['run', 'dev', '--', '--host', '0.0.0.0', '--port', '4173', '--strictPort', '--open'],
+        cwd: '/repo/app',
+      },
+    ])
   })
 })

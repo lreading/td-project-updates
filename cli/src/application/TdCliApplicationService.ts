@@ -10,6 +10,7 @@ import { PresentationIndexStore } from '../init/PresentationIndexStore'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
 import { QuarterResolver } from '../generation/QuarterResolver'
 import { YamlWriter } from '../io/YamlWriter'
+import { NodeProcessRunner } from '../process/ProcessRunner'
 
 import type { TdCliService } from './TdCliService'
 import type {
@@ -25,6 +26,7 @@ import type {
   ValidateContentResult,
 } from './TdCliService.types'
 import type { GitHubClient } from '../github/GitHubClient.types'
+import type { ProcessRunner } from '../process/ProcessRunner'
 
 interface TdCliApplicationServiceOptions {
   cliRoot?: string
@@ -39,6 +41,7 @@ interface TdCliApplicationServiceOptions {
   quarterResolver?: QuarterResolver
   yamlWriter?: YamlWriter
   gitHubClientFactory?: (token: string) => GitHubClient
+  processRunner?: ProcessRunner
 }
 
 export class TdCliApplicationService implements TdCliService {
@@ -54,6 +57,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly quarterResolver: QuarterResolver
   private readonly yamlWriter: YamlWriter
   private readonly gitHubClientFactory: (token: string) => GitHubClient
+  private readonly processRunner: ProcessRunner
 
   public constructor(options: TdCliApplicationServiceOptions = {}) {
     this.paths = new FileSystemPaths(options.cliRoot ?? process.cwd())
@@ -68,6 +72,7 @@ export class TdCliApplicationService implements TdCliService {
     this.quarterResolver = options.quarterResolver ?? new QuarterResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
     this.gitHubClientFactory = options.gitHubClientFactory ?? ((token: string) => new GitHubApiClient({ token }))
+    this.processRunner = options.processRunner ?? new NodeProcessRunner()
   }
 
   public async initPresentation(input: InitPresentationInput): Promise<InitPresentationResult> {
@@ -168,14 +173,51 @@ export class TdCliApplicationService implements TdCliService {
   }
 
   public async buildSite(_input: BuildSiteInput): Promise<BuildSiteResult> {
-    throw new Error('buildSite is not implemented yet.')
+    await this.processRunner.run(this.getNpmCommand(), ['run', 'build'], {
+      cwd: this.paths.getAppRoot(),
+    })
+
+    return {
+      outputPath: `${this.paths.getAppRoot()}/dist`,
+    }
   }
 
-  public async serveSite(_input: ServeSiteInput): Promise<ServeSiteResult> {
-    throw new Error('serveSite is not implemented yet.')
+  public async serveSite(input: ServeSiteInput): Promise<ServeSiteResult> {
+    const host = input.host ?? '127.0.0.1'
+    const port = input.port ?? 5173
+    const args = [
+      'run',
+      'dev',
+      '--',
+      '--host',
+      host,
+      '--port',
+      String(port),
+      '--strictPort',
+      ...(input.open ? ['--open'] : []),
+    ]
+
+    await this.processRunner.start(this.getNpmCommand(), args, {
+      cwd: this.paths.getAppRoot(),
+    })
+
+    return {
+      url: `http://${host}:${port}/`,
+    }
   }
 
   public async validateContent(_input: ValidateContentInput): Promise<ValidateContentResult> {
-    throw new Error('validateContent is not implemented yet.')
+    await this.processRunner.run(this.getNpmCommand(), ['run', 'validate:content'], {
+      cwd: this.paths.getAppRoot(),
+    })
+
+    return {
+      valid: true,
+      errors: [],
+    }
+  }
+
+  private getNpmCommand(): string {
+    return process.platform === 'win32' ? 'npm.cmd' : 'npm'
   }
 }

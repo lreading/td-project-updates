@@ -10,11 +10,14 @@ Current scope:
 - typed GitHub client
 - quarter-based generated-data fetching
 - quarter-based presentation scaffolding
+- thin CLI command routing
+- app build/serve/validate delegation
 
 Commands:
 - `npm run lint`
 - `npm run test`
 - `npm run build`
+- `npm run cli -- <command> [options]`
 - `npm run verify`
 
 Environment:
@@ -28,5 +31,13 @@ Current source of truth:
 Current status:
 - `fetchPresentationData(...)` is implemented in the application layer
 - `initPresentation(...)` is implemented in the application layer
-- command parsing is not implemented yet
-- `build`, `serve`, and `validate` command flows are not implemented yet
+- command parsing is implemented
+- `build`, `serve`, and `validate` command flows are implemented
+
+CLI usage:
+- `npm run build`
+- `npm run cli -- init --year 2026 --quarter 2`
+- `npm run cli -- fetch --year 2026 --quarter 2`
+- `npm run cli -- build`
+- `npm run cli -- serve --host 127.0.0.1 --port 5173`
+- `npm run cli -- validate`
