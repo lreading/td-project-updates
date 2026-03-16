@@ -7,7 +7,6 @@ import HowToContributeSlideView from './HowToContributeSlideView.vue'
 const presentation: PresentationContent = {
   id: '2026-q1',
   year: 2026,
-  quarter: 1,
   title: 'Threat Dragon Quarterly Community Update',
   subtitle: 'Q1 2026',
   slides: [],

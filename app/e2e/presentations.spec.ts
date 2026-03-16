@@ -16,7 +16,7 @@ test('renders the presentations listing and opens the selected presentation', as
   await expect(page.getByText(`${presentations.length} presentation`)).toBeVisible()
   await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   await expect(page.getByText(featured.summary)).toBeVisible()
-  await expect(page.getByText(`Q${featured.quarter} ${featured.year}`)).toBeVisible()
+  await expect(page.getByText(featured.subtitle)).toBeVisible()
   await expect(page.getByRole('link', { name: /github.com\/lreading\/td-project-updates/i })).toHaveAttribute(
     'href',
     'https://github.com/lreading/td-project-updates',
@@ -36,7 +36,7 @@ test('supports search and empty-state filtering on the presentations page', asyn
 
   const search = page.getByLabel('Search')
 
-  await search.fill('q1 2026')
+  await search.fill(featured.subtitle)
   await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   await expect(page.getByText('1 presentation total')).toBeVisible()
   await expect(page.getByText(/Page 1 of 1/)).toBeVisible()
@@ -47,6 +47,8 @@ test('supports search and empty-state filtering on the presentations page', asyn
   await expect(page.getByText('0 presentations total')).toBeVisible()
 
   await search.fill('')
-  await page.getByLabel('Year').selectOption(String(featured.year))
-  await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
+  if (featured.year !== undefined) {
+    await page.getByLabel('Year').selectOption(String(featured.year))
+    await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
+  }
 })

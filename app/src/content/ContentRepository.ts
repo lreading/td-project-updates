@@ -36,9 +36,7 @@ export class ContentRepository {
     const document = this.readDocument('presentations/index.yaml')
     this.validator.validatePresentationIndexDocument(document)
 
-    return document.presentations
-      .filter((entry) => entry.published)
-      .sort((left, right) => this.toSortValue(right) - this.toSortValue(left))
+    return document.presentations.filter((entry) => entry.published)
   }
 
   public getPresentation(id: string): PresentationRecord {
@@ -74,10 +72,6 @@ export class ContentRepository {
     }
 
     return parse(entry[1])
-  }
-
-  private toSortValue(entry: PresentationIndexEntry): number {
-    return entry.year * 10 + entry.quarter
   }
 }
 

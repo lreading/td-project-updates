@@ -98,7 +98,7 @@ function goToPage(page: number): void {
       <div v-if="pageResult.items.length" class="presentations-list">
         <article v-for="entry in pageResult.items" :key="entry.id" class="presentations-row">
           <div class="presentations-meta">
-            <p class="presentations-quarter">Q{{ entry.quarter }} {{ entry.year }}</p>
+            <p class="presentations-subtitle">{{ entry.subtitle }}</p>
             <p class="presentations-id">{{ entry.id }}</p>
           </div>
 
@@ -267,7 +267,7 @@ function goToPage(page: number): void {
   gap: 0.35rem;
 }
 
-.presentations-quarter {
+.presentations-subtitle {
   color: var(--accent-soft);
   font: 600 0.875rem/1.2 var(--font-mono);
   margin: 0;

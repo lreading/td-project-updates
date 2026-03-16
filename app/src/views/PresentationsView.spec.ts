@@ -44,7 +44,6 @@ describe('PresentationsView', () => {
       {
         id: '2026-q1',
         year: 2026,
-        quarter: 1,
         title: 'Q1 2026',
         subtitle: 'Q1 2026',
         summary: 'Latest quarterly update',
@@ -70,9 +69,8 @@ describe('PresentationsView', () => {
       {
         id: '2026-q2',
         year: 2026,
-        quarter: 2,
         title: 'Weekly Update 10',
-        subtitle: 'Q2 2026',
+        subtitle: 'Week 10, 2026',
         summary: 'Weekly cadence',
         published: true,
         featured: false,
@@ -80,9 +78,8 @@ describe('PresentationsView', () => {
       {
         id: '2025-q4',
         year: 2025,
-        quarter: 4,
         title: 'Quarterly Review',
-        subtitle: 'Q4 2025',
+        subtitle: 'October 2025',
         summary: 'Year-end wrap-up',
         published: true,
         featured: false,
@@ -110,9 +107,8 @@ describe('PresentationsView', () => {
       Array.from({ length: 13 }, (_, index) => ({
         id: `2026-w${index + 1}`,
         year: 2026,
-        quarter: 1,
         title: `Weekly Update ${index + 1}`,
-        subtitle: 'Q1 2026',
+        subtitle: `Week ${index + 1}`,
         summary: 'Archive pagination test',
         published: true,
         featured: false,
@@ -139,9 +135,8 @@ describe('PresentationsView', () => {
       Array.from({ length: 6204 }, (_, index) => ({
         id: `2026-w${index + 1}`,
         year: 2026,
-        quarter: 1,
         title: `Presentation ${index + 1}`,
-        subtitle: 'Q1 2026',
+        subtitle: `Window ${index + 1}`,
         summary: 'Large presentations test',
         published: true,
         featured: false,
@@ -193,9 +188,8 @@ describe('PresentationsView', () => {
       {
         id: '2026-q1',
         year: 2026,
-        quarter: 1,
         title: 'Q1 2026',
-        subtitle: 'Q1 2026',
+        subtitle: 'January to March 2026',
         summary: 'Latest quarterly update',
         published: true,
         featured: true,

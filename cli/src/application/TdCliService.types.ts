@@ -1,8 +1,12 @@
 import type { GeneratedPresentationData } from '../generation/Generation.types'
 
 export interface InitPresentationInput {
-  year: number
-  quarter: number
+  presentationId: string
+  title: string
+  subtitle: string
+  fromDate: string
+  toDate?: string
+  summary?: string
   force?: boolean
 }
 

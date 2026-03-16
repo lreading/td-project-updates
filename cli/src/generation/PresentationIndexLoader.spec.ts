@@ -28,14 +28,13 @@ class MemoryFileSystem implements FileSystem {
 }
 
 describe('PresentationIndexLoader', () => {
-  it('loads presentation index entries and can find a quarter match', async () => {
+  it('loads presentation index entries and can find a presentation by id', async () => {
     const paths = new FileSystemPaths('/workspace/project/cli')
     const loader = new PresentationIndexLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2026-q1
     year: 2026
-    quarter: 1
     title: Title
     subtitle: Q1 2026
     summary: Summary
@@ -46,8 +45,8 @@ presentations:
 
     const entries = await loader.loadPresentations(paths)
     expect(entries).toHaveLength(1)
-    expect(loader.findPresentationIdForQuarter(entries, 2026, 1)).toBe('2026-q1')
-    expect(loader.findPresentationIdForQuarter(entries, 2025, 4)).toBeUndefined()
+    expect(loader.findPresentationById(entries, '2026-q1')?.id).toBe('2026-q1')
+    expect(loader.findPresentationById(entries, '2025-q4')).toBeUndefined()
   })
 
   it('rejects malformed index documents', async () => {
@@ -79,7 +78,6 @@ presentations:
 presentations:
   - id: 2026-q1
     year: nope
-    quarter: 1
     title: Title
     subtitle: Q1 2026
     summary: Summary
@@ -95,7 +93,6 @@ presentations:
 presentations:
   - id: " "
     year: 2026
-    quarter: 1
     title: Title
     subtitle: Q1 2026
     summary: Summary
@@ -111,7 +108,6 @@ presentations:
 presentations:
   - id: 2026-q1
     year: 2026
-    quarter: 1
     title: Title
     subtitle: Q1 2026
     summary: Summary

@@ -37,7 +37,6 @@ describe('HomeView', () => {
       {
         id: '2026-q3',
         year: 2026,
-        quarter: 3,
         title: 'Fallback Quarterly Update',
         subtitle: 'Q3 2026',
         summary: 'Fallback summary',

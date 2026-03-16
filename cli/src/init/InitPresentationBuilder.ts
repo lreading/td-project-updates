@@ -1,42 +1,44 @@
 import type {
   GeneratedPresentationData,
   PresentationIndexEntry,
-  QuarterWindow,
+  ReportingPeriod,
 } from '../generation/Generation.types'
 
 export interface PresentationDocument {
   presentation: {
     id: string
-    year: number
-    quarter: number
     title: string
     subtitle: string
     slides: Array<Record<string, unknown>>
   }
 }
 
+export interface InitPresentationContent {
+  presentationId: string
+  title: string
+  subtitle: string
+  summary: string
+  period: ReportingPeriod
+}
+
 export class InitPresentationBuilder {
-  public buildIndexEntry(quarterWindow: QuarterWindow): PresentationIndexEntry {
+  public buildIndexEntry(input: InitPresentationContent): PresentationIndexEntry {
     return {
-      id: quarterWindow.presentationId,
-      year: quarterWindow.year,
-      quarter: quarterWindow.quarter,
-      title: 'Quarterly Community Update',
-      subtitle: `Q${quarterWindow.quarter} ${quarterWindow.year}`,
-      summary: 'Replace with a summary before publishing.',
+      id: input.presentationId,
+      title: input.title,
+      subtitle: input.subtitle,
+      summary: input.summary,
       published: false,
       featured: false,
     }
   }
 
-  public buildPresentationDocument(quarterWindow: QuarterWindow): PresentationDocument {
+  public buildPresentationDocument(input: InitPresentationContent): PresentationDocument {
     return {
       presentation: {
-        id: quarterWindow.presentationId,
-        year: quarterWindow.year,
-        quarter: quarterWindow.quarter,
-        title: 'Quarterly Community Update',
-        subtitle: `Q${quarterWindow.quarter} ${quarterWindow.year}`,
+        id: input.presentationId,
+        title: input.title,
+        subtitle: input.subtitle,
         slides: [
           {
             template: 'hero',
@@ -115,14 +117,14 @@ export class InitPresentationBuilder {
   }
 
   public buildGeneratedData(
-    quarterWindow: QuarterWindow,
+    input: InitPresentationContent,
     previousPresentationId?: string,
   ): GeneratedPresentationData {
     return {
-      id: quarterWindow.presentationId,
+      id: input.presentationId,
       period: {
-        start: quarterWindow.start,
-        end: quarterWindow.end,
+        start: input.period.start,
+        end: input.period.end,
       },
       ...(previousPresentationId ? { previous_presentation_id: previousPresentationId } : {}),
       stats: {

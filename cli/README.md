@@ -9,7 +9,7 @@ Current scope:
 - `.env` token loading
 - typed GitHub client
 - period-based generated-data fetching
-- presentation scaffolding for quarter-oriented deck ids
+- presentation scaffolding from explicit ids, titles, subtitles, and date ranges
 - thin CLI command routing
 - app build/serve/validate delegation
 
@@ -55,7 +55,7 @@ Current status:
 
 CLI usage:
 - `npm run build`
-- `npm run cli -- init --year 2026 --quarter 2`
+- `npm run cli -- init --presentation-id 2026-q2 --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`
 - `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`
 - `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-03-01 --no-previous-period --dry-run`
 - `npm run cli -- build`

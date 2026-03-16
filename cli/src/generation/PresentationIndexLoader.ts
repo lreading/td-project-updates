@@ -15,7 +15,11 @@ function assertString(value: unknown, path: string): string {
   return value
 }
 
-function assertNumber(value: unknown, path: string): number {
+function assertOptionalNumber(value: unknown, path: string): number | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     throw new Error(`${path} must be a number.`)
   }
@@ -44,12 +48,11 @@ export class PresentationIndexLoader {
     return document.presentations.map((entry, index) => this.mapEntry(entry, index))
   }
 
-  public findPresentationIdForQuarter(
+  public findPresentationById(
     entries: PresentationIndexEntry[],
-    year: number,
-    quarter: number,
-  ): string | undefined {
-    return entries.find((entry) => entry.year === year && entry.quarter === quarter)?.id
+    id: string,
+  ): PresentationIndexEntry | undefined {
+    return entries.find((entry) => entry.id === id)
   }
 
   private mapEntry(entry: unknown, index: number): PresentationIndexEntry {
@@ -57,10 +60,11 @@ export class PresentationIndexLoader {
       throw new Error(`content/presentations/index.yaml.presentations[${index}] must be an object.`)
     }
 
+    const year = assertOptionalNumber(entry.year, `presentations[${index}].year`)
+
     return {
       id: assertString(entry.id, `presentations[${index}].id`),
-      year: assertNumber(entry.year, `presentations[${index}].year`),
-      quarter: assertNumber(entry.quarter, `presentations[${index}].quarter`),
+      ...(year !== undefined ? { year } : {}),
       title: assertString(entry.title, `presentations[${index}].title`),
       subtitle: assertString(entry.subtitle, `presentations[${index}].subtitle`),
       summary: assertString(entry.summary, `presentations[${index}].summary`),

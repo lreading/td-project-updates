@@ -35,13 +35,12 @@ class MemoryFileSystem implements FileSystem {
 }
 
 describe('PresentationIndexStore', () => {
-  it('loads, finds, and writes sorted presentation index entries', async () => {
+  it('loads, finds, and writes presentation index entries without reordering them', async () => {
     const fileSystem = new MemoryFileSystem({
       '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2025-q4
     year: 2025
-    quarter: 4
     title: Previous
     subtitle: Q4 2025
     summary: Summary
@@ -56,14 +55,13 @@ presentations:
     const paths = new FileSystemPaths('/workspace/project/cli')
     const entries = await store.load(paths)
 
-    expect(store.findPresentationIdForQuarter(entries, 2025, 4)).toBe('2025-q4')
+    expect(store.findPresentationById(entries, '2025-q4')?.id).toBe('2025-q4')
 
     await store.write(paths, [
       ...entries,
       {
         id: '2026-q1',
         year: 2026,
-        quarter: 1,
         title: 'Current',
         subtitle: 'Q1 2026',
         summary: 'Summary',
@@ -73,10 +71,10 @@ presentations:
     ])
 
     const content = fileSystem.files.get('/workspace/project/content/presentations/index.yaml') ?? ''
-    expect(content.indexOf('id: 2026-q1')).toBeLessThan(content.indexOf('id: 2025-q4'))
+    expect(content.indexOf('id: 2025-q4')).toBeLessThan(content.indexOf('id: 2026-q1'))
   })
 
-  it('sorts by year, then quarter, then id when writing the index', async () => {
+  it('preserves input order when writing the index', async () => {
     const fileSystem = new MemoryFileSystem({})
     const store = new PresentationIndexStore(
       new PresentationIndexLoader(new YamlReader(fileSystem)),
@@ -88,7 +86,6 @@ presentations:
       {
         id: '2026-q1-b',
         year: 2026,
-        quarter: 1,
         title: 'Later id',
         subtitle: 'Q1 2026',
         summary: 'Summary',
@@ -98,7 +95,6 @@ presentations:
       {
         id: '2026-q1-a',
         year: 2026,
-        quarter: 1,
         title: 'Earlier id',
         subtitle: 'Q1 2026',
         summary: 'Summary',
@@ -108,7 +104,6 @@ presentations:
       {
         id: '2026-q2',
         year: 2026,
-        quarter: 2,
         title: 'Later quarter',
         subtitle: 'Q2 2026',
         summary: 'Summary',
@@ -118,7 +113,6 @@ presentations:
       {
         id: '2025-q4',
         year: 2025,
-        quarter: 4,
         title: 'Previous year',
         subtitle: 'Q4 2025',
         summary: 'Summary',
@@ -128,8 +122,8 @@ presentations:
     ])
 
     const content = fileSystem.files.get('/workspace/project/content/presentations/index.yaml') ?? ''
-    expect(content.indexOf('id: 2026-q2')).toBeLessThan(content.indexOf('id: 2026-q1-a'))
-    expect(content.indexOf('id: 2026-q1-a')).toBeLessThan(content.indexOf('id: 2026-q1-b'))
-    expect(content.indexOf('id: 2026-q1-b')).toBeLessThan(content.indexOf('id: 2025-q4'))
+    expect(content.indexOf('id: 2026-q1-b')).toBeLessThan(content.indexOf('id: 2026-q1-a'))
+    expect(content.indexOf('id: 2026-q1-a')).toBeLessThan(content.indexOf('id: 2026-q2'))
+    expect(content.indexOf('id: 2026-q2')).toBeLessThan(content.indexOf('id: 2025-q4'))
   })
 })

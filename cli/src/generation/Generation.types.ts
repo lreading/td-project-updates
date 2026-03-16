@@ -1,22 +1,11 @@
 export interface PresentationIndexEntry {
   id: string
-  year: number
-  quarter: number
+  year?: number
   title: string
   subtitle: string
   summary: string
   published: boolean
   featured: boolean
-}
-
-export interface QuarterWindow {
-  year: number
-  quarter: number
-  presentationId: string
-  start: string
-  end: string
-  previousYear: number
-  previousQuarter: number
 }
 
 export interface ReportingPeriod {

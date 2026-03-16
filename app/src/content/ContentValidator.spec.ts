@@ -8,7 +8,6 @@ const createValidPresentationDocument = () => ({
   presentation: {
     id: '2026-q1',
     year: 2026,
-    quarter: 1,
     title: 'Quarterly Community Update',
     subtitle: 'Q1 2026',
     roadmap: {
@@ -178,7 +177,6 @@ describe('ContentValidator', () => {
           {
             id: '2026-q1',
             year: 2026,
-            quarter: 1,
             title: 'Quarterly Community Update',
             subtitle: 'Q1 2026',
             summary: 'Summary',
@@ -361,7 +359,6 @@ describe('ContentValidator', () => {
           {
             id: '2026-q1',
             year: 2026,
-            quarter: 1,
             title: 'One',
             subtitle: 'Q1 2026',
             summary: 'Summary',
@@ -371,7 +368,6 @@ describe('ContentValidator', () => {
           {
             id: '2026-q1',
             year: 2026,
-            quarter: 2,
             title: 'Two',
             subtitle: 'Q2 2026',
             summary: 'Summary',
@@ -430,7 +426,6 @@ describe('ContentValidator', () => {
         {
           id: '2026-q1',
           year: 2026,
-          quarter: 1,
           title: 'One',
           subtitle: 'Q1 2026',
           summary: 'Summary',
@@ -440,7 +435,6 @@ describe('ContentValidator', () => {
         {
           id: '2026-q2',
           year: 2026,
-          quarter: 2,
           title: 'Two',
           subtitle: 'Q2 2026',
           slides: [],

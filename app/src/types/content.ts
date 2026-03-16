@@ -91,8 +91,7 @@ export interface SiteContent {
 
 export interface PresentationIndexEntry {
   id: string
-  year: number
-  quarter: number
+  year?: number
   title: string
   subtitle: string
   summary: string
@@ -188,8 +187,7 @@ export type PresentationSlide =
 
 export interface PresentationContent {
   id: string
-  year: number
-  quarter: number
+  year?: number
   title: string
   subtitle: string
   roadmap?: RoadmapContent

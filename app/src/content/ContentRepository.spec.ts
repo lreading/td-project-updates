@@ -105,10 +105,10 @@ describe('ContentRepository', () => {
     expect(repository.getSiteContent().title).toBe('Test Site')
   })
 
-  it('sorts published presentations by most recent quarter first', () => {
+  it('preserves authored presentation order from the index', () => {
     const repository = new ContentRepository(files)
 
-    expect(repository.listPresentations().map((entry) => entry.id)).toEqual(['2026-q1', '2025-q4'])
+    expect(repository.listPresentations().map((entry) => entry.id)).toEqual(['2025-q4', '2026-q1'])
   })
 
   it('returns the merged presentation record for a quarter', () => {

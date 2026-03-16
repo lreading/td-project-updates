@@ -6,7 +6,7 @@ import { YamlWriter } from '../io/YamlWriter'
 import type { GitHubClient } from '../github/GitHubClient.types'
 import type { SiteConfig } from '../config/Config.types'
 import type { FileSystem } from '../io/FileSystem'
-import type { GeneratedPresentationData, PresentationIndexEntry, QuarterWindow, ResolvedReportingPeriod } from '../generation/Generation.types'
+import type { GeneratedPresentationData, PresentationIndexEntry, ResolvedReportingPeriod } from '../generation/Generation.types'
 import type { ProcessRunner } from '../process/ProcessRunner'
 
 class StubContentConfigLoader {
@@ -39,30 +39,15 @@ class StubPresentationIndexStore {
     return this.entries
   }
 
-  public findPresentationIdForQuarter(
+  public findPresentationById(
     entries: PresentationIndexEntry[],
-    year: number,
-    quarter: number,
-  ): string | undefined {
-    return entries.find((entry) => entry.year === year && entry.quarter === quarter)?.id
+    id: string,
+  ): PresentationIndexEntry | undefined {
+    return entries.find((entry) => entry.id === id)
   }
 
   public async write(_paths: unknown, entries: PresentationIndexEntry[]): Promise<void> {
     this.writes.push(entries)
-  }
-}
-
-class StubQuarterResolver {
-  public resolve(): QuarterWindow {
-    return {
-      year: 2026,
-      quarter: 1,
-      presentationId: '2026-q1',
-      start: '2026-01-01',
-      end: '2026-03-31',
-      previousYear: 2025,
-      previousQuarter: 4,
-    }
   }
 }
 
@@ -257,14 +242,13 @@ describe('TdCliApplicationService', () => {
     expect(generatedDataStore.writes).toHaveLength(0)
   })
 
-  it('initializes a new presentation scaffold and updates the index when the quarter is new', async () => {
+  it('initializes a new presentation scaffold and updates the index when the presentation id is new', async () => {
     const fileSystem = new MemoryFileSystem()
     const generatedDataStore = new StubGeneratedDataStore()
     const presentationIndexStore = new StubPresentationIndexStore([
       {
         id: '2025-q4',
         year: 2025,
-        quarter: 4,
         title: 'Previous',
         subtitle: 'Q4 2025',
         summary: 'Summary',
@@ -277,12 +261,15 @@ describe('TdCliApplicationService', () => {
       presentationIndexStore: presentationIndexStore as never,
       generatedDataStore: generatedDataStore as never,
       yamlWriter: new YamlWriter(fileSystem),
-      quarterResolver: new StubQuarterResolver() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
     })
 
     await expect(service.initPresentation({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      title: 'Quarterly Community Update',
+      subtitle: 'Q1 2026',
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       createdPaths: [
@@ -297,14 +284,13 @@ describe('TdCliApplicationService', () => {
     expect(presentationIndexStore.writes).toHaveLength(1)
   })
 
-  it('rejects existing quarters unless force is enabled, and force overwrites scaffold files without rewriting the index', async () => {
+  it('rejects existing presentation ids unless force is enabled, and force overwrites scaffold files without rewriting the index', async () => {
     const fileSystem = new MemoryFileSystem()
     const generatedDataStore = new StubGeneratedDataStore()
     const presentationIndexStore = new StubPresentationIndexStore([
       {
         id: '2026-q1',
         year: 2026,
-        quarter: 1,
         title: 'Existing',
         subtitle: 'Q1 2026',
         summary: 'Summary',
@@ -317,19 +303,25 @@ describe('TdCliApplicationService', () => {
       presentationIndexStore: presentationIndexStore as never,
       generatedDataStore: generatedDataStore as never,
       yamlWriter: new YamlWriter(fileSystem),
-      quarterResolver: new StubQuarterResolver() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
     })
 
     await expect(service.initPresentation({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      title: 'Existing',
+      subtitle: 'Q1 2026',
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
     })).rejects.toThrow(
-      'Presentation "2026-q1" already exists for Q1 2026. Use force to overwrite scaffold files.',
+      'Presentation "2026-q1" already exists. Use force to overwrite scaffold files.',
     )
 
     await expect(service.initPresentation({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      title: 'Existing',
+      subtitle: 'Q1 2026',
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
       force: true,
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
@@ -348,7 +340,7 @@ describe('TdCliApplicationService', () => {
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
-      quarterResolver: new StubQuarterResolver() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: new StubGeneratedDataStore() as never,
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),

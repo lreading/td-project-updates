@@ -55,9 +55,15 @@ export class CliCommandRunner {
   private async runInit(args: string[]): Promise<void> {
     const options = this.parseOptions(args)
     const force = this.readBooleanOption(options, 'force')
+    const toDate = this.readStringOption(options, 'to-date')
+    const summary = this.readStringOption(options, 'summary')
     const result = await this.service.initPresentation({
-      year: this.requireNumberOption(options, 'year'),
-      quarter: this.requireNumberOption(options, 'quarter'),
+      presentationId: this.requireStringOption(options, 'presentation-id'),
+      title: this.requireStringOption(options, 'title'),
+      subtitle: this.requireStringOption(options, 'subtitle'),
+      fromDate: this.requireStringOption(options, 'from-date'),
+      ...(toDate !== undefined ? { toDate } : {}),
+      ...(summary !== undefined ? { summary } : {}),
       ...(force !== undefined ? { force } : {}),
     })
     this.output.info(`Initialized ${result.presentationId}`)
@@ -135,15 +141,6 @@ export class CliCommandRunner {
     return options
   }
 
-  private requireNumberOption(options: CommandOptions, key: string): number {
-    const value = this.readNumberOption(options, key)
-    if (value === undefined) {
-      throw new Error(`Missing required option "--${key}".`)
-    }
-
-    return value
-  }
-
   private requireStringOption(options: CommandOptions, key: string): string {
     const value = this.readStringOption(options, key)
     if (value === undefined) {
@@ -182,7 +179,7 @@ export class CliCommandRunner {
       'Usage: td-updates <command> [options]',
       '',
       'Commands:',
-      '  init --year <year> --quarter <quarter> [--force]',
+      '  init --presentation-id <id> --title <title> --subtitle <subtitle> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force]',
       '  fetch --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--dry-run]',
       '  build',
       '  serve [--host <host>] [--port <port>] [--open]',

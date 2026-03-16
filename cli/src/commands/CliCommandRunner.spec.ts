@@ -58,16 +58,44 @@ describe('CliCommandRunner', () => {
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates'))
   })
 
+  it('prints help for explicit help flags', async () => {
+    const output = createOutput()
+    const runner = new CliCommandRunner(createService(), output)
+
+    await expect(runner.run(['--help'])).resolves.toBe(0)
+    await expect(runner.run(['-h'])).resolves.toBe(0)
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Commands:'))
+  })
+
   it('dispatches init with parsed options', async () => {
     const service = createService()
     const output = createOutput()
     const runner = new CliCommandRunner(service, output)
 
-    await expect(runner.run(['init', '--year', '2026', '--quarter', '1', '--force'])).resolves.toBe(0)
+    await expect(runner.run([
+      'init',
+      '--presentation-id',
+      '2026-q1',
+      '--title',
+      'Quarterly Community Update',
+      '--subtitle',
+      'Q1 2026',
+      '--from-date',
+      '2026-01-01',
+      '--to-date',
+      '2026-03-31',
+      '--summary',
+      'Summary',
+      '--force',
+    ])).resolves.toBe(0)
 
     expect(service.initPresentation).toHaveBeenCalledWith({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      title: 'Quarterly Community Update',
+      subtitle: 'Q1 2026',
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
+      summary: 'Summary',
       force: true,
     })
     expect(output.info).toHaveBeenCalledWith('Initialized 2026-q1')
@@ -137,9 +165,9 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['unknown'])).resolves.toBe(1)
     await expect(runner.run(['build', 'unexpected'])).resolves.toBe(1)
     await expect(runner.run(['serve', 'unexpected'])).resolves.toBe(1)
-    await expect(runner.run(['init', '--year', '--quarter', '1'])).resolves.toBe(1)
-    await expect(runner.run(['init', '--year', 'oops', '--quarter', '1'])).resolves.toBe(1)
+    await expect(runner.run(['init', '--presentation-id', 'demo'])).resolves.toBe(1)
     await expect(runner.run(['fetch', '--from-date', '2026-01-01'])).resolves.toBe(1)
+    await expect(runner.run(['serve', '--port', 'oops'])).resolves.toBe(1)
     expect(output.error).toHaveBeenCalled()
   })
 })

@@ -8,7 +8,6 @@ import { GitHubApiClient } from '../github/GitHubClient'
 import { InitPresentationBuilder } from '../init/InitPresentationBuilder'
 import { PresentationIndexStore } from '../init/PresentationIndexStore'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
-import { QuarterResolver } from '../generation/QuarterResolver'
 import { ReportingPeriodResolver } from '../generation/ReportingPeriodResolver'
 import { YamlWriter } from '../io/YamlWriter'
 import { NodeProcessRunner } from '../process/ProcessRunner'
@@ -39,7 +38,6 @@ interface TdCliApplicationServiceOptions {
   generatedDataBuilder?: GeneratedDataBuilder
   generatedDataStore?: GeneratedDataStore
   initPresentationBuilder?: InitPresentationBuilder
-  quarterResolver?: QuarterResolver
   reportingPeriodResolver?: ReportingPeriodResolver
   yamlWriter?: YamlWriter
   gitHubClientFactory?: (token: string) => GitHubClient
@@ -56,7 +54,6 @@ export class TdCliApplicationService implements TdCliService {
   private readonly generatedDataBuilder: GeneratedDataBuilder
   private readonly generatedDataStore: GeneratedDataStore
   private readonly initPresentationBuilder: InitPresentationBuilder
-  private readonly quarterResolver: QuarterResolver
   private readonly reportingPeriodResolver: ReportingPeriodResolver
   private readonly yamlWriter: YamlWriter
   private readonly gitHubClientFactory: (token: string) => GitHubClient
@@ -72,7 +69,6 @@ export class TdCliApplicationService implements TdCliService {
     this.generatedDataBuilder = options.generatedDataBuilder ?? new GeneratedDataBuilder()
     this.generatedDataStore = options.generatedDataStore ?? new GeneratedDataStore()
     this.initPresentationBuilder = options.initPresentationBuilder ?? new InitPresentationBuilder()
-    this.quarterResolver = options.quarterResolver ?? new QuarterResolver()
     this.reportingPeriodResolver = options.reportingPeriodResolver ?? new ReportingPeriodResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
     this.gitHubClientFactory = options.gitHubClientFactory ?? ((token: string) => new GitHubApiClient({ token }))
@@ -80,54 +76,46 @@ export class TdCliApplicationService implements TdCliService {
   }
 
   public async initPresentation(input: InitPresentationInput): Promise<InitPresentationResult> {
-    const quarterWindow = this.quarterResolver.resolve(input.year, input.quarter)
+    const period = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate).current
     const entries = await this.presentationIndexStore.load(this.paths)
-    const existingPresentationId = this.presentationIndexStore.findPresentationIdForQuarter(
-      entries,
-      input.year,
-      input.quarter,
-    )
+    const existingPresentation = this.presentationIndexStore.findPresentationById(entries, input.presentationId)
 
-    if (existingPresentationId && !input.force) {
+    if (existingPresentation && !input.force) {
       throw new Error(
-        `Presentation "${existingPresentationId}" already exists for Q${input.quarter} ${input.year}. Use force to overwrite scaffold files.`,
+        `Presentation "${input.presentationId}" already exists. Use force to overwrite scaffold files.`,
       )
     }
 
-    const presentationId = existingPresentationId ?? quarterWindow.presentationId
-    const previousPresentationId = this.presentationIndexStore.findPresentationIdForQuarter(
-      entries,
-      quarterWindow.previousYear,
-      quarterWindow.previousQuarter,
-    )
-    const scopedQuarterWindow = {
-      ...quarterWindow,
-      presentationId,
+    const scaffold = {
+      presentationId: input.presentationId,
+      title: input.title,
+      subtitle: input.subtitle,
+      summary: input.summary ?? 'Replace with a summary before publishing.',
+      period,
     }
-    const presentationDocument = this.initPresentationBuilder.buildPresentationDocument(scopedQuarterWindow)
+    const presentationDocument = this.initPresentationBuilder.buildPresentationDocument(scaffold)
     const generatedDocument = this.initPresentationBuilder.buildGeneratedData(
-      scopedQuarterWindow,
-      previousPresentationId,
+      scaffold,
     )
-    const presentationPath = this.paths.getPresentationPath(presentationId)
-    const generatedPath = this.paths.getGeneratedPath(presentationId)
+    const presentationPath = this.paths.getPresentationPath(input.presentationId)
+    const generatedPath = this.paths.getGeneratedPath(input.presentationId)
 
     await this.yamlWriter.writeDocument(presentationPath, presentationDocument)
-    await this.generatedDataStore.writeGeneratedData(this.paths, presentationId, generatedDocument)
+    await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, generatedDocument)
 
-    if (!existingPresentationId) {
+    if (!existingPresentation) {
       await this.presentationIndexStore.write(this.paths, [
+        this.initPresentationBuilder.buildIndexEntry(scaffold),
         ...entries,
-        this.initPresentationBuilder.buildIndexEntry(scopedQuarterWindow),
       ])
     }
 
     return {
-      presentationId,
+      presentationId: input.presentationId,
       createdPaths: [
         presentationPath,
         generatedPath,
-        ...(existingPresentationId ? [] : [this.paths.getPresentationsIndexPath()]),
+        ...(existingPresentation ? [] : [this.paths.getPresentationsIndexPath()]),
       ],
     }
   }

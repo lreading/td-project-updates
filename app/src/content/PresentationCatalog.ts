@@ -25,7 +25,11 @@ export class PresentationCatalog {
   }
 
   public listYears(): number[] {
-    return [...new Set(this.entries.map((entry) => entry.year))].sort((left, right) => right - left)
+    return [...new Set(
+      this.entries
+        .map((entry) => entry.year)
+        .filter((entry): entry is number => typeof entry === 'number' && Number.isFinite(entry)),
+    )].sort((left, right) => right - left)
   }
 
   public getPage(input: PresentationPageInput): PresentationPageResult {
@@ -71,9 +75,7 @@ export class PresentationCatalog {
       entry.title,
       entry.subtitle,
       entry.summary,
-      `q${entry.quarter}`,
-      `${entry.year}`,
-      `q${entry.quarter} ${entry.year}`,
+      ...(entry.year !== undefined ? [String(entry.year)] : []),
     ]
       .join(' ')
       .toLowerCase()

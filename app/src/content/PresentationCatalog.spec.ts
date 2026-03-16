@@ -6,7 +6,6 @@ const entries = [
   {
     id: '2026-q4',
     year: 2026,
-    quarter: 4,
     title: 'Q4 2026 Update',
     subtitle: 'Q4 2026',
     summary: 'Late-year update',
@@ -16,7 +15,6 @@ const entries = [
   {
     id: '2026-q3',
     year: 2026,
-    quarter: 3,
     title: 'Q3 2026 Update',
     subtitle: 'Q3 2026',
     summary: 'Summer update',
@@ -26,7 +24,6 @@ const entries = [
   {
     id: '2025-q4',
     year: 2025,
-    quarter: 4,
     title: 'Q4 2025 Update',
     subtitle: 'Q4 2025',
     summary: 'Holiday update',
@@ -36,7 +33,6 @@ const entries = [
   {
     id: '2025-q3',
     year: 2025,
-    quarter: 3,
     title: 'Security Weekly',
     subtitle: 'Q3 2025',
     summary: 'Weekly cadence presentations test',

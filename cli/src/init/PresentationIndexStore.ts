@@ -14,20 +14,16 @@ export class PresentationIndexStore {
     return this.loader.loadPresentations(paths)
   }
 
-  public findPresentationIdForQuarter(
+  public findPresentationById(
     entries: PresentationIndexEntry[],
-    year: number,
-    quarter: number,
-  ): string | undefined {
-    return this.loader.findPresentationIdForQuarter(entries, year, quarter)
+    id: string,
+  ): PresentationIndexEntry | undefined {
+    return this.loader.findPresentationById(entries, id)
   }
 
   public async write(paths: FileSystemPaths, entries: PresentationIndexEntry[]): Promise<void> {
-    const sortedEntries = [...entries].sort((left, right) =>
-      right.year - left.year || right.quarter - left.quarter || left.id.localeCompare(right.id))
-
     await this.yamlWriter.writeDocument(paths.getPresentationsIndexPath(), {
-      presentations: sortedEntries,
+      presentations: entries,
     })
   }
 }

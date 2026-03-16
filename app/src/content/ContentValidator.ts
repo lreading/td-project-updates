@@ -52,6 +52,12 @@ function assertNumber(value: unknown, path: string): asserts value is number {
   assert(typeof value === 'number' && Number.isFinite(value), `${path} must be a number.`)
 }
 
+function assertOptionalNumber(value: unknown, path: string): void {
+  if (value !== undefined) {
+    assertNumber(value, path)
+  }
+}
+
 function assertStringArray(value: unknown, path: string): asserts value is string[] {
   assert(Array.isArray(value), `${path} must be an array.`)
   const entries = value as unknown[]
@@ -280,8 +286,7 @@ export class ContentValidator {
       assertNonBlankString(entry.id, `${path}.id`)
       assert(!ids.has(entry.id), `${path}.id must be unique.`)
       ids.add(entry.id)
-      assertNumber(entry.year, `${path}.year`)
-      assertNumber(entry.quarter, `${path}.quarter`)
+      assertOptionalNumber(entry.year, `${path}.year`)
       assertNonBlankString(entry.title, `${path}.title`)
       assertNonBlankString(entry.subtitle, `${path}.subtitle`)
       assertNonBlankString(entry.summary, `${path}.summary`)
@@ -295,8 +300,7 @@ export class ContentValidator {
     assert(isRecord(document.presentation), 'presentation document.presentation must be an object.')
     const presentation = document.presentation
     assertNonBlankString(presentation.id, 'presentation document.presentation.id')
-    assertNumber(presentation.year, 'presentation document.presentation.year')
-    assertNumber(presentation.quarter, 'presentation document.presentation.quarter')
+    assertOptionalNumber(presentation.year, 'presentation document.presentation.year')
     assertNonBlankString(presentation.title, 'presentation document.presentation.title')
     assertNonBlankString(presentation.subtitle, 'presentation document.presentation.subtitle')
     if (presentation.roadmap !== undefined) {
@@ -367,14 +371,6 @@ export class ContentValidator {
     assert(
       indexEntry.id === generated.id,
       `Presentation id mismatch between index "${indexEntry.id}" and generated "${generated.id}".`,
-    )
-    assert(
-      indexEntry.year === presentation.year,
-      `Presentation year mismatch between index "${indexEntry.year}" and presentation "${presentation.year}".`,
-    )
-    assert(
-      indexEntry.quarter === presentation.quarter,
-      `Presentation quarter mismatch between index "${indexEntry.quarter}" and presentation "${presentation.quarter}".`,
     )
     assert(
       indexEntry.title === presentation.title,

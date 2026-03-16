@@ -67,7 +67,6 @@ describe('AppNav', () => {
       {
         id: '2026-q2',
         year: 2026,
-        quarter: 2,
         title: 'Q2 Deck',
         subtitle: 'Q2 2026',
         summary: 'Fallback deck',
