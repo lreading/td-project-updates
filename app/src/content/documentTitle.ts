@@ -2,6 +2,7 @@ import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import type { Router } from 'vue-router'
 
 import { contentRepository } from './ContentRepository'
+import { resolvePresentationsPageContent } from './contentDefaults'
 
 const getBaseTitle = (): string => contentRepository.getSiteContent().title
 
@@ -20,10 +21,7 @@ export const resolveDocumentTitle = (
   }
 
   if (route.name === 'presentations') {
-    const pageTitle =
-      site.presentations_page?.title?.trim()
-      || site.presentations_page_title?.trim()
-      || 'All presentations'
+    const pageTitle = resolvePresentationsPageContent(site).title
     return `${pageTitle} | ${site.title}`
   }
 

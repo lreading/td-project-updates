@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { contentRepository } from '../content/ContentRepository'
+import { resolvePresentationToolbarContent } from '../content/contentDefaults'
 import { DeckNavigation } from '../content/DeckNavigation'
 import PresentationToolbar from '../components/presentation/PresentationToolbar.vue'
 import SlideRenderer from '../components/presentation/SlideRenderer.vue'
@@ -12,6 +13,7 @@ const router = useRouter()
 const fullscreenActive = ref(false)
 
 const site = contentRepository.getSiteContent()
+const toolbarContent = resolvePresentationToolbarContent(site)
 const presentationId = computed(() => String(route.params.presentationId))
 const record = computed(() => contentRepository.getPresentation(presentationId.value))
 const slides = computed(() => record.value.presentation.slides.filter((slide) => slide.enabled))
@@ -146,10 +148,10 @@ onUnmounted(() => {
       v-if="!isPresentationActive"
       :slide-number="slideNumber"
       :slide-total="slides.length"
-      :navigation-label="site.presentation_toolbar?.navigation_label"
-      :previous-slide-label="site.presentation_toolbar?.previous_slide_label"
-      :next-slide-label="site.presentation_toolbar?.next_slide_label"
-      :presentation-mode-label="site.presentation_toolbar?.presentation_mode_label"
+      :navigation-label="toolbarContent.navigation_label"
+      :previous-slide-label="toolbarContent.previous_slide_label"
+      :next-slide-label="toolbarContent.next_slide_label"
+      :presentation-mode-label="toolbarContent.presentation_mode_label"
       @previous="updateRoute(navigator.previous(slideNumber))"
       @next="updateRoute(navigator.next(slideNumber))"
       @toggle-mode="toggleMode"

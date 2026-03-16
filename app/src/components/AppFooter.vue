@@ -2,24 +2,22 @@
 import { computed } from 'vue'
 
 import { contentRepository } from '../content/ContentRepository'
+import { resolveAppFooterContent } from '../content/contentDefaults'
 
 const site = contentRepository.getSiteContent()
-const footerLink = computed(() => ({
-  label: site.app_footer?.repository_label?.trim() || 'github.com/lreading/td-project-updates',
-  url: site.app_footer?.repository_url?.trim() || 'https://github.com/lreading/td-project-updates',
-}))
+const footerLink = computed(() => resolveAppFooterContent(site))
 </script>
 
 <template>
   <footer class="app-footer">
     <a
-      :href="footerLink.url"
+      :href="footerLink.repository_url"
       target="_blank"
       rel="noreferrer"
       class="app-footer__link"
     >
       <i class="fab fa-github app-footer__icon" aria-hidden="true"></i>
-      <span>{{ footerLink.label }}</span>
+      <span>{{ footerLink.repository_label }}</span>
     </a>
   </footer>
 </template>

@@ -7,6 +7,7 @@ import FooterActionLink from '../ui/FooterActionLink.vue'
 import KeyValueRows from '../ui/KeyValueRows.vue'
 import ProgressTimeline from '../ui/ProgressTimeline.vue'
 import SectionHeading from '../ui/SectionHeading.vue'
+import { resolveRoadmapLabels } from '../../content/contentDefaults'
 
 import type {
   PresentationDeck,
@@ -53,11 +54,7 @@ const timelineStages = computed(() =>
   }),
 )
 const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallbackSection)
-const roadmapLabels = computed(() => ({
-  deliverables: props.presentation.roadmap?.deliverables_heading?.trim() || 'Key deliverables',
-  focusAreas: props.presentation.roadmap?.focus_areas_heading?.trim() || 'Focus areas',
-  footerLink: props.presentation.roadmap?.footer_link_label?.trim() || 'View full roadmap & milestones on GitHub',
-}))
+const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
 </script>
 
 <template>

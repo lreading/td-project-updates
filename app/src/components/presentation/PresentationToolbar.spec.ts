@@ -4,11 +4,19 @@ import { describe, expect, it } from 'vitest'
 import PresentationToolbar from './PresentationToolbar.vue'
 
 describe('PresentationToolbar', () => {
+  const toolbarLabels = {
+    navigationLabel: 'Slide navigation',
+    previousSlideLabel: 'Previous slide',
+    nextSlideLabel: 'Next slide',
+    presentationModeLabel: 'Presentation mode',
+  }
+
   it('emits navigation and mode events', async () => {
     const wrapper = mount(PresentationToolbar, {
       props: {
         slideNumber: 2,
         slideTotal: 9,
+        ...toolbarLabels,
       },
     })
 
@@ -27,6 +35,7 @@ describe('PresentationToolbar', () => {
       props: {
         slideNumber: 1,
         slideTotal: 3,
+        ...toolbarLabels,
       },
     })
 

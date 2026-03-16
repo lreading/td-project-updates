@@ -7,6 +7,7 @@ import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
 import ProjectBadgePill from '../ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../ui/SiteFooterLinks.vue'
+import { resolveTitleSlideContent } from '../../content/contentDefaults'
 import { getProjectBadgeDisplay } from '../../content/projectBadge'
 
 import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
@@ -18,11 +19,7 @@ const props = defineProps<{
 }>()
 
 const badge = computed(() => getProjectBadgeDisplay(props.site))
-const titlePrimary = computed(() => props.slide.title_primary?.trim() || 'OWASP')
-const titleAccent = computed(() => props.slide.title_accent?.trim() || 'Threat Dragon')
-const subtitlePrefix = computed(
-  () => props.slide.subtitle_prefix?.trim() || 'Quarterly Community Update',
-)
+const slideContent = computed(() => resolveTitleSlideContent(props.slide))
 </script>
 
 <template>
@@ -38,11 +35,11 @@ const subtitlePrefix = computed(
 
       <div class="text-block">
         <h1 class="hero-title">
-          {{ titlePrimary }} <span class="accent-text">{{ titleAccent }}</span>
+          {{ slideContent.titlePrimary }} <span class="accent-text">{{ slideContent.titleAccent }}</span>
         </h1>
         <AccentDivider />
         <h2 class="hero-subtitle">
-          {{ subtitlePrefix }} —
+          {{ slideContent.subtitlePrefix }} —
           <span class="hero-subtitle-strong">{{ presentation.subtitle }}</span>
         </h2>
         <p class="hero-quote">"{{ slide.quote }}"</p>

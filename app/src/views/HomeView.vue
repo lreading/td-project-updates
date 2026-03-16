@@ -10,17 +10,14 @@ import ProjectBadgePill from '../components/ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../components/ui/SiteFooterLinks.vue'
 import { getProjectBadgeDisplay } from '../content/projectBadge'
 import { contentRepository } from '../content/ContentRepository'
+import { resolveHomeHeroContent } from '../content/contentDefaults'
 
 const site = contentRepository.getSiteContent()
 const presentations = contentRepository.listPresentations()
 
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const badge = computed(() => getProjectBadgeDisplay(site))
-const heroContent = computed(() => ({
-  titlePrimary: site.home_hero?.title_primary?.trim() || 'OWASP',
-  titleAccent: site.home_hero?.title_accent?.trim() || 'Threat Dragon',
-  subtitle: site.home_hero?.subtitle?.trim() || 'Community Updates',
-}))
+const heroContent = computed(() => resolveHomeHeroContent(site))
 </script>
 
 <template>
@@ -48,7 +45,7 @@ const heroContent = computed(() => ({
 
       <div class="hero-copy">
         <h1 class="hero-title">
-          {{ heroContent.titlePrimary }} <span class="accent-text">{{ heroContent.titleAccent }}</span>
+          {{ heroContent.title_primary }} <span class="accent-text">{{ heroContent.title_accent }}</span>
         </h1>
         <AccentDivider />
         <h2 class="hero-subtitle">
