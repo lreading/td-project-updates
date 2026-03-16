@@ -5,7 +5,7 @@ import { DeltaCalculator } from './DeltaCalculator'
 describe('DeltaCalculator', () => {
   const calculator = new DeltaCalculator()
 
-  it('computes quarter-over-quarter deltas with a zero fallback', () => {
+  it('computes period-over-period deltas with a zero fallback', () => {
     expect(calculator.createMetric('GitHub Stars', 50, 40)).toEqual({
       label: 'GitHub Stars',
       current: 50,

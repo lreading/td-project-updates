@@ -29,12 +29,12 @@ describe('ContributorSpotlightSlideView', () => {
 
     expect(wrapper.findAll('.profile-card')).toHaveLength(slide.content.spotlight.length)
     expect(wrapper.text()).toContain('Special thanks to all')
-    expect(wrapper.text()).toContain('24 contributors')
+    expect(wrapper.text()).toContain(`${record.generated.contributors.total} contributors`)
     expect(wrapper.get('.contributors-link').attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/graphs/contributors',
     )
     expect(wrapper.findAll('.github-handle')[0]?.attributes('href')).toBe(
-      'https://github.com/schen_dev',
+      `https://github.com/${slide.content.spotlight[0]?.login}`,
     )
   })
 

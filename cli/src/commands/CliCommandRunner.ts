@@ -65,12 +65,15 @@ export class CliCommandRunner {
 
   private async runFetch(args: string[]): Promise<void> {
     const options = this.parseOptions(args)
-    const presentationId = this.readStringOption(options, 'presentation-id')
+    const presentationId = this.requireStringOption(options, 'presentation-id')
     const write = this.readBooleanOption(options, 'dry-run') ? false : undefined
+    const toDate = this.readStringOption(options, 'to-date')
+    const noPreviousPeriod = this.readBooleanOption(options, 'no-previous-period')
     const result = await this.service.fetchPresentationData({
-      year: this.requireNumberOption(options, 'year'),
-      quarter: this.requireNumberOption(options, 'quarter'),
-      ...(presentationId !== undefined ? { presentationId } : {}),
+      fromDate: this.requireStringOption(options, 'from-date'),
+      ...(toDate !== undefined ? { toDate } : {}),
+      presentationId,
+      ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
       ...(write !== undefined ? { write } : {}),
     })
     this.output.info(`Fetched ${result.presentationId}`)
@@ -141,6 +144,15 @@ export class CliCommandRunner {
     return value
   }
 
+  private requireStringOption(options: CommandOptions, key: string): string {
+    const value = this.readStringOption(options, key)
+    if (value === undefined) {
+      throw new Error(`Missing required option "--${key}".`)
+    }
+
+    return value
+  }
+
   private readNumberOption(options: CommandOptions, key: string): number | undefined {
     const value = options[key]
     if (value === undefined || typeof value === 'boolean') {
@@ -171,7 +183,7 @@ export class CliCommandRunner {
       '',
       'Commands:',
       '  init --year <year> --quarter <quarter> [--force]',
-      '  fetch --year <year> --quarter <quarter> [--presentation-id <id>] [--dry-run]',
+      '  fetch --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--dry-run]',
       '  build',
       '  serve [--host <host>] [--port <port>] [--open]',
       '  validate [--strict]',

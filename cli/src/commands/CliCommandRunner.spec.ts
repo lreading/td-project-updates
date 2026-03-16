@@ -80,19 +80,21 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([
       'fetch',
-      '--year',
-      '2026',
-      '--quarter',
-      '1',
       '--presentation-id',
       'custom-id',
+      '--from-date',
+      '2026-01-01',
+      '--to-date',
+      '2026-03-31',
+      '--no-previous-period',
       '--dry-run',
     ])).resolves.toBe(0)
 
     expect(service.fetchPresentationData).toHaveBeenCalledWith({
-      year: 2026,
-      quarter: 1,
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
       presentationId: 'custom-id',
+      noPreviousPeriod: true,
       write: false,
     })
   })
@@ -137,6 +139,7 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['serve', 'unexpected'])).resolves.toBe(1)
     await expect(runner.run(['init', '--year', '--quarter', '1'])).resolves.toBe(1)
     await expect(runner.run(['init', '--year', 'oops', '--quarter', '1'])).resolves.toBe(1)
+    await expect(runner.run(['fetch', '--from-date', '2026-01-01'])).resolves.toBe(1)
     expect(output.error).toHaveBeenCalled()
   })
 })

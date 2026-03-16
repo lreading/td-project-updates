@@ -4,6 +4,24 @@ import { describe, expect, it } from 'vitest'
 import { contentRepository } from '../../content/ContentRepository'
 import CommunityHighlightsSlideView from './CommunityHighlightsSlideView.vue'
 
+function formatTrend(delta: number, previous: number, suffix?: string): string {
+  if (delta === 0) {
+    return ''
+  }
+
+  const resolvedSuffix = suffix ? ` ${suffix}` : ''
+
+  if (previous <= 0) {
+    const sign = delta > 0 ? '+' : ''
+    return `${sign}${delta}${resolvedSuffix}`
+  }
+
+  const percentDelta = Math.round((delta / previous) * 100)
+  const sign = percentDelta > 0 ? '+' : ''
+
+  return `${sign}${percentDelta}%${resolvedSuffix}`
+}
+
 describe('CommunityHighlightsSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const slide = record.presentation.slides.find(
@@ -28,7 +46,13 @@ describe('CommunityHighlightsSlideView', () => {
     expect(wrapper.text()).toContain('Community Activity')
     expect(wrapper.findAll('.mention-card')).toHaveLength(slide.content.mentions.length)
     expect(wrapper.findAll('.stat-card')).toHaveLength(slide.content.stat_keys.length)
-    expect(wrapper.text()).toContain(`+12% ${slide.content.trend_suffix}`)
+    expect(wrapper.text()).toContain(
+      formatTrend(
+        record.generated.stats.stars.delta,
+        record.generated.stats.stars.previous,
+        slide.content.trend_suffix,
+      ),
+    )
     expect(wrapper.text()).toContain('GitHub Stars')
     expect(wrapper.findAll('a.mention-card')).toHaveLength(slide.content.mentions.length)
     expect(wrapper.text()).toContain('Interop tool')
@@ -63,10 +87,26 @@ describe('CommunityHighlightsSlideView', () => {
       'GitHub Stars',
     ])
     expect(trends).toEqual([
-      `+50% ${slide.content.trend_suffix}`,
-      `+15% ${slide.content.trend_suffix}`,
-      `+8% ${slide.content.trend_suffix}`,
-      `+12% ${slide.content.trend_suffix}`,
+      formatTrend(
+        record.generated.stats.new_contributors.delta,
+        record.generated.stats.new_contributors.previous,
+        slide.content.trend_suffix,
+      ),
+      formatTrend(
+        record.generated.stats.prs_merged.delta,
+        record.generated.stats.prs_merged.previous,
+        slide.content.trend_suffix,
+      ),
+      formatTrend(
+        record.generated.stats.issues_closed.delta,
+        record.generated.stats.issues_closed.previous,
+        slide.content.trend_suffix,
+      ),
+      formatTrend(
+        record.generated.stats.stars.delta,
+        record.generated.stats.stars.previous,
+        slide.content.trend_suffix,
+      ),
     ])
   })
 

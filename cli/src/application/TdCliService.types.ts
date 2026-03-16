@@ -12,9 +12,10 @@ export interface InitPresentationResult {
 }
 
 export interface FetchPresentationDataInput {
-  year: number
-  quarter: number
-  presentationId?: string
+  fromDate: string
+  toDate?: string
+  presentationId: string
+  noPreviousPeriod?: boolean
   write?: boolean
 }
 

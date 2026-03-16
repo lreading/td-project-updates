@@ -80,7 +80,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
           await expect(page.getByText(bullet)).toBeVisible()
         }
       }
-      if (releasesSlide.content.latest_badge_label) {
+      if (releasesSlide.content.latest_badge_label && releases.length > 0) {
         await expect(
           page.getByText(releasesSlide.content.latest_badge_label, { exact: true }),
         ).toBeVisible()
@@ -122,7 +122,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         const contributor = record.generated.contributors.authors.find(
           (entry) => entry.login === spotlight.login,
         )
-        await expect(page.getByRole('heading', { name: contributor?.name ?? '' })).toBeVisible()
+        await expect(
+          page.getByRole('heading', { name: contributor?.name ?? spotlight.login }),
+        ).toBeVisible()
         await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
           'href',
           `https://github.com/${spotlight.login}`,

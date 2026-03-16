@@ -1,6 +1,7 @@
 # Local / Testing files
 AGENTS.md
 html/
+backups/
 
 # Dependencies
 node_modules/

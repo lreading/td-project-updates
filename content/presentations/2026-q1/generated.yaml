@@ -3,87 +3,155 @@ generated:
   period:
     start: 2026-01-01
     end: 2026-03-31
-  previous_presentation_id: 2025-q4
   stats:
     stars:
       label: GitHub Stars
-      current: 2845
-      previous: 2540
-      delta: 305
+      current: 1350
+      previous: 0
+      delta: 1350
     issues_closed:
       label: Issues closed
-      current: 42
-      previous: 39
-      delta: 3
+      current: 30
+      previous: 14
+      delta: 16
     prs_merged:
       label: PRs Merged
-      current: 38
-      previous: 33
-      delta: 5
+      current: 25
+      previous: 17
+      delta: 8
     new_contributors:
       label: New contributors
-      current: 15
-      previous: 10
-      delta: 5
-  releases:
-    - id: v2.3.0
-      version: v2.3.0
-      published_at: 2026-02-15
-      url: https://github.com/OWASP/threat-dragon/releases/tag/v2.3.0
-      summary_bullets:
-        - Major UI overhaul with native dark mode support across all platforms
-        - Added new threat library integration for cloud-native architectures
-        - Fixed critical diagram serialization bug affecting large models
-        - Performance improvements for loading remote GitHub repositories
-    - id: v2.2.1
-      version: v2.2.1
-      published_at: 2026-01-10
-      url: https://github.com/OWASP/threat-dragon/releases/tag/v2.2.1
-      summary_bullets:
-        - Hotfix for PDF report generation on Windows systems
-        - Updated dependency packages to address security vulnerabilities
-        - Improved keyboard navigation accessibility
-    - id: v2.2.0
-      version: v2.2.0
-      published_at: 2025-12-05
-      url: https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0
-      summary_bullets:
-        - Introduced custom rule templates feature
-        - Added STRIDE-per-interaction analysis mode
-        - Enhanced zoom and pan controls for the diagram editor
+      current: 3
+      previous: 5
+      delta: -2
+  releases: []
   contributors:
-    total: 24
+    total: 5
     authors:
-      - login: schen_dev
-        name: Sarah Chen
-        avatar_url: https://avatars.githubusercontent.com/u/583231?v=4
+      - login: jgadsden
+        name: Jon Gadsden
+        avatar_url: https://avatars.githubusercontent.com/u/29352392?u=e54b694a117a1c893e879048eb7d6ac49eb2e4c7&v=4
         merged_prs: 8
         first_time: false
-      - login: mjohnson_sec
-        name: Marcus Johnson
-        avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+      - login: lreading
+        name: Leo
+        avatar_url: https://avatars.githubusercontent.com/u/5851985?u=99b9298dfd5651861ff9b1068f27151022730731&v=4
+        merged_prs: 7
+        first_time: false
+      - login: Ajith-Penmatsa-GGL
+        name: Ajith-Penmatsa-GGL
+        avatar_url: https://avatars.githubusercontent.com/u/244636293?v=4
         merged_prs: 6
         first_time: true
-      - login: erodriguez_docs
-        name: Elena Rodriguez
-        avatar_url: https://avatars.githubusercontent.com/u/9287?v=4
-        merged_prs: 5
-        first_time: false
-      - login: afernandez
-        name: Alex Fernandez
-        avatar_url: https://avatars.githubusercontent.com/u/3?v=4
-        merged_prs: 4
+      - login: sn3ha-dev278
+        name: Sneha
+        avatar_url: https://avatars.githubusercontent.com/u/243399891?v=4
+        merged_prs: 3
+        first_time: true
+      - login: Mahaboobunnisa123
+        name: Mahaboobunnisa Md
+        avatar_url: https://avatars.githubusercontent.com/u/179287447?v=4
+        merged_prs: 1
         first_time: true
   merged_prs:
-    - number: 4120
-      title: Add dark mode palette tokens
-      merged_at: 2026-02-01
-      author_login: schen_dev
-    - number: 4124
-      title: Introduce custom rule template support
-      merged_at: 2026-02-12
-      author_login: mjohnson_sec
-    - number: 4131
-      title: Rewrite getting started guide
-      merged_at: 2026-03-08
-      author_login: erodriguez_docs
+    - number: 1421
+      title: Workflow dependency updates
+      merged_at: 2026-01-05T07:14:58Z
+      author_login: jgadsden
+    - number: 1424
+      title: Fix SVG/PNG export to exclude selection decorations
+      merged_at: 2026-01-07T19:07:33Z
+      author_login: sn3ha-dev278
+    - number: 1430
+      title: Fix image export affected by zoom level
+      merged_at: 2026-01-16T11:10:00Z
+      author_login: sn3ha-dev278
+    - number: 1432
+      title: Fix diagram count for demo models
+      merged_at: 2026-01-16T11:22:07Z
+      author_login: jgadsden
+    - number: 1436
+      title: Fix for docs links to schemas
+      merged_at: 2026-01-17T15:39:33Z
+      author_login: jgadsden
+    - number: 1437
+      title: Fix possible loss of diagram changes when using Save/Save As in  desktop
+        menu
+      merged_at: 2026-01-25T08:12:07Z
+      author_login: sn3ha-dev278
+    - number: 1443
+      title: Fix link formatting in vulnerability reporting section
+      merged_at: 2026-02-01T17:54:50Z
+      author_login: lreading
+    - number: 1453
+      title: Update threat model schema to version 1.0.2
+      merged_at: 2026-02-16T19:46:41Z
+      author_login: jgadsden
+    - number: 1444
+      title: reusable templates feature (Web and Github only)
+      merged_at: 2026-02-17T00:04:23Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1455
+      title: "Fixed a bug in desktop app introduced in pr #1444"
+      merged_at: 2026-02-17T21:16:38Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1454
+      title: Fix/gitlab error opening models
+      merged_at: 2026-02-18T18:48:17Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1458
+      title: Update dependencies
+      merged_at: 2026-02-23T05:34:25Z
+      author_login: jgadsden
+    - number: 1461
+      title: "Fix: Broken link in model select page"
+      merged_at: 2026-02-23T08:43:19Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1462
+      title: updated the link so that the unit test passes
+      merged_at: 2026-02-23T18:17:15Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1465
+      title: provide example minimal production env-vars
+      merged_at: 2026-02-23T20:02:09Z
+      author_login: jgadsden
+    - number: 1464
+      title: "Bug: hide 'Manage Templates' for desktop app"
+      merged_at: 2026-02-24T07:02:55Z
+      author_login: jgadsden
+    - number: 1459
+      title: "Fix: Add Cornucopia MobileApp Deck to EoP Games diagram (#1447)"
+      merged_at: 2026-02-24T07:48:26Z
+      author_login: Mahaboobunnisa123
+    - number: 1467
+      title: "fixed rendering issues with template docs "
+      merged_at: 2026-03-05T09:44:01Z
+      author_login: Ajith-Penmatsa-GGL
+    - number: 1471
+      title: Documentation Dependencies Updates
+      merged_at: 2026-03-06T13:16:54Z
+      author_login: lreading
+    - number: 1473
+      title: Dependency Vuln Cleanup
+      merged_at: 2026-03-07T14:14:28Z
+      author_login: lreading
+    - number: 1476
+      title: Dockerfile Refactor
+      merged_at: 2026-03-08T06:15:39Z
+      author_login: lreading
+    - number: 1479
+      title: Documentation Updates
+      merged_at: 2026-03-08T15:12:15Z
+      author_login: lreading
+    - number: 1486
+      title: Desktop unit test coverage
+      merged_at: 2026-03-14T13:14:53Z
+      author_login: lreading
+    - number: 1497
+      title: Update workflows for latest actions
+      merged_at: 2026-03-15T16:20:32Z
+      author_login: jgadsden
+    - number: 1499
+      title: "Contributing: Requirement to Manually Test Changes"
+      merged_at: 2026-03-15T21:42:50Z
+      author_login: lreading

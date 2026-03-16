@@ -9,6 +9,7 @@ import { InitPresentationBuilder } from '../init/InitPresentationBuilder'
 import { PresentationIndexStore } from '../init/PresentationIndexStore'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
 import { QuarterResolver } from '../generation/QuarterResolver'
+import { ReportingPeriodResolver } from '../generation/ReportingPeriodResolver'
 import { YamlWriter } from '../io/YamlWriter'
 import { NodeProcessRunner } from '../process/ProcessRunner'
 
@@ -39,6 +40,7 @@ interface TdCliApplicationServiceOptions {
   generatedDataStore?: GeneratedDataStore
   initPresentationBuilder?: InitPresentationBuilder
   quarterResolver?: QuarterResolver
+  reportingPeriodResolver?: ReportingPeriodResolver
   yamlWriter?: YamlWriter
   gitHubClientFactory?: (token: string) => GitHubClient
   processRunner?: ProcessRunner
@@ -55,6 +57,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly generatedDataStore: GeneratedDataStore
   private readonly initPresentationBuilder: InitPresentationBuilder
   private readonly quarterResolver: QuarterResolver
+  private readonly reportingPeriodResolver: ReportingPeriodResolver
   private readonly yamlWriter: YamlWriter
   private readonly gitHubClientFactory: (token: string) => GitHubClient
   private readonly processRunner: ProcessRunner
@@ -70,6 +73,7 @@ export class TdCliApplicationService implements TdCliService {
     this.generatedDataStore = options.generatedDataStore ?? new GeneratedDataStore()
     this.initPresentationBuilder = options.initPresentationBuilder ?? new InitPresentationBuilder()
     this.quarterResolver = options.quarterResolver ?? new QuarterResolver()
+    this.reportingPeriodResolver = options.reportingPeriodResolver ?? new ReportingPeriodResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
     this.gitHubClientFactory = options.gitHubClientFactory ?? ((token: string) => new GitHubApiClient({ token }))
     this.processRunner = options.processRunner ?? new NodeProcessRunner()
@@ -129,44 +133,29 @@ export class TdCliApplicationService implements TdCliService {
   }
 
   public async fetchPresentationData(input: FetchPresentationDataInput): Promise<FetchPresentationDataResult> {
-    const quarterWindow = this.quarterResolver.resolve(input.year, input.quarter)
+    const periods = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate)
     const siteConfig = await this.contentConfigLoader.loadSiteConfig(this.paths)
     const repository = this.dataSourceResolver.resolveGitHubRepository(siteConfig)
     const environment = await this.envLoader.loadEnvironment(this.paths)
     const gitHubClient = this.gitHubClientFactory(environment.githubAccessToken)
-    const presentationIndex = await this.presentationIndexLoader.loadPresentations(this.paths)
-    const presentationId = input.presentationId
-      ?? this.presentationIndexLoader.findPresentationIdForQuarter(
-        presentationIndex,
-        input.year,
-        input.quarter,
-      )
-      ?? quarterWindow.presentationId
-    const previousPresentationId = this.presentationIndexLoader.findPresentationIdForQuarter(
-      presentationIndex,
-      quarterWindow.previousYear,
-      quarterWindow.previousQuarter,
-    )
-    const previousGenerated = previousPresentationId
-      ? await this.generatedDataStore.loadGeneratedData(this.paths, previousPresentationId)
-      : undefined
     const generated = await this.generatedDataBuilder.build({
       client: gitHubClient,
-      presentationId,
-      ...(previousGenerated ? { previousGenerated } : {}),
-      ...(previousPresentationId ? { previousPresentationId } : {}),
-      quarterWindow,
+      presentationId: input.presentationId,
+      currentPeriod: periods.current,
+      ...(input.noPreviousPeriod ? {} : { previousPeriod: periods.previous }),
       repository,
     })
     const generatedPath = input.write === false
-      ? this.paths.getGeneratedPath(presentationId)
-      : await this.generatedDataStore.writeGeneratedData(this.paths, presentationId, generated)
-    const warnings = previousPresentationId ? [] : ['No previous presentation found; previous values defaulted to 0.']
+      ? this.paths.getGeneratedPath(input.presentationId)
+      : await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, generated)
+    const warnings = [
+      ...(input.noPreviousPeriod ? ['Previous period comparison disabled; previous values defaulted to 0.'] : []),
+      'Historical star snapshots are not available; star previous value defaulted to 0.',
+    ]
 
     return {
-      presentationId,
+      presentationId: input.presentationId,
       generatedPath,
-      ...(previousPresentationId ? { previousPresentationId } : {}),
       generated,
       warnings,
     }

@@ -4,14 +4,13 @@ import { DeltaCalculator } from './DeltaCalculator'
 import type { GeneratedPresentationData, ReleaseEntry } from './Generation.types'
 import type { GitHubClient, GitHubReleaseSummary, GitHubRepositoryMetadata } from '../github/GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
-import type { QuarterWindow } from './Generation.types'
+import type { ReportingPeriod } from './Generation.types'
 
 interface BuildGeneratedDataInput {
   client: GitHubClient
   presentationId: string
-  previousGenerated?: GeneratedPresentationData
-  previousPresentationId?: string
-  quarterWindow: QuarterWindow
+  currentPeriod: ReportingPeriod
+  previousPeriod?: ReportingPeriod
   repository: GitHubRepositoryRef
 }
 
@@ -31,46 +30,57 @@ export class GeneratedDataBuilder {
   public async build(input: BuildGeneratedDataInput): Promise<GeneratedPresentationData> {
     const repositoryMetadata = await input.client.getRepositoryMetadata(input.repository)
     const releases = await input.client.listReleases(input.repository)
-    const mergedPullRequests = await input.client.listMergedPullRequests(input.repository, input.quarterWindow)
+    const mergedPullRequests = await input.client.listMergedPullRequests(input.repository, input.currentPeriod)
     const historicalAuthors = await input.client.listMergedPullRequestAuthorsBefore(
       input.repository,
-      input.quarterWindow.start,
+      input.currentPeriod.start,
     )
-    const closedIssues = await input.client.listClosedIssues(input.repository, input.quarterWindow)
+    const closedIssues = await input.client.listClosedIssues(input.repository, input.currentPeriod)
 
     const contributorAnalysis = this.contributorAnalyzer.analyze(mergedPullRequests, historicalAuthors)
-    const previousStats = input.previousGenerated?.stats ?? {}
+    const previousMergedPullRequests = input.previousPeriod
+      ? await input.client.listMergedPullRequests(input.repository, input.previousPeriod)
+      : []
+    const previousHistoricalAuthors = input.previousPeriod
+      ? await input.client.listMergedPullRequestAuthorsBefore(input.repository, input.previousPeriod.start)
+      : []
+    const previousClosedIssues = input.previousPeriod
+      ? await input.client.listClosedIssues(input.repository, input.previousPeriod)
+      : []
+    const previousContributorAnalysis = input.previousPeriod
+      ? this.contributorAnalyzer.analyze(previousMergedPullRequests, previousHistoricalAuthors)
+      : undefined
+    const previousStars = 0
 
     return {
       id: input.presentationId,
       period: {
-        start: input.quarterWindow.start,
-        end: input.quarterWindow.end,
+        start: input.currentPeriod.start,
+        end: input.currentPeriod.end,
       },
-      ...(input.previousPresentationId ? { previous_presentation_id: input.previousPresentationId } : {}),
       stats: {
         stars: this.deltaCalculator.createMetric(
           metricLabels.stars,
           repositoryMetadata.stars,
-          previousStats.stars?.current ?? 0,
+          previousStars,
         ),
         issues_closed: this.deltaCalculator.createMetric(
           metricLabels.issues_closed,
           closedIssues.length,
-          previousStats.issues_closed?.current ?? 0,
+          previousClosedIssues.length,
         ),
         prs_merged: this.deltaCalculator.createMetric(
           metricLabels.prs_merged,
           mergedPullRequests.length,
-          previousStats.prs_merged?.current ?? 0,
+          previousMergedPullRequests.length,
         ),
         new_contributors: this.deltaCalculator.createMetric(
           metricLabels.new_contributors,
           contributorAnalysis.newContributorCount,
-          previousStats.new_contributors?.current ?? 0,
+          previousContributorAnalysis?.newContributorCount ?? 0,
         ),
       },
-      releases: this.selectReleases(releases, repositoryMetadata, input.quarterWindow.end),
+      releases: this.selectReleases(releases, repositoryMetadata, input.currentPeriod),
       contributors: {
         total: contributorAnalysis.total,
         authors: contributorAnalysis.authors,
@@ -90,10 +100,13 @@ export class GeneratedDataBuilder {
   private selectReleases(
     releases: GitHubReleaseSummary[],
     repositoryMetadata: GitHubRepositoryMetadata,
-    endDate: string,
+    period: ReportingPeriod,
   ): ReleaseEntry[] {
     return releases
-      .filter((release) => typeof release.publishedAt === 'string' && release.publishedAt <= endDate)
+      .filter((release) =>
+        typeof release.publishedAt === 'string'
+        && release.publishedAt >= period.start
+        && release.publishedAt <= `${period.end}T23:59:59Z`)
       .sort((left, right) => (right.publishedAt ?? '').localeCompare(left.publishedAt ?? ''))
       .slice(0, 3)
       .map((release) => ({

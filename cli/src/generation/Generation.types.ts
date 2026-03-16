@@ -19,6 +19,16 @@ export interface QuarterWindow {
   previousQuarter: number
 }
 
+export interface ReportingPeriod {
+  start: string
+  end: string
+}
+
+export interface ResolvedReportingPeriod {
+  current: ReportingPeriod
+  previous: ReportingPeriod
+}
+
 export interface MetricValue {
   label: string
   current: number

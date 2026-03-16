@@ -6,7 +6,7 @@ import { YamlWriter } from '../io/YamlWriter'
 import type { GitHubClient } from '../github/GitHubClient.types'
 import type { SiteConfig } from '../config/Config.types'
 import type { FileSystem } from '../io/FileSystem'
-import type { GeneratedPresentationData, PresentationIndexEntry, QuarterWindow } from '../generation/Generation.types'
+import type { GeneratedPresentationData, PresentationIndexEntry, QuarterWindow, ResolvedReportingPeriod } from '../generation/Generation.types'
 import type { ProcessRunner } from '../process/ProcessRunner'
 
 class StubContentConfigLoader {
@@ -27,41 +27,6 @@ class StubEnvLoader {
     return {
       githubAccessToken: 'secret-token',
     }
-  }
-}
-
-class StubPresentationIndexLoader {
-  public async loadPresentations(): Promise<PresentationIndexEntry[]> {
-    return [
-      {
-        id: '2025-q4',
-        year: 2025,
-        quarter: 4,
-        title: 'Previous',
-        subtitle: 'Q4 2025',
-        summary: 'Summary',
-        published: true,
-        featured: false,
-      },
-      {
-        id: '2026-q1',
-        year: 2026,
-        quarter: 1,
-        title: 'Current',
-        subtitle: 'Q1 2026',
-        summary: 'Summary',
-        published: true,
-        featured: true,
-      },
-    ]
-  }
-
-  public findPresentationIdForQuarter(
-    entries: PresentationIndexEntry[],
-    year: number,
-    quarter: number,
-  ): string | undefined {
-    return entries.find((entry) => entry.year === year && entry.quarter === quarter)?.id
   }
 }
 
@@ -141,9 +106,8 @@ class StubGeneratedDataStore {
 
 class StubGeneratedDataBuilder {
   public async build(input: {
-    previousGenerated?: GeneratedPresentationData
-    previousPresentationId?: string
     presentationId: string
+    previousPeriod?: { start: string; end: string }
   }): Promise<GeneratedPresentationData> {
     return {
       id: input.presentationId,
@@ -151,14 +115,28 @@ class StubGeneratedDataBuilder {
         start: '2026-01-01',
         end: '2026-03-31',
       },
-      ...(input.previousPresentationId ? { previous_presentation_id: input.previousPresentationId } : {}),
       stats: {},
       releases: [],
       contributors: {
-        total: input.previousGenerated ? 1 : 0,
+        total: input.previousPeriod ? 1 : 0,
         authors: [],
       },
       merged_prs: [],
+    }
+  }
+}
+
+class StubReportingPeriodResolver {
+  public resolve(): ResolvedReportingPeriod {
+    return {
+      current: {
+        start: '2026-01-01',
+        end: '2026-03-31',
+      },
+      previous: {
+        start: '2025-10-01',
+        end: '2025-12-31',
+      },
     }
   }
 }
@@ -224,61 +202,56 @@ describe('TdCliApplicationService', () => {
     expect(new TdCliApplicationService()).toBeInstanceOf(TdCliApplicationService)
   })
 
-  it('fetches generated data, resolves previous presentation state, and writes output by default', async () => {
+  it('fetches generated data with previous-period comparison and writes output by default', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
     const service = new TdCliApplicationService({
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
-      presentationIndexLoader: new StubPresentationIndexLoader() as never,
-      quarterResolver: new StubQuarterResolver() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: generatedDataStore as never,
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
     })
 
     await expect(service.fetchPresentationData({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      fromDate: '2026-01-01',
+      toDate: '2026-03-31',
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
-      previousPresentationId: '2025-q4',
       generatedPath: '/repo/content/presentations/2026-q1/generated.yaml',
-      warnings: [],
+      warnings: ['Historical star snapshots are not available; star previous value defaulted to 0.'],
     })
 
     expect(generatedDataStore.writes).toHaveLength(1)
-    expect(generatedDataStore.writes[0]?.generated.previous_presentation_id).toBe('2025-q4')
+    expect(generatedDataStore.writes[0]?.generated.contributors.total).toBe(1)
   })
 
-  it('returns the target path without writing when write is false and warns when no previous presentation exists', async () => {
+  it('returns the target path without writing and can skip previous-period comparison', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
     const service = new TdCliApplicationService({
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
-      presentationIndexLoader: {
-        async loadPresentations(): Promise<PresentationIndexEntry[]> {
-          return []
-        },
-        findPresentationIdForQuarter(): string | undefined {
-          return undefined
-        },
-      } as never,
-      quarterResolver: new StubQuarterResolver() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: generatedDataStore as never,
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
     })
 
     await expect(service.fetchPresentationData({
-      year: 2026,
-      quarter: 1,
+      presentationId: '2026-q1',
+      fromDate: '2026-01-01',
       write: false,
+      noPreviousPeriod: true,
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       generatedPath: '/repo/content/presentations/2026-q1/generated.yaml',
-      warnings: ['No previous presentation found; previous values defaulted to 0.'],
+      warnings: [
+        'Previous period comparison disabled; previous values defaulted to 0.',
+        'Historical star snapshots are not available; star previous value defaulted to 0.',
+      ],
     })
 
     expect(generatedDataStore.writes).toHaveLength(0)
@@ -375,7 +348,6 @@ describe('TdCliApplicationService', () => {
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
-      presentationIndexLoader: new StubPresentationIndexLoader() as never,
       quarterResolver: new StubQuarterResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: new StubGeneratedDataStore() as never,

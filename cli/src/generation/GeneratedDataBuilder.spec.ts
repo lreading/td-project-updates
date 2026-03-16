@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest'
 
 import { GeneratedDataBuilder } from './GeneratedDataBuilder'
 
-import type { GitHubClient } from '../github/GitHubClient.types'
+import type { GitHubClient, GitHubReleaseSummary } from '../github/GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
-import type { QuarterWindow } from './Generation.types'
+import type { ReportingPeriod } from './Generation.types'
 
 class StubGitHubClient implements GitHubClient {
   public async getRepositoryMetadata() {
@@ -19,12 +19,12 @@ class StubGitHubClient implements GitHubClient {
     }
   }
 
-  public async listReleases() {
+  public async listReleases(): Promise<GitHubReleaseSummary[]> {
     return [
       {
         id: 1,
         tagName: 'v2.1.0',
-        name: 'Quarterly release',
+        name: 'Period release',
         publishedAt: '2026-02-10',
         htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.0',
         body: '- Added thing\n- Fixed thing',
@@ -43,7 +43,21 @@ class StubGitHubClient implements GitHubClient {
     ]
   }
 
-  public async listMergedPullRequests() {
+  public async listMergedPullRequests(_repository: GitHubRepositoryRef, dateRange: ReportingPeriod) {
+    if (dateRange.start === '2025-10-01') {
+      return [
+        {
+          authorAvatarUrl: 'https://avatars.example/octocat.png',
+          authorLogin: 'octocat',
+          authorName: 'Octocat',
+          mergedAt: '2025-11-12T10:00:00Z',
+          number: 10,
+          title: 'Prior feature',
+          url: 'https://github.com/OWASP/threat-dragon/pull/10',
+        },
+      ]
+    }
+
     return [
       {
         authorAvatarUrl: 'https://avatars.example/octocat.png',
@@ -68,7 +82,18 @@ class StubGitHubClient implements GitHubClient {
     return ['octocat']
   }
 
-  public async listClosedIssues() {
+  public async listClosedIssues(_repository: GitHubRepositoryRef, dateRange: ReportingPeriod) {
+    if (dateRange.start === '2025-10-01') {
+      return [
+        {
+          number: 77,
+          title: 'Issue 0',
+          closedAt: '2025-11-01T00:00:00Z',
+          url: 'https://github.com/OWASP/threat-dragon/issues/77',
+        },
+      ]
+    }
+
     return [
       {
         number: 88,
@@ -88,48 +113,28 @@ describe('GeneratedDataBuilder', () => {
     type: 'github',
     url: 'https://github.com/OWASP/threat-dragon',
   }
-  const quarterWindow: QuarterWindow = {
-    year: 2026,
-    quarter: 1,
-    presentationId: '2026-q1',
+  const currentPeriod: ReportingPeriod = {
     start: '2026-01-01',
     end: '2026-03-31',
-    previousYear: 2025,
-    previousQuarter: 4,
+  }
+  const previousPeriod: ReportingPeriod = {
+    start: '2025-10-01',
+    end: '2025-12-31',
   }
 
-  it('builds generated presentation data with previous-quarter deltas and contributor analysis', async () => {
+  it('builds generated presentation data with previous-period deltas and contributor analysis', async () => {
     const generated = await builder.build({
       client: new StubGitHubClient(),
       presentationId: '2026-q1',
-      previousGenerated: {
-        id: '2025-q4',
-        period: {
-          start: '2025-10-01',
-          end: '2025-12-31',
-        },
-        stats: {
-          stars: { label: 'GitHub Stars', current: 200, previous: 0, delta: 200 },
-          issues_closed: { label: 'Issues closed', current: 3, previous: 0, delta: 3 },
-          prs_merged: { label: 'PRs Merged', current: 1, previous: 0, delta: 1 },
-          new_contributors: { label: 'New contributors', current: 0, previous: 0, delta: 0 },
-        },
-        releases: [],
-        contributors: {
-          total: 0,
-          authors: [],
-        },
-        merged_prs: [],
-      },
-      previousPresentationId: '2025-q4',
-      quarterWindow,
+      currentPeriod,
+      previousPeriod,
       repository,
     })
 
-    expect(generated.stats.stars?.delta).toBe(50)
+    expect(generated.stats.stars?.delta).toBe(250)
     expect(generated.stats.prs_merged?.delta).toBe(1)
     expect(generated.stats.new_contributors?.current).toBe(1)
-    expect(generated.previous_presentation_id).toBe('2025-q4')
+    expect(generated.stats.issues_closed?.previous).toBe(1)
     expect(generated.releases[0]?.summary_bullets).toEqual(['Added thing', 'Fixed thing'])
     expect(generated.contributors.authors).toContainEqual(expect.objectContaining({
       login: 'alice',
@@ -155,11 +160,60 @@ describe('GeneratedDataBuilder', () => {
     const generated = await builder.build({
       client: new StubGitHubClient(),
       presentationId: '2026-q1',
-      quarterWindow,
+      currentPeriod,
       repository,
     })
 
     expect(generated.stats.stars?.previous).toBe(0)
     expect(generated.stats.stars?.delta).toBe(250)
+  })
+
+  it('filters out releases outside the current period and falls back to repository name when no bullets or release name exist', async () => {
+    class SparseReleaseClient extends StubGitHubClient {
+      public override async listReleases(): Promise<GitHubReleaseSummary[]> {
+        return [
+          {
+            id: 3,
+            tagName: 'v2.2.0',
+            publishedAt: '2026-03-15T10:00:00Z',
+            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0',
+            isDraft: false,
+            isPrerelease: false,
+          },
+          {
+            id: 4,
+            tagName: 'v2.1.9',
+            publishedAt: '2025-12-31T23:59:59Z',
+            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.9',
+            isDraft: false,
+            isPrerelease: false,
+          },
+          {
+            id: 5,
+            tagName: 'v2.1.8',
+            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.8',
+            isDraft: false,
+            isPrerelease: false,
+          },
+        ]
+      }
+    }
+
+    const generated = await builder.build({
+      client: new SparseReleaseClient(),
+      presentationId: '2026-q1',
+      currentPeriod,
+      repository,
+    })
+
+    expect(generated.releases).toEqual([
+      {
+        id: 'v2.2.0',
+        version: 'v2.2.0',
+        published_at: '2026-03-15T10:00:00Z',
+        url: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0',
+        summary_bullets: ['Release for OWASP/threat-dragon'],
+      },
+    ])
   })
 })
