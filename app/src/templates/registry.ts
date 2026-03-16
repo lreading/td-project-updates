@@ -11,6 +11,7 @@ import ThankYouSlideView from '../components/slides/ThankYouSlideView.vue'
 import TitleSlideView from '../components/slides/TitleSlideView.vue'
 
 import type { PresentationRecord, PresentationSlide, SiteContent } from '../types/content'
+import { slideTemplateValidators, type SlideTemplateValidator } from './validation'
 import type { SlideTemplateId } from './templateIds'
 
 export interface SlideTemplateRenderContext {
@@ -25,6 +26,7 @@ export interface SlideTemplateDefinition {
   id: SlideTemplateId
   label: string
   component: Component
+  validate: SlideTemplateValidator
   createProps: (context: SlideTemplateRenderContext) => Record<string, unknown>
 }
 
@@ -40,6 +42,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'hero',
     label: 'Hero',
     component: TitleSlideView,
+    validate: slideTemplateValidators.hero,
     createProps: (context) => ({
       presentation: context.record.presentation,
       site: context.site,
@@ -50,18 +53,21 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'agenda',
     label: 'Agenda',
     component: AgendaSlideView,
+    validate: slideTemplateValidators.agenda,
     createProps: createSharedSlideProps,
   },
   'section-list-grid': {
     id: 'section-list-grid',
     label: 'Section List Grid',
     component: RecentUpdatesSlideView,
+    validate: slideTemplateValidators['section-list-grid'],
     createProps: createSharedSlideProps,
   },
   timeline: {
     id: 'timeline',
     label: 'Timeline',
     component: ReleasesSlideView,
+    validate: slideTemplateValidators.timeline,
     createProps: (context) => ({
       ...createSharedSlideProps(context),
       generated: context.record.generated,
@@ -72,6 +78,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'progress-timeline',
     label: 'Progress Timeline',
     component: RoadmapSlideView,
+    validate: slideTemplateValidators['progress-timeline'],
     createProps: (context) => ({
       ...createSharedSlideProps(context),
       site: context.site,
@@ -81,6 +88,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'people',
     label: 'People',
     component: ContributorSpotlightSlideView,
+    validate: slideTemplateValidators.people,
     createProps: (context) => ({
       ...createSharedSlideProps(context),
       generated: context.record.generated,
@@ -91,6 +99,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'metrics-and-links',
     label: 'Metrics and Links',
     component: CommunityHighlightsSlideView,
+    validate: slideTemplateValidators['metrics-and-links'],
     createProps: (context) => ({
       ...createSharedSlideProps(context),
       generated: context.record.generated,
@@ -100,6 +109,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'action-cards',
     label: 'Action Cards',
     component: HowToContributeSlideView,
+    validate: slideTemplateValidators['action-cards'],
     createProps: (context) => ({
       ...createSharedSlideProps(context),
       site: context.site,
@@ -109,6 +119,7 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     id: 'closing',
     label: 'Closing',
     component: ThankYouSlideView,
+    validate: slideTemplateValidators.closing,
     createProps: (context) => ({
       presentation: context.record.presentation,
       generated: context.record.generated,

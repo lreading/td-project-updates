@@ -20,6 +20,7 @@ describe('template registry', () => {
       expect(definition.id).toBe(templateId)
       expect(definition.label.length).toBeGreaterThan(0)
       expect(definition.component).toBeTruthy()
+      expect(typeof definition.validate).toBe('function')
     })
   })
 
@@ -42,6 +43,7 @@ describe('template registry', () => {
 
       expect(props.slide).toBe(slide)
       expect(props.presentation).toBe(record.presentation)
+      expect(() => definition.validate(slide as unknown as Record<string, unknown>, 'slide')).not.toThrow()
     })
   })
 })

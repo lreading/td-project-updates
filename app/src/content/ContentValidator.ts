@@ -1,26 +1,15 @@
 import type {
-  CommunityHighlightsSlide,
-  ContentSection,
-  ContributionCard,
-  ContributorSpotlightSlide,
   GeneratedPresentationData,
-  HowToContributeSlide,
   MetricValue,
   PresentationContent,
   PresentationIndexEntry,
-  PresentationSlide,
-  ReleasesSlide,
-  RoadmapContent,
-  RoadmapSlide,
-  RoadmapStageContent,
+  SlideKind,
   SiteContent,
   SiteLink,
-  SpotlightEntry,
-  ThankYouSlide,
-  TitleSlide,
 } from '../types/content'
 import { getLegacyTemplateIdForSlideKind } from '../templates/resolveSlideTemplate'
 import { isSlideTemplateId } from '../templates/templateIds'
+import { validateTemplateSlide } from '../templates/validation'
 
 const legacySlideKinds = new Set([
   'title',
@@ -89,7 +78,7 @@ function assertOptionalString(value: unknown, path: string): void {
   }
 }
 
-function isLegacySlideKind(value: unknown): value is PresentationSlide['kind'] {
+function isLegacySlideKind(value: unknown): value is SlideKind {
   return typeof value === 'string' && legacySlideKinds.has(value)
 }
 
@@ -189,27 +178,7 @@ function assertMetricValue(value: unknown, path: string): asserts value is Metri
   assertNumber(value.delta, `${path}.delta`)
 }
 
-function assertContentSection(value: unknown, path: string): asserts value is ContentSection {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.title, `${path}.title`)
-  assertStringArray(value.bullets, `${path}.bullets`)
-}
-
-function assertContributionCard(value: unknown, path: string): asserts value is ContributionCard {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.title, `${path}.title`)
-  assertNonBlankString(value.description, `${path}.description`)
-  assertNonBlankString(value.url_label, `${path}.url_label`)
-  assertNonBlankString(value.url, `${path}.url`)
-}
-
-function assertSpotlightEntry(value: unknown, path: string): asserts value is SpotlightEntry {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.login, `${path}.login`)
-  assertNonBlankString(value.summary, `${path}.summary`)
-}
-
-function assertRoadmapStageContent(value: unknown, path: string): asserts value is RoadmapStageContent {
+function assertRoadmapStageContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.label, `${path}.label`)
   assertNonBlankString(value.summary, `${path}.summary`)
@@ -223,7 +192,7 @@ function assertRoadmapStageContent(value: unknown, path: string): asserts value 
   })
 }
 
-function assertRoadmapContent(value: unknown, path: string): asserts value is RoadmapContent {
+function assertRoadmapContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertOptionalString(value.agenda_label, `${path}.agenda_label`)
   assertOptionalString(value.deliverables_heading, `${path}.deliverables_heading`)
@@ -236,7 +205,7 @@ function assertRoadmapContent(value: unknown, path: string): asserts value is Ro
   assertRoadmapStageContent(value.sections.future, `${path}.sections.future`)
 }
 
-function assertSlideBase(value: unknown, path: string): asserts value is PresentationSlide {
+function validateSlide(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.template, `${path}.template`)
   assert(
@@ -255,138 +224,8 @@ function assertSlideBase(value: unknown, path: string): asserts value is Present
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.subtitle, `${path}.subtitle`)
   assert(isRecord(value.content), `${path}.content must be an object.`)
-}
 
-function assertTitleSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as TitleSlide
-  assertOptionalString(slide.content.title_primary, `${path}.content.title_primary`)
-  assertOptionalString(slide.content.title_accent, `${path}.content.title_accent`)
-  assertOptionalString(slide.content.subtitle_prefix, `${path}.content.subtitle_prefix`)
-  assertOptionalString(slide.content.quote, `${path}.content.quote`)
-  assert(
-    slide.content.title_primary !== undefined || slide.content.title_accent !== undefined,
-    `${path}.content must include title_primary or title_accent.`,
-  )
-}
-
-function assertAgendaSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  assertNonBlankString((value as { title?: unknown }).title, `${path}.title`)
-}
-
-function assertRecentUpdatesSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as { title?: unknown; content: Record<string, unknown> }
-  assertNonBlankString(slide.title, `${path}.title`)
-  assert(Array.isArray(slide.content.sections), `${path}.content.sections must be an array.`)
-  const sections = slide.content.sections as unknown[]
-  sections.forEach((section, index) =>
-    assertContentSection(section, `${path}.content.sections[${index}]`))
-}
-
-function assertReleasesSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as ReleasesSlide
-  assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.content.latest_badge_label, `${path}.content.latest_badge_label`)
-  assertOptionalString(slide.content.footer_link_label, `${path}.content.footer_link_label`)
-  assertStringArray(slide.content.featured_release_ids, `${path}.content.featured_release_ids`)
-}
-
-function assertRoadmapSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as RoadmapSlide
-  assertNonBlankString(slide.title, `${path}.title`)
-  assertNonBlankString(slide.content.stage, `${path}.content.stage`)
-}
-
-function assertContributorSpotlightSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as ContributorSpotlightSlide
-  assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.content.banner_prefix, `${path}.content.banner_prefix`)
-  assertOptionalString(
-    slide.content.contributors_link_label,
-    `${path}.content.contributors_link_label`,
-  )
-  assertOptionalString(slide.content.banner_suffix, `${path}.content.banner_suffix`)
-  assert(Array.isArray(slide.content.spotlight), `${path}.content.spotlight must be an array.`)
-  slide.content.spotlight.forEach((entry, index) =>
-    assertSpotlightEntry(entry, `${path}.content.spotlight[${index}]`))
-}
-
-function assertCommunityHighlightsSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as CommunityHighlightsSlide
-  assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.content.section_heading, `${path}.content.section_heading`)
-  assertOptionalString(slide.content.stats_heading, `${path}.content.stats_heading`)
-  assertOptionalString(slide.content.trend_suffix, `${path}.content.trend_suffix`)
-  assertStringArray(slide.content.stat_keys, `${path}.content.stat_keys`)
-  assert(Array.isArray(slide.content.mentions), `${path}.content.mentions must be an array.`)
-  const mentions = slide.content.mentions as unknown[]
-  mentions.forEach((mention, index) => {
-    assert(isRecord(mention), `${path}.content.mentions[${index}] must be an object.`)
-    assertNonBlankString(mention.type, `${path}.content.mentions[${index}].type`)
-    assertNonBlankString(mention.title, `${path}.content.mentions[${index}].title`)
-    assertOptionalString(mention.url_label, `${path}.content.mentions[${index}].url_label`)
-    assertOptionalString(mention.url, `${path}.content.mentions[${index}].url`)
-  })
-}
-
-function assertHowToContributeSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as HowToContributeSlide
-  assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.content.footer_text, `${path}.content.footer_text`)
-  assert(Array.isArray(slide.content.cards), `${path}.content.cards must be an array.`)
-  slide.content.cards.forEach((card, index) =>
-    assertContributionCard(card, `${path}.content.cards[${index}]`))
-}
-
-function assertThankYouSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-  const slide = value as ThankYouSlide
-  assertNonBlankString(slide.content.heading, `${path}.content.heading`)
-  assertNonBlankString(slide.content.message, `${path}.content.message`)
-  assertOptionalString(slide.content.quote, `${path}.content.quote`)
-}
-
-function validateSlide(value: unknown, path: string): void {
-  assertSlideBase(value, path)
-
-  switch (value.template) {
-    case 'hero':
-      assertTitleSlide(value, path)
-      break
-    case 'agenda':
-      assertAgendaSlide(value, path)
-      break
-    case 'section-list-grid':
-      assertRecentUpdatesSlide(value, path)
-      break
-    case 'timeline':
-      assertReleasesSlide(value, path)
-      break
-    case 'progress-timeline':
-      assertRoadmapSlide(value, path)
-      break
-    case 'people':
-      assertContributorSpotlightSlide(value, path)
-      break
-    case 'metrics-and-links':
-      assertCommunityHighlightsSlide(value, path)
-      break
-    case 'action-cards':
-      assertHowToContributeSlide(value, path)
-      break
-    case 'closing':
-      assertThankYouSlide(value, path)
-      break
-    default:
-      throw new Error(`${path}.template must be a supported template id.`)
-  }
+  validateTemplateSlide(value.template, value, path)
 }
 
 export class ContentValidator {
@@ -465,9 +304,7 @@ export class ContentValidator {
     }
     assert(Array.isArray(presentation.slides), 'presentation document.presentation.slides must be an array.')
     const slides = presentation.slides as unknown[]
-    slides.forEach((slide, index) => {
-      validateSlide(slide, `presentation document.presentation.slides[${index}]`)
-    })
+    slides.forEach((slide, index) => validateSlide(slide, `presentation document.presentation.slides[${index}]`))
   }
 
   public validateGeneratedDocument(document: unknown): asserts document is GeneratedDocument {
