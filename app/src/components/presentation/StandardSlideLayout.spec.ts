@@ -47,6 +47,18 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.find('.bg-dots').exists()).toBe(false)
   })
 
+  it('omits the header block when both title and subtitle are missing', () => {
+    const wrapper = mount(StandardSlideLayout, {
+      props: {
+        slideNumber: 2,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.header-section').exists()).toBe(false)
+    expect(wrapper.find('.page-title').exists()).toBe(false)
+  })
+
   it('falls back to the dragon icon when no presentation logo is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',

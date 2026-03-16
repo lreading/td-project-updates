@@ -26,17 +26,17 @@ const agendaItems = computed(() => {
         }
 
         roadmapIncluded = true
-        return ['Roadmap']
+        return [props.presentation.roadmap?.agenda_label?.trim()].filter(Boolean)
       }
 
-      return [getSlideLabel(entry, props.presentation)]
+      return [getSlideLabel(entry, props.presentation)].filter(Boolean)
     })
 })
 </script>
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? 'Agenda'"
+    :title="slide.title"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

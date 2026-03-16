@@ -27,7 +27,7 @@ describe('RecentUpdatesSlideView', () => {
     expect(wrapper.text()).toContain(slide.sections[0].bullets[0])
   })
 
-  it('falls back to the default title when the slide title is missing', () => {
+  it('omits the title heading when the slide title is missing', () => {
     const wrapper = mount(RecentUpdatesSlideView, {
       props: {
         presentation: record.presentation,
@@ -40,6 +40,6 @@ describe('RecentUpdatesSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('What Happened Since Last Update')
+    expect(wrapper.find('.page-title').exists()).toBe(false)
   })
 })

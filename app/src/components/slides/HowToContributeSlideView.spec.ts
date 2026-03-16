@@ -98,6 +98,32 @@ describe('HowToContributeSlideView', () => {
     })
 
     expect(wrapper.find('.footer-action-link').exists()).toBe(false)
-    expect(wrapper.text()).toContain('Open Source and Community Driven')
+    expect(wrapper.text()).not.toContain('Open Source and Community Driven')
+  })
+
+  it('omits the footer callout entirely when footer copy and repository link are both missing', () => {
+    const site: SiteContent = {
+      title: 'Threat Dragon Updates',
+      tagline: 'Quarterly updates',
+      home_intro: 'Intro',
+      home_cta_label: 'View latest presentation',
+      presentations_cta_label: 'View all presentations',
+      links: {},
+    }
+
+    const wrapper = mount(HowToContributeSlideView, {
+      props: {
+        presentation,
+        site,
+        slide: {
+          ...slide,
+          footer_text: undefined,
+        },
+        slideNumber: 11,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.footer-cta').exists()).toBe(false)
   })
 })

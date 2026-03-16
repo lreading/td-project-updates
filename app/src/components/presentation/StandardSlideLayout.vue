@@ -5,7 +5,7 @@ import { contentRepository } from '../../content/ContentRepository'
 
 withDefaults(
   defineProps<{
-    title: string
+    title?: string
     subtitle?: string
     slideNumber: number
     slideTotal: number
@@ -45,8 +45,8 @@ const markLabel = computed(
 
       <div class="main-content" :style="{ padding: contentPadding }">
         <div v-if="showDots" class="bg-dots"></div>
-        <div class="header-section z-10">
-          <div>
+        <div v-if="title || subtitle" class="header-section z-10">
+          <div v-if="title">
             <h1 class="page-title">{{ title }}</h1>
           </div>
           <div v-if="subtitle">

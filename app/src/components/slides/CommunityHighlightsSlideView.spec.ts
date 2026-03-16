@@ -93,6 +93,33 @@ describe('CommunityHighlightsSlideView', () => {
     expect(wrapper.find('.metric-stat-card__trend').exists()).toBe(false)
   })
 
+  it('uses an absolute delta trend when there is no previous value', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: {
+          ...record.generated,
+          stats: {
+            ...record.generated.stats,
+            stars: {
+              ...record.generated.stats.stars,
+              previous: 0,
+              delta: 42,
+            },
+          },
+        },
+        slide: {
+          ...slide,
+          stat_keys: ['stars'],
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.metric-stat-card__trend').text()).toBe('+42 vs last presentation')
+  })
+
   it('renders mention cards without links when a URL is not provided', () => {
     const mixedLinkSlide = {
       ...slide,
@@ -124,7 +151,7 @@ describe('CommunityHighlightsSlideView', () => {
     expect(mentionCards[1].find('.mention-link').exists()).toBe(false)
   })
 
-  it('falls back to the default section heading when none is configured', () => {
+  it('omits the section heading when none is configured', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
         presentation: record.presentation,
@@ -138,10 +165,10 @@ describe('CommunityHighlightsSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Community Activity')
+    expect(wrapper.text()).not.toContain('Community Activity')
   })
 
-  it('falls back to default title, stats heading, and mention icon when optional values are missing', () => {
+  it('omits title and stats heading when optional values are missing while keeping mention icon fallback', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
         presentation: record.presentation,
@@ -163,8 +190,8 @@ describe('CommunityHighlightsSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Community Highlights')
-    expect(wrapper.text()).toContain('Stats This Quarter')
+    expect(wrapper.find('.page-title').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Stats This Quarter')
     expect(wrapper.text()).toContain('Community tooling')
 
     const mentionTypes = wrapper.findAll('.mention-type')

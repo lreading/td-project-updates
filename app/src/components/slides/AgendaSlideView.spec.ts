@@ -27,5 +27,6 @@ describe('AgendaSlideView', () => {
     expect(agendaItems).toContain('Roadmap')
     expect(agendaItems.filter((item) => item === 'Roadmap')).toHaveLength(1)
     expect(agendaItems).not.toContain('Roadmap: Completed')
+    expect(agendaItems).toContain('Thank you')
   })
 })

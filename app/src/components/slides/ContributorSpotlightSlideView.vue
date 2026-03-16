@@ -38,17 +38,21 @@ const contributors = computed(() =>
 )
 const contributorsUrl = computed(() => `${props.site.links.repository.url}/graphs/contributors`)
 const bannerContent = computed(() => ({
-  prefix: props.slide.banner_prefix?.trim() || 'Special thanks to all',
-  linkLabel: props.slide.contributors_link_label?.trim() || 'contributors',
-  suffix:
-    props.slide.banner_suffix?.trim()
-    || 'who submitted PRs, reported bugs, and improved docs this quarter!',
+  prefix: props.slide.banner_prefix?.trim(),
+  linkLabel: props.slide.contributors_link_label?.trim(),
+  suffix: props.slide.banner_suffix?.trim(),
 }))
+const showBanner = computed(
+  () =>
+    Boolean(bannerContent.value.prefix)
+    || Boolean(bannerContent.value.linkLabel)
+    || Boolean(bannerContent.value.suffix),
+)
 </script>
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? 'Contributor Spotlight'"
+    :title="slide.title"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
@@ -91,13 +95,20 @@ const bannerContent = computed(() => ({
       </SurfaceCard>
     </div>
 
-    <CalloutBanner class="thank-you-banner" variant="dashed" align="center">
+    <CalloutBanner v-if="showBanner" class="thank-you-banner" variant="dashed" align="center">
       <p class="thank-you-text">
-        <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" /> {{ bannerContent.prefix }}
-        <a class="contributors-link" :href="contributorsUrl" target="_blank" rel="noreferrer">
+        <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" />
+        <template v-if="bannerContent.prefix">{{ bannerContent.prefix }} </template>
+        <a
+          v-if="bannerContent.linkLabel"
+          class="contributors-link"
+          :href="contributorsUrl"
+          target="_blank"
+          rel="noreferrer"
+        >
           <strong>{{ generated.contributors.total }} {{ bannerContent.linkLabel }}</strong>
         </a>
-        {{ bannerContent.suffix }}
+        <template v-if="bannerContent.suffix"> {{ bannerContent.suffix }}</template>
       </p>
     </CalloutBanner>
   </StandardSlideLayout>

@@ -17,7 +17,7 @@ const icons = ['wrench', 'star', 'users']
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? 'What Happened Since Last Update'"
+    :title="slide.title"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

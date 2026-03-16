@@ -38,7 +38,7 @@ describe('ContributorSpotlightSlideView', () => {
     )
   })
 
-  it('falls back to default banner copy when banner fields are missing', () => {
+  it('omits the banner when no banner copy is configured', () => {
     const wrapper = mount(ContributorSpotlightSlideView, {
       props: {
         presentation: record.presentation,
@@ -55,9 +55,7 @@ describe('ContributorSpotlightSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Special thanks to all')
-    expect(wrapper.text()).toContain('24 contributors')
-    expect(wrapper.text()).toContain('who submitted PRs, reported bugs, and improved docs this quarter!')
+    expect(wrapper.find('.thank-you-banner').exists()).toBe(false)
   })
 
   it('falls back to login names and the default icon when generated data is missing', () => {

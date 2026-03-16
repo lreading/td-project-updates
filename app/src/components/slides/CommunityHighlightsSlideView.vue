@@ -23,7 +23,7 @@ const props = defineProps<{
 const mentionIcons = ['microphone-alt', 'rss', 'podcast']
 const statIcons = ['star', 'check-circle', 'code-branch', 'user-plus']
 
-function formatTrendLabel(current: number, previous: number, delta: number): string | undefined {
+function formatTrendLabel(previous: number, delta: number): string | undefined {
   if (delta === 0) {
     return undefined
   }
@@ -43,7 +43,6 @@ const stats = computed(() =>
     ...props.generated.stats[key],
     icon: statIcons[index],
     trend: formatTrendLabel(
-      props.generated.stats[key].current,
       props.generated.stats[key].previous,
       props.generated.stats[key].delta,
     ),
@@ -61,7 +60,7 @@ const mentionCards = computed(() =>
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? 'Community Highlights'"
+    :title="slide.title"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
@@ -69,7 +68,11 @@ const mentionCards = computed(() =>
   >
     <div class="content-grid">
       <div class="left-column">
-        <SectionHeading :icon="'bullhorn'" :title="slide.section_heading ?? 'Community Activity'" />
+        <SectionHeading
+          v-if="slide.section_heading"
+          :icon="'bullhorn'"
+          :title="slide.section_heading"
+        />
         <div class="mentions-list">
           <SurfaceCard
             v-for="mention in mentionCards"
@@ -93,7 +96,11 @@ const mentionCards = computed(() =>
       </div>
 
       <div class="right-column">
-        <SectionHeading :icon="'chart-line'" :title="slide.stats_heading ?? 'Stats This Quarter'" />
+        <SectionHeading
+          v-if="slide.stats_heading"
+          :icon="'chart-line'"
+          :title="slide.stats_heading"
+        />
         <div class="stats-grid">
           <MetricStatCard
             v-for="stat in stats"

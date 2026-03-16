@@ -20,11 +20,12 @@ const props = defineProps<{
 const icons = ['bug', 'code-branch', 'book', 'bullhorn']
 const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
 const repositoryLink = computed(() => props.site.links.repository)
+const showFooterCta = computed(() => Boolean(props.slide.footer_text?.trim()) || Boolean(repositoryLink.value))
 </script>
 
 <template>
   <StandardSlideLayout
-    :title="slide.title ?? 'How to Contribute'"
+    :title="slide.title"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
@@ -58,10 +59,10 @@ const repositoryLink = computed(() => props.site.links.repository)
       </SurfaceCard>
     </div>
 
-    <CalloutBanner class="footer-cta">
+    <CalloutBanner v-if="showFooterCta" class="footer-cta">
       <div class="repo-info">
         <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
-        <p>{{ slide.footer_text ?? 'Open Source and Community Driven' }}</p>
+        <p v-if="slide.footer_text">{{ slide.footer_text }}</p>
       </div>
       <template v-if="repositoryLink" #action>
         <FooterActionLink :href="repositoryLink.url" icon="code" :label="repositoryLink.label" />
