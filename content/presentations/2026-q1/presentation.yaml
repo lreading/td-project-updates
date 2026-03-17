@@ -163,7 +163,7 @@ presentation:
       content:
         section_heading: Community Activity
         stats_heading: Stats This Quarter
-        trend_suffix: vs last presentation
+        trend_suffix: vs last quarter
         stat_keys:
           - stars
           - issues_closed

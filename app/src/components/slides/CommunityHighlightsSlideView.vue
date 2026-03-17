@@ -44,10 +44,15 @@ function formatTrendLabel(
   return suffix ? `${direction}${Math.abs(delta)} ${suffix}` : `${direction}${Math.abs(delta)}`
 }
 
+function getTrendDirection(delta: number): 'up' | 'down' {
+  return delta < 0 ? 'down' : 'up'
+}
+
 const stats = computed(() =>
   props.slide.content.stat_keys.map((key, index) => ({
     ...props.generated.stats[key],
     icon: statIcons[index],
+    trendDirection: getTrendDirection(props.generated.stats[key].delta),
     trend: props.slide.content.show_deltas === false
       ? undefined
       : formatTrendLabel(
@@ -119,6 +124,7 @@ const mentionCards = computed(() =>
             :value="stat.current.toLocaleString()"
             :label="stat.label"
             :trend="stat.trend"
+            :trend-direction="stat.trendDirection"
           />
         </div>
       </div>

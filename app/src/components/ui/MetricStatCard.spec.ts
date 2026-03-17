@@ -19,6 +19,22 @@ describe('MetricStatCard', () => {
     expect(wrapper.text()).toContain('+12% vs last Q')
   })
 
+  it('renders a down trend with the down arrow class when requested', () => {
+    const wrapper = mount(MetricStatCard, {
+      props: {
+        icon: 'star',
+        value: '4',
+        label: 'New contributors',
+        trend: '-20% vs last presentation',
+        trendDirection: 'down',
+      },
+    })
+
+    expect(wrapper.find('.metric-stat-card__trend').classes()).toContain('metric-stat-card__trend--down')
+    expect(wrapper.find('.metric-stat-card__trend').text()).toContain('-20% vs last presentation')
+    expect(wrapper.html()).toContain('fa-arrow-down')
+  })
+
   it('omits trend when not provided', () => {
     const wrapper = mount(MetricStatCard, {
       props: {

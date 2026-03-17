@@ -108,6 +108,9 @@ describe('CommunityHighlightsSlideView', () => {
         slide.content.trend_suffix,
       ),
     ])
+    expect(wrapper.findAll('.metric-stat-card__trend')[0]?.classes()).toContain(
+      'metric-stat-card__trend--down',
+    )
   })
 
   it('omits the trend label when the delta is zero', () => {
