@@ -1,4 +1,6 @@
 # UI
+- Move all of the images and stuff out of the ui, and into the config somewhere.
+- Make sure images are loaded from config and able to be served
 - Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
 - Add a documentation site (focus on schema, templates, etc)
   - Not sure if we should use readthedocs or jekyll+gh pages or something else

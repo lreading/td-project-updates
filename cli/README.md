@@ -55,6 +55,7 @@ Current status:
 
 CLI usage:
 - `npm run build`
+- `node ./dist/index.js help`
 - `npm run cli -- init --presentation-id 2026-q2 --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`
 - `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`
 - `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-03-01 --no-previous-period --dry-run`

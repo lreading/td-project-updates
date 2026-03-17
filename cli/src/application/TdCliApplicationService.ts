@@ -1,4 +1,5 @@
 import { ContentConfigLoader } from '../config/ContentConfigLoader'
+import { resolveCliRoot } from '../config/CliRuntimePaths'
 import { DataSourceResolver } from '../config/DataSourceResolver'
 import { EnvLoader } from '../config/EnvLoader'
 import { FileSystemPaths } from '../io/FileSystemPaths'
@@ -60,7 +61,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly processRunner: ProcessRunner
 
   public constructor(options: TdCliApplicationServiceOptions = {}) {
-    this.paths = new FileSystemPaths(options.cliRoot ?? process.cwd())
+    this.paths = new FileSystemPaths(options.cliRoot ?? resolveCliRoot(process.cwd(), import.meta.url))
     this.contentConfigLoader = options.contentConfigLoader ?? new ContentConfigLoader()
     this.dataSourceResolver = options.dataSourceResolver ?? new DataSourceResolver()
     this.envLoader = options.envLoader ?? new EnvLoader()

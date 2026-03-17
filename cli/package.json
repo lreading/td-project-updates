@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "cli": "tsx src/index.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
@@ -24,6 +24,7 @@
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
     "tsx": "^4.20.6",
+    "tsup": "^8.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.57.0",
     "vitest": "^4.1.0"
