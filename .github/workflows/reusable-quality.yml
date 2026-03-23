@@ -15,8 +15,8 @@ jobs:
   app:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -37,8 +37,8 @@ jobs:
   cli:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -55,8 +55,8 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -71,8 +71,8 @@ jobs:
   markdown:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -82,8 +82,8 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -93,8 +93,8 @@ jobs:
   links:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -107,22 +107,38 @@ jobs:
         working-directory: docs
       - run: npx -y http-server@14.1.1 ./docs/.vitepress/dist -p 4174 >/tmp/slide-spec-docs.log 2>&1 &
       - run: sleep 2
+      - id: lychee-cache-bucket
+        run: echo "bucket=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      # actions/cache/restore@v5.0.4
+      - id: restore-lychee-cache
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        with:
+          path: .lycheecache
+          key: lychee-${{ runner.os }}-v1-${{ steps.lychee-cache-bucket.outputs.bucket }}
+          restore-keys: |
+            lychee-${{ runner.os }}-v1-
       # lycheeverse/lychee-action@v2.8.0
       - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: --verbose --no-progress --config .github/lychee.toml "./README.md"
+          args: --cache --max-cache-age 14d --verbose --no-progress --config .github/lychee.toml "./README.md"
           fail: true
       # lycheeverse/lychee-action@v2.8.0
       - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: --verbose --no-progress --config .github/lychee.toml --base-url "http://127.0.0.1:4174/" "./docs/.vitepress/dist/**/*.html"
+          args: --cache --max-cache-age 14d --verbose --no-progress --config .github/lychee.toml --base-url "http://127.0.0.1:4174/" "./docs/.vitepress/dist/**/*.html"
           fail: true
+      # actions/cache/save@v5.0.4
+      - uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        if: always()
+        with:
+          path: .lycheecache
+          key: ${{ steps.restore-lychee-cache.outputs.cache-primary-key }}
 
   trivy:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -143,8 +159,8 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/src" \
@@ -165,8 +181,8 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -187,10 +203,10 @@ jobs:
   sbom:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
-      # anchore/sbom-action@v0.20.5
-      - uses: anchore/sbom-action@da167eac915b4e86f08b264dbdbc867b61be6f0c
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # anchore/sbom-action@v0.24.0
+      - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
         with:
           path: .
           format: spdx-json
@@ -204,8 +220,8 @@ jobs:
   dast:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -247,7 +263,7 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/dependency-review-action@v4.9.0
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
