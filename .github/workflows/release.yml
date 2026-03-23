@@ -24,7 +24,7 @@ jobs:
       id-token: write
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -44,7 +44,7 @@ jobs:
       contents: write
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: mkdir -p release-artifacts && git archive --format=tar.gz --output=release-artifacts/source.tar.gz HEAD
       # softprops/action-gh-release@v2
       - uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe
