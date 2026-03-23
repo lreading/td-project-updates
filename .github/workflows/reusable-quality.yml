@@ -15,7 +15,7 @@ jobs:
   app:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -37,7 +37,7 @@ jobs:
   cli:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -55,7 +55,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -71,7 +71,7 @@ jobs:
   markdown:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -82,7 +82,7 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -93,7 +93,7 @@ jobs:
   links:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -121,7 +121,7 @@ jobs:
   trivy:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
@@ -143,7 +143,7 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
@@ -165,7 +165,7 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
@@ -187,7 +187,7 @@ jobs:
   sbom:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # anchore/sbom-action@v0.20.6.0.2
       - uses: anchore/sbom-action@da167eac915b4e86f08b264dbdbc867b61be6f0c
@@ -204,7 +204,7 @@ jobs:
   dast:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
@@ -247,7 +247,7 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      # actions/checkout@v5.0.0
+      # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/dependency-review-action@v4.9.0
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
