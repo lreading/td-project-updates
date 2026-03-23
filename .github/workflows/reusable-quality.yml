@@ -16,10 +16,8 @@ jobs:
     name: App Content
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -33,10 +31,8 @@ jobs:
     name: App Lint
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -50,10 +46,8 @@ jobs:
     name: App Typecheck
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -67,10 +61,8 @@ jobs:
     name: App Build
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -84,10 +76,8 @@ jobs:
     name: App Unit Tests
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -101,10 +91,8 @@ jobs:
     name: App E2E
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -120,10 +108,8 @@ jobs:
     name: App A11y
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -139,10 +125,8 @@ jobs:
     name: App Visual
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -158,10 +142,8 @@ jobs:
     name: CLI Lint
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -175,10 +157,8 @@ jobs:
     name: CLI Typecheck
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -192,10 +172,8 @@ jobs:
     name: CLI Build
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -209,10 +187,8 @@ jobs:
     name: CLI Unit Tests
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -225,10 +201,8 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -241,10 +215,8 @@ jobs:
   markdown:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
       - run: npx -y markdownlint-cli2@0.22.0 "README.md" "CONTRIBUTING.md" "docs/**/*.md" "!docs/node_modules/**"
@@ -252,10 +224,8 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
       - run: npx -y cspell@9.7.0 lint --no-progress "README.md" "CONTRIBUTING.md" "docs/**/*.md" --gitignore --config .cspell.json
@@ -263,10 +233,8 @@ jobs:
   links:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -279,26 +247,22 @@ jobs:
       - run: sleep 2
       - id: lychee-cache-bucket
         run: echo "bucket=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
-      # actions/cache/restore@v5.0.4
       - id: restore-lychee-cache
-        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: .lycheecache
           key: lychee-${{ runner.os }}-v1-${{ steps.lychee-cache-bucket.outputs.bucket }}
           restore-keys: |
             lychee-${{ runner.os }}-v1-
-      # lycheeverse/lychee-action@v2.8.0
-      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
+      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         with:
           args: --cache --max-cache-age 14d --verbose --no-progress --config .github/lychee.toml "./README.md"
           fail: true
-      # lycheeverse/lychee-action@v2.8.0
-      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
+      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         with:
           args: --cache --max-cache-age 14d --verbose --no-progress --config .github/lychee.toml --base-url "http://127.0.0.1:4174/" "./docs/.vitepress/dist/**/*.html"
           fail: true
-      # actions/cache/save@v5.0.4
-      - uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7
+      - uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         if: always()
         with:
           path: .lycheecache
@@ -307,8 +271,7 @@ jobs:
   trivy:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -319,8 +282,7 @@ jobs:
             --format sarif \
             --output /repo/trivy-results.sarif \
             /repo
-      # actions/upload-artifact@v7.0.0
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always()
         with:
           name: trivy-results
@@ -329,8 +291,7 @@ jobs:
   semgrep:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - run: |
           docker run --rm \
             -v "${PWD}:/src" \
@@ -341,8 +302,7 @@ jobs:
             --json \
             --output /src/semgrep-results.json \
             /src
-      # actions/upload-artifact@v7.0.0
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always()
         with:
           name: semgrep-results
@@ -351,8 +311,7 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -363,8 +322,7 @@ jobs:
             --report-path /repo/gitleaks-results.sarif \
             --redact \
             --no-banner
-      # actions/upload-artifact@v7.0.0
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always()
         with:
           name: gitleaks-results
@@ -373,16 +331,13 @@ jobs:
   sbom:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # anchore/sbom-action@v0.24.0
-      - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         with:
           path: .
           format: spdx-json
           output-file: sbom.spdx.json
-      # actions/upload-artifact@v7.0.0
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: sbom-spdx
           path: sbom.spdx.json
@@ -390,10 +345,8 @@ jobs:
   dast:
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/setup-node@v6.2.0
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
         with:
           node-version: 24
           cache: npm
@@ -417,8 +370,7 @@ jobs:
           -J zap-report.json
           -w zap-warnings.md
           -I
-      # actions/upload-artifact@v7.0.0
-      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         if: always()
         with:
           name: dast-report
@@ -433,7 +385,5 @@ jobs:
       contents: read
       pull-requests: read
     steps:
-      # actions/checkout@v6.0.2
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # actions/dependency-review-action@v4.9.0
-      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
