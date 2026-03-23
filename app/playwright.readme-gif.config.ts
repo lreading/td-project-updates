@@ -14,10 +14,10 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${PORT}`,
     trace: 'off',
     ...devices['Desktop Chrome'],
-    viewport: { width: 1280, height: 720 },
-    video: { mode: 'on', size: { width: 1280, height: 720 } },
+    viewport: { width: 1280, height: 800 },
+    video: { mode: 'on', size: { width: 1280, height: 800 } },
     launchOptions: {
-      slowMo: 550,
+      slowMo: 260,
     },
   },
   projects: [{ name: 'chromium-readme-gif', use: {} }],

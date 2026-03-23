@@ -42,7 +42,7 @@ execFileSync(
     '-i',
     webm,
     '-vf',
-    'fps=6,scale=720:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=96[p];[s1][p]paletteuse',
+    'fps=8,scale=720:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=112[p];[s1][p]paletteuse',
     outGif,
   ],
   { stdio: 'inherit' },
