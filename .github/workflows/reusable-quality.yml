@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -144,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/src" \
@@ -166,7 +166,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: |
           docker run --rm \
             -v "${PWD}:/repo" \
@@ -188,8 +188,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
-      # anchore/sbom-action@v0.20.5
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # anchore/sbom-action@v0.20.6.0.2
       - uses: anchore/sbom-action@da167eac915b4e86f08b264dbdbc867b61be6f0c
         with:
           path: .
@@ -205,7 +205,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/setup-node@v6.2.0
       - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
@@ -248,6 +248,6 @@ jobs:
       pull-requests: read
     steps:
       # actions/checkout@v5.0.0
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       # actions/dependency-review-action@v4.9.0
       - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
