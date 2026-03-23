@@ -35,7 +35,7 @@ Use the Slide Spec CLI to get started.
 
 Requirements: Node.js 22+ and npm.
 
-1. **Scaffold:** `npx @slide-spec/cli init ./my-deck` 
+1. **Scaffold:** `npx @slide-spec/cli init ./my-deck`
 2. **Edit YAML** under `my-deck/content/` (`site.yaml`, `presentations/index.yaml`, and each deck’s `presentation.yaml` / `generated.yaml`).
 3. **Validate YAML:** `npx @slide-spec/cli validate ./my-deck`
 4. **Preview locally:** `npx @slide-spec/cli serve ./my-deck`
@@ -49,7 +49,7 @@ Optional: set a public deployment URL in `site.yaml` or pass `--deployment-url` 
 
 ### Requirements
 
-- Node.js 24 
+- Node.js 24
 - npm
 - Git
 - Playwright for app browser tests: `cd app && npx playwright install chromium`
