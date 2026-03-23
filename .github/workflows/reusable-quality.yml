@@ -84,9 +84,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - run: npm ci
+        working-directory: docs
+      - run: npm run build
+        working-directory: docs
       - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: --verbose --no-progress --config .github/lychee.toml "./README.md" "./docs/**/*.md"
+          args: --verbose --no-progress --config .github/lychee.toml --root-dir "./docs/.vitepress/dist" "./README.md" "./docs/.vitepress/dist/**/*.html"
           fail: true
 
   trivy:
@@ -185,8 +194,9 @@ jobs:
           ghcr.io/zaproxy/zaproxy:stable
           zap-baseline.py
           -t http://127.0.0.1:4173
-          -J /zap/wrk/zap-report.json
-          -w /zap/wrk/zap-warnings.md
+          -J zap-report.json
+          -w zap-warnings.md
+          -I
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
