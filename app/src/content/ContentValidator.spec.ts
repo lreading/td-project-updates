@@ -290,6 +290,58 @@ describe('ContentValidator', () => {
         },
       }),
     ).toThrow('site.yaml.site.data_sources[0].type must be "github".')
+
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          deployment_url: 'not-a-url',
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: {
+              label: 'GitHub Repo',
+              url: 'https://github.com/OWASP/threat-dragon',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
+            },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.site.deployment_url must be a valid URL.')
+
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          sitemap_enabled: true,
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: {
+              label: 'GitHub Repo',
+              url: 'https://github.com/OWASP/threat-dragon',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
+            },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.site.deployment_url is required when site.yaml.site.sitemap_enabled is true.')
   })
 
   it('rejects blank authored content and incomplete grouped fields', () => {

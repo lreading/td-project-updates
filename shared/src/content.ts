@@ -3,6 +3,11 @@ export interface DataSource {
   url: string
 }
 
+export interface SiteDeploymentConfig {
+  deployment_url?: string
+  sitemap_enabled?: boolean
+}
+
 export interface PresentationIndexEntry {
   id: string
   year?: number

@@ -19,6 +19,10 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run dev:e2e -- --host 127.0.0.1 --port ${PORT}`,
+    env: {
+      ...process.env,
+      VITE_CONTENT_SOURCE: 'fixtures',
+    },
     url: `http://127.0.0.1:${PORT}`,
     reuseExistingServer: true,
     timeout: 120_000,
