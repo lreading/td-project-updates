@@ -189,7 +189,29 @@ export class TdCliApplicationService implements TdCliService {
 
   public async buildSite(input: BuildSiteInput): Promise<BuildSiteResult> {
     const paths = this.getPaths(input.projectRoot)
-    await this.siteBuilder.build(paths)
+    const previousDeploymentUrl = process.env.SLIDE_SPEC_DEPLOYMENT_URL
+    const previousSitemapEnabled = process.env.SLIDE_SPEC_SITEMAP_ENABLED
+
+    if (input.deploymentUrl !== undefined) {
+      process.env.SLIDE_SPEC_DEPLOYMENT_URL = input.deploymentUrl
+      process.env.SLIDE_SPEC_SITEMAP_ENABLED = 'true'
+    }
+
+    try {
+      await this.siteBuilder.build(paths)
+    } finally {
+      if (previousDeploymentUrl === undefined) {
+        delete process.env.SLIDE_SPEC_DEPLOYMENT_URL
+      } else {
+        process.env.SLIDE_SPEC_DEPLOYMENT_URL = previousDeploymentUrl
+      }
+
+      if (previousSitemapEnabled === undefined) {
+        delete process.env.SLIDE_SPEC_SITEMAP_ENABLED
+      } else {
+        process.env.SLIDE_SPEC_SITEMAP_ENABLED = previousSitemapEnabled
+      }
+    }
 
     return {
       outputPath: paths.getDistPath(),

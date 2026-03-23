@@ -257,12 +257,18 @@ describe('CliCommandRunner', () => {
       buildOutput,
       createPrompter({
         promptCommand: vi.fn().mockResolvedValue('build'),
-        promptOptional: vi.fn().mockResolvedValueOnce('/workspace/project'),
+        promptOptional: vi.fn()
+          .mockResolvedValueOnce('/workspace/project')
+          .mockResolvedValueOnce('https://updates.example.com'),
       }),
     )
 
     await expect(buildRunner.run([])).resolves.toBe(0)
-    expect(service.buildSite).toHaveBeenCalledWith({ projectRoot: '/workspace/project', mode: 'production' })
+    expect(service.buildSite).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
+      mode: 'production',
+      deploymentUrl: 'https://updates.example.com',
+    })
     expect(buildOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec build'))
 
     const serveOutput = createOutput()

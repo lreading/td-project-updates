@@ -90,9 +90,14 @@ export class CliCommandRunner {
       case 'fetch':
         await this.runFetch(argv.slice(1))
         return 0
-      case 'build':
-        await this.runBuild(this.readProjectRoot(this.parseCommandInput(argv.slice(1))))
+      case 'build': {
+        const parsed = this.parseCommandInput(argv.slice(1))
+        await this.runBuild(
+          this.readProjectRoot(parsed),
+          this.readStringOption(parsed.options, 'deployment-url'),
+        )
         return 0
+      }
       case 'serve':
         await this.runServe(argv.slice(1))
         return 0
@@ -172,7 +177,11 @@ export class CliCommandRunner {
           'Target presentation project root. Leave blank to use the current working directory.',
           'Project root (optional)',
         )
-        await this.runBuild(projectRoot)
+        const deploymentUrl = await this.promptOptional(
+          'Optional public deployment URL used for sitemap.xml. Leave blank to skip sitemap generation.',
+          'Deployment URL (optional)',
+        )
+        await this.runBuild(projectRoot, deploymentUrl)
         break
       }
       case 'serve': {
@@ -347,10 +356,11 @@ export class CliCommandRunner {
     }
   }
 
-  private async runBuild(projectRoot?: string): Promise<void> {
+  private async runBuild(projectRoot?: string, deploymentUrl?: string): Promise<void> {
     const result = await this.service.buildSite({
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       mode: 'production',
+      ...(deploymentUrl !== undefined ? { deploymentUrl } : {}),
     })
     this.info(`Built site to ${result.outputPath}`)
   }
@@ -535,15 +545,21 @@ export class CliCommandRunner {
         ].join('\n')
       case 'build':
         return [
-          `Usage: ${CLI_BIN_NAME} build [project-root] [--project-root <path>]`,
+          `Usage: ${CLI_BIN_NAME} build [project-root] [--project-root <path>] [--deployment-url <url>]`,
           '',
           'Build the packaged presentation app and write static output to dist/ in the target project.',
+          'Sitemap generation is disabled by default. Provide --deployment-url or enable it in site.yaml when you have a real deployment URL.',
           '',
           globalOptions,
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
+          '  --deployment-url <url>  Optional. Public deployment URL used for sitemap.xml generation',
+          '',
+          'Examples:',
+          `  ${CLI_BIN_NAME} build`,
+          `  ${CLI_BIN_NAME} build /path/to/project --deployment-url https://updates.example.com`,
         ].join('\n')
       case 'serve':
         return [
@@ -611,8 +627,8 @@ export class CliCommandRunner {
       '    Validate authored and generated content against the current app schema.',
       '  serve [project-root] [--project-root <path>] [--host <host>] [--port <port>] [--open]',
       '    Build the site and serve dist/ locally so you can review the presentation in a browser.',
-      '  build [project-root] [--project-root <path>]',
-      '    Build the packaged app runtime and write dist/ to the target project.',
+      '  build [project-root] [--project-root <path>] [--deployment-url <url>]',
+      '    Build the packaged app runtime and write dist/ to the target project. Sitemap generation is opt-in.',
     ].join('\n')
   }
 

@@ -3,6 +3,7 @@ import type {
   DataSource,
   GeneratedPresentationData,
   PresentationIndexEntry,
+  SiteDeploymentConfig,
 } from '../../../shared/src/content'
 
 export type {
@@ -98,6 +99,8 @@ export interface PresentationsPageContent {
 
 export interface SiteContent {
   title: string
+  deployment_url?: SiteDeploymentConfig['deployment_url']
+  sitemap_enabled?: SiteDeploymentConfig['sitemap_enabled']
   mascot?: MascotContent
   data_sources?: DataSource[]
   project_badge?: ProjectBadge

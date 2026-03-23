@@ -42,6 +42,7 @@ export interface FetchPresentationDataResult {
 export interface BuildSiteInput {
   projectRoot?: string
   mode?: 'production'
+  deploymentUrl?: string
 }
 
 export interface BuildSiteResult {

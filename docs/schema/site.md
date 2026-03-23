@@ -35,6 +35,8 @@ See the tracked reference file:
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `site.title` | yes | string | Site title used by the app shell and document title logic. |
+| `site.deployment_url` | no | string | Public deployment URL used for sitemap generation. |
+| `site.sitemap_enabled` | no | boolean | Controls whether sitemap.xml is generated. Requires `deployment_url`. |
 | `site.mascot` | no | object | Shared mascot image for home/title/closing surfaces. |
 | `site.data_sources` | no | array | External data sources. Only GitHub is supported today. |
 | `site.project_badge` | no | object | Small badge rendered near the hero/title identity. |
@@ -56,6 +58,15 @@ See the tracked reference file:
 | --- | --- | --- | --- |
 | `url` | no | string | Local or remote image path. |
 | `alt` | no | string | Requires `url`. |
+
+### Deployment metadata
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `deployment_url` | no | string | Must be a valid URL when present. |
+| `sitemap_enabled` | no | boolean | When `true`, `deployment_url` must also be set. |
+
+If `sitemap_enabled` is omitted or `false`, the app build still succeeds and only generates `robots.txt`.
 
 ### `site.data_sources[]`
 
@@ -167,3 +178,4 @@ Each link object uses the same shape:
 - Optional blocks can be omitted entirely.
 - `alt` fields without matching `url` fields are invalid.
 - `site.links.repository`, `site.links.docs`, and `site.links.owasp` must all exist today.
+- `sitemap_enabled` without `deployment_url` is invalid.
