@@ -62,7 +62,7 @@ export class ViteSiteBuilder {
           emptyOutDir: true,
         },
       })
-      const siteDocument = await this.readYaml<{ site: { site_url?: string } }>(paths.getSiteConfigPath())
+      const siteDocument = await this.readYaml<{ site: { deployment_url?: string; sitemap_enabled?: boolean } }>(paths.getSiteConfigPath())
       const indexDocument = await this.readYaml<{
         presentations: Array<{ id: string; published: boolean }>
       }>(paths.getPresentationsIndexPath())
@@ -70,7 +70,8 @@ export class ViteSiteBuilder {
       this.contentValidator.validatePresentationIndexDocument(indexDocument)
       await this.siteArtifactGenerator.generate({
         outputRoot: resolve(workspace.appRoot, 'dist'),
-        siteUrl: process.env.SLIDE_SPEC_SITE_URL || siteDocument.site.site_url || 'https://example.invalid',
+        siteUrl: process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+        sitemapEnabled: process.env.SLIDE_SPEC_SITEMAP_ENABLED === 'true' || siteDocument.site.sitemap_enabled === true,
         publishedPresentationIds: indexDocument.presentations
           .filter((entry) => entry.published)
           .map((entry) => entry.id),

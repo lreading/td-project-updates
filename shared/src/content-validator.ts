@@ -221,7 +221,13 @@ export class ContentValidator {
     assert(isRecord(document.site), 'site.yaml.site must be an object.')
     const site = document.site
     assertNonBlankString(site.title, 'site.yaml.site.title')
-    assertOptionalUrlString(site.site_url, 'site.yaml.site.site_url')
+    assertOptionalUrlString(site.deployment_url, 'site.yaml.site.deployment_url')
+    if (site.sitemap_enabled !== undefined) {
+      assertBoolean(site.sitemap_enabled, 'site.yaml.site.sitemap_enabled')
+    }
+    if (site.sitemap_enabled === true) {
+      assert(site.deployment_url !== undefined, 'site.yaml.site.deployment_url is required when site.yaml.site.sitemap_enabled is true.')
+    }
     if (site.data_sources !== undefined) {
       assert(Array.isArray(site.data_sources), 'site.yaml.site.data_sources must be an array.')
       ;(site.data_sources as unknown[]).forEach((source, index) => assertDataSource(source, `site.yaml.site.data_sources[${index}]`))

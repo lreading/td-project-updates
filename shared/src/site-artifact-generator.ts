@@ -3,18 +3,21 @@ import { dirname, resolve } from 'node:path'
 
 export interface SiteArtifactGeneratorOptions {
   outputRoot: string
-  siteUrl: string
+  siteUrl?: string | undefined
+  sitemapEnabled?: boolean
   publishedPresentationIds: string[]
 }
 
 export class SiteArtifactGenerator {
   public async generate(options: SiteArtifactGeneratorOptions): Promise<void> {
     const siteUrl = this.resolveSiteUrl(options.siteUrl)
-    const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
-    const robotsTxt = this.buildRobots(siteUrl)
+    const robotsTxt = this.buildRobots(siteUrl, options.sitemapEnabled === true)
 
-    await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)
     await this.writeOutput(resolve(options.outputRoot, 'robots.txt'), robotsTxt)
+    if (siteUrl && options.sitemapEnabled === true) {
+      const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
+      await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)
+    }
   }
 
   private buildSitemap(siteUrl: URL, publishedPresentationIds: string[]): string {
@@ -29,12 +32,16 @@ export class SiteArtifactGenerator {
     return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`
   }
 
-  private buildRobots(siteUrl: URL): string {
-    return `User-agent: *\nAllow: /\nSitemap: ${this.toUrl(siteUrl, '/sitemap.xml')}\n`
+  private buildRobots(siteUrl: URL | undefined, includeSitemap: boolean): string {
+    const sitemapLine = siteUrl && includeSitemap ? `Sitemap: ${this.toUrl(siteUrl, '/sitemap.xml')}\n` : ''
+    return `User-agent: *\nAllow: /\n${sitemapLine}`
   }
 
-  private resolveSiteUrl(siteUrl: string): URL {
-    const candidate = siteUrl.trim() || 'https://example.invalid'
+  private resolveSiteUrl(siteUrl: string | undefined): URL | undefined {
+    const candidate = siteUrl?.trim()
+    if (!candidate) {
+      return undefined
+    }
     const normalizedCandidate = candidate.endsWith('/') ? candidate : `${candidate}/`
 
     return new URL(normalizedCandidate)

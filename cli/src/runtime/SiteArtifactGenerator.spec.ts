@@ -35,6 +35,7 @@ describe('SiteArtifactGenerator', () => {
     await new SiteArtifactGenerator().generate({
       outputRoot,
       siteUrl: 'https://updates.example.test',
+      sitemapEnabled: true,
       publishedPresentationIds: ['public-one'],
     })
 
@@ -47,19 +48,19 @@ describe('SiteArtifactGenerator', () => {
     await expect(readFile(resolve(outputRoot, 'sitemap.xml'), 'utf8')).resolves.not.toContain('draft-two')
   })
 
-  it('falls back to example.invalid when no site url is configured', async () => {
+  it('omits the sitemap when no deployment url is configured', async () => {
     const projectRoot = await workspace.create()
     const outputRoot = resolve(projectRoot, 'dist')
     await mkdir(outputRoot, { recursive: true })
 
     await new SiteArtifactGenerator().generate({
       outputRoot,
-      siteUrl: '',
+      siteUrl: undefined,
+      sitemapEnabled: false,
       publishedPresentationIds: [],
     })
 
-    await expect(readFile(resolve(outputRoot, 'sitemap.xml'), 'utf8')).resolves.toContain(
-      '<loc>https://example.invalid/</loc>',
-    )
+    await expect(readFile(resolve(outputRoot, 'robots.txt'), 'utf8')).resolves.toBe('User-agent: *\nAllow: /\n')
+    await expect(readFile(resolve(outputRoot, 'sitemap.xml'), 'utf8')).rejects.toThrow()
   })
 })

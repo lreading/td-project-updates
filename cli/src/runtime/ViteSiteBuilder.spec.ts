@@ -43,6 +43,8 @@ describe('ViteSiteBuilder', () => {
       resolve(projectRoot, 'content', 'site.yaml'),
       `site:
   title: Demo
+  deployment_url: https://updates.example.com
+  sitemap_enabled: true
   home_intro: Intro
   home_cta_label: Open
   presentations_cta_label: Presentations
@@ -82,7 +84,9 @@ describe('ViteSiteBuilder', () => {
     expect(outputPath).toBe(resolve(projectRoot, 'dist'))
     expect(viteCalls).toEqual([resolve(workspaceRoot, 'app')])
     await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain('built')
-    await expect(readFile(resolve(projectRoot, 'dist', 'robots.txt'), 'utf8')).resolves.toContain('Sitemap:')
+    await expect(readFile(resolve(projectRoot, 'dist', 'robots.txt'), 'utf8')).resolves.toContain(
+      'Sitemap: https://updates.example.com/sitemap.xml',
+    )
     await expect(readFile(resolve(projectRoot, 'dist', 'sitemap.xml'), 'utf8')).resolves.toContain(
       '/presentations/2026-q1',
     )

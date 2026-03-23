@@ -29,6 +29,7 @@ Usage notes:
 - If you choose GitHub import interactively and paste a PAT, the CLI writes `<project-root>/.env` for you.
 - `fetch` supports explicit date ranges and best-effort mode when no GitHub token is provided.
 - `build` writes only `<project-root>/dist`.
+- `build --deployment-url <url>` also generates `sitemap.xml`; otherwise the build skips sitemap generation.
 - `serve` builds first, then serves `<project-root>/dist`.
 - The CLI accepts an explicit project root so it can run against external projects, not just this repository.
 - `slide-spec <command> --help` prints contextual help for each subcommand.

@@ -8,7 +8,8 @@ import { ContentValidator } from '../src/content/ContentValidator'
 
 interface SiteDocument {
   site: {
-    site_url?: string
+    deployment_url?: string
+    sitemap_enabled?: boolean
   }
 }
 
@@ -36,7 +37,8 @@ class AppSiteFilesRunner {
 
     await new SiteArtifactGenerator().generate({
       outputRoot: this.outputRoot,
-      siteUrl: process.env.SLIDE_SPEC_SITE_URL || siteDocument.site.site_url || 'https://example.invalid',
+      siteUrl: process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+      sitemapEnabled: process.env.SLIDE_SPEC_SITEMAP_ENABLED === 'true' || siteDocument.site.sitemap_enabled === true,
       publishedPresentationIds: indexDocument.presentations
         .filter((entry) => entry.published)
         .map((entry) => entry.id),
