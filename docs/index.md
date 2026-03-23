@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: slide-spec
+  name: Slide Spec
   text: Presentation sites from YAML
   tagline: Author slides in reviewable files, pull metrics when you want them, ship static HTML. No slide-deck app required.
   image:
