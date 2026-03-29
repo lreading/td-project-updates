@@ -1,9 +1,9 @@
-# Agent assistance
+# Agent Assistance
 
-Keep the YAML sources explicit so automated helpers do not have to guess.
+slide-spec's YAML-first design works well with AI coding assistants.
 
-Good fits: drafting `presentation.yaml`, filling `generated.yaml` from approved numbers, schema checks, regenerating screenshots from a validated fixture.
+**Good fits:** drafting `presentation.yaml` slides, filling `generated.yaml` from approved data, running schema validation, regenerating screenshots from fixtures.
 
-Still needs a human: roadmap calls, release story, external links, spotlights, any metric that looks off.
+**Needs a human:** roadmap decisions, release narratives, external link curation, spotlight selection, any metric that looks wrong.
 
-Workflow: author or `fetch` → `validate` → `build` or `serve` → review the rendered site → commit when it matches intent.
+**Workflow:** author or fetch → validate → build or serve → review the rendered site → commit.

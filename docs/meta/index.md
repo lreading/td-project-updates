@@ -1,3 +1,8 @@
-# Meta
+# Project Notes
 
-Operational and machine-facing notes: [accessibility](/meta/accessibility) (app and docs audits), [AI-friendly docs](/meta/ai), [agent assistance](/meta/agent-assistance), [supply chain](/meta/supply-chain).
+Background on accessibility, AI tooling support, and supply chain.
+
+- [Accessibility](/meta/accessibility)
+- [AI-friendly docs](/meta/ai)
+- [Supply chain](/meta/supply-chain)
+- [Agent assistance](/meta/agent-assistance)

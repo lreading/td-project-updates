@@ -1,30 +1,33 @@
-# `fetch`
+# fetch
 
-`fetch` fills `generated.yaml` for one presentation from the GitHub data source in `site.yaml`.
+Populates `generated.yaml` for a presentation using the connector configured in `site.yaml`.
 
 ```bash
-npx @slide-spec/cli fetch ./my-slides \
+npx @slide-spec/cli fetch \
   --presentation-id 2026-spring-briefing \
   --from-date 2026-03-01 \
   --to-date 2026-05-31
 ```
 
-## Required flags
+## Flags
 
-| Flag | Notes |
-| --- | --- |
-| `project-root` (positional or `--project-root`) | Target project. |
-| `--presentation-id` | Which deck to update. |
-| `--from-date` | Period start. |
-| `--to-date` | Period end; defaults to today if omitted. |
+| Flag | Required | Description |
+| --- | --- | --- |
+| `[project-root]` (positional) | | Target project. Defaults to current directory |
+| `--presentation-id` | yes | Presentation to update |
+| `--from-date` | yes | Period start date |
+| `--to-date` | | Period end date (defaults to today) |
+| `--no-previous-period` | | Skip previous-period comparison |
+| `--timings` | | Print timing for each fetch step |
+| `--dry-run` | | Preview without writing `generated.yaml` |
 
-## Optional flags
+## What it writes
 
-| Flag | Notes |
-| --- | --- |
-| `--no-previous-period` | Skip previous-period comparison. |
-| `--timings` | Print per-step timing. |
+`fetch` overwrites `content/presentations/<id>/generated.yaml` with data from the configured connector: metrics, releases, contributors, and related details.
 
-`site.yaml` must define exactly one GitHub data source today. A PAT is recommended for reliable metrics.
+It does not touch slide titles, roadmap content, spotlights, or CTAs.
 
-`fetch` overwrites `content/presentations/<presentation-id>/generated.yaml`. It does not write slide titles, roadmap prose, spotlights, or CTAs.
+## Requirements
+
+- `site.yaml` must define a data source (see [connectors](/connectors/))
+- Authentication credentials may be required depending on the connector

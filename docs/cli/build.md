@@ -1,24 +1,20 @@
-# `build`
+# build
 
-`build` emits a static site into `<project-root>/dist`.
-
-```bash
-npx @slide-spec/cli build ./my-slides
-```
-
-With sitemap generation (provide a public deployment URL):
+Generates a static site into `dist/`.
 
 ```bash
-npx @slide-spec/cli build ./my-slides --deployment-url https://updates.example.com
+npx @slide-spec/cli build
 ```
+
+## Flags
+
+| Flag | Description |
+| --- | --- |
+| `[project-root]` (positional) | Target project. Defaults to current directory |
+| `--deployment-url <url>` | Public URL for sitemap generation |
 
 ## Output
 
-- Writes `<project-root>/dist` as static HTML, CSS, and JS. No backend is required.
-- Always generates `robots.txt`.
-- Generates `sitemap.xml` when a real deployment URL is provided (CLI flag and/or `site.yaml` metadata, depending on your setup).
-
-## Notes
-
-- Uses the packaged runtime shipped with the CLI; the project does not need a local `app/` checkout.
-- If no deployment URL is configured, the build does not emit a sitemap.
+- `dist/` - static HTML, CSS, and JS. Host anywhere.
+- `robots.txt` - always generated
+- `sitemap.xml` - generated when a deployment URL is provided via `--deployment-url` or `site.yaml`'s `deployment_url` field (with `sitemap_enabled: true`)

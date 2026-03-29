@@ -1,0 +1,8 @@
+presentations:
+  - id: 2026-q1-update
+    year: 2026
+    title: "Vortex CLI: Q1 2026"
+    subtitle: Community Update
+    summary: New plugin system, improved error messages, and a growing contributor community.
+    published: true
+    featured: true

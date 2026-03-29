@@ -1,0 +1,69 @@
+site:
+  title: Vortex CLI Updates
+  mascot:
+    url: https://api.dicebear.com/9.x/bottts-neutral/svg?seed=vortex
+    alt: Vortex mascot
+  project_badge:
+    label: Open Source
+    fa_icon: fa-code-branch
+    icon_position: before
+  presentation_logo:
+    url: https://api.dicebear.com/9.x/shapes/svg?seed=vortex-logo
+    alt: Vortex logo
+  navigation:
+    brand_title: Vortex CLI Updates
+    home_label: Home
+    presentations_label: Presentations
+    latest_presentation_label: Latest
+    toggle_label: Toggle navigation
+  attribution:
+    enabled: true
+    label: Powered by Slide Spec
+    url: https://github.com/lreading/slide-spec
+  presentation_chrome:
+    mark_label: Vortex CLI
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
+  home_hero:
+    title_primary: Vortex
+    title_accent: CLI
+    subtitle: Community Updates
+  home_intro: Quarterly updates on the Vortex CLI open source project - releases, contributors, and roadmap.
+  home_cta_label: View latest update
+  presentations_cta_label: View all updates
+  presentations_page:
+    title: All updates
+    search_label: Search
+    search_placeholder: Search updates...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open update
+    empty_title: No matching updates
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    page_of_label: of
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: update
+    presentation_plural_label: updates
+  links:
+    repository:
+      label: GitHub
+      url: https://github.com/example/vortex-cli
+      eyebrow: Source Code
+    docs:
+      label: Docs
+      url: https://vortex-cli.example.com/docs
+      eyebrow: Documentation
+    owasp:
+      label: Discord
+      url: https://discord.example.com/vortex
+      eyebrow: Community

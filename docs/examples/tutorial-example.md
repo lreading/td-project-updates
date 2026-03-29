@@ -1,8 +1,8 @@
-# Tutorial example
+# Tutorial
 
-Build a minimal deck from scratch. The steps match [`docs/fixtures/reference-project/`](https://github.com/lreading/slide-spec/tree/main/docs/fixtures/reference-project) in the main repo.
+Build a full presentation from scratch. The YAML shown here matches the [reference project](https://github.com/lreading/slide-spec/tree/main/docs/fixtures/reference-project) in the repo.
 
-## Step 1: `init`
+## 1. Scaffold
 
 ```bash
 npx @slide-spec/cli init ./acorn-cloud-updates \
@@ -13,11 +13,16 @@ npx @slide-spec/cli init ./acorn-cloud-updates \
   --to-date 2026-05-31
 ```
 
-## Step 2: Branding assets
+## 2. Add branding assets
 
-Add `content/assets/slide-spec-logo.svg` and `content/assets/slide-spec-mascot.svg`. Local paths avoid network calls during `build` and `serve`.
+Place logos in `content/assets/`:
 
-## Step 3: `content/site.yaml`
+- `content/assets/slide-spec-logo.svg`
+- `content/assets/slide-spec-mascot.svg`
+
+Local paths avoid network calls during build.
+
+## 3. Edit `content/site.yaml`
 
 ```yaml
 site:
@@ -91,7 +96,7 @@ site:
       eyebrow: Website
 ```
 
-## Step 4: `content/presentations/index.yaml`
+## 4. Edit `content/presentations/index.yaml`
 
 ```yaml
 presentations:
@@ -104,39 +109,29 @@ presentations:
     featured: true
 ```
 
-## Step 5: `presentation.yaml`
+## 5. Edit `presentation.yaml`
 
-Copy from the tracked reference—one slide per template, global roadmap data, and authored titles, subtitles, and blocks:
+Copy from the reference fixture. It includes one slide per template with full roadmap data:
 
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
+[`presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
 
-## Step 6: `generated.yaml`
+## 6. Edit `generated.yaml`
 
-Same fixture: stable hand-authored metrics (`period`, `previous_presentation_id`, metric metadata, releases, contributors, merged pull requests):
+Use the reference fixture for stable hand-authored metrics, releases, and contributors:
 
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
+[`presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
 
-## Step 7: Validate
+## 7. Validate, build, serve
 
 ```bash
 npx @slide-spec/cli validate ./acorn-cloud-updates
-```
-
-## Step 8: Build
-
-```bash
 npx @slide-spec/cli build ./acorn-cloud-updates
-```
-
-## Step 9: Serve
-
-```bash
 npx @slide-spec/cli serve ./acorn-cloud-updates
 ```
 
-## Optional: GitHub `fetch` later
+## Adding GitHub data later
 
-Add a connector and run `fetch` when you want live GitHub data instead of hand-written `generated.yaml`:
+Replace hand-authored `generated.yaml` with live data by adding a connector:
 
 ```yaml
 site:
@@ -145,6 +140,4 @@ site:
       url: https://github.com/OWNER/REPO
 ```
 
-## Takeaways
-
-The fixture shows end-to-end YAML authoring, validation, and build without a GitHub data source. Add `site.data_sources` only when you need automated metrics.
+Then run [`fetch`](/cli/fetch) to populate `generated.yaml` automatically.

@@ -1,31 +1,51 @@
-# `init`
+# init
 
-`init` creates a new project tree under the directory you pass.
+Scaffolds a new Slide Spec project.
 
 ```bash
-npx @slide-spec/cli init ./my-slides
+npx @slide-spec/cli init
 ```
 
-You need a project root, presentation id, title, and `from-date`. Supply them with flags or through the interactive prompts.
+Running `init` without flags starts interactive mode, which walks you through project titles, reporting period, optional connector configuration, and branding.
+
+For CI or scripting, pass required flags directly:
+
+```bash
+npx @slide-spec/cli init \
+  --presentation-id 2026-spring-briefing \
+  --title "Spring Product Brief" \
+  --subtitle "Spring 2026" \
+  --from-date 2026-03-01
+```
 
 ## Flags
 
-| Flag | Required | Notes |
+| Flag | Required | Description |
 | --- | --- | --- |
-| positional `project-root` | yes | Target directory. |
-| `--project-root` | no | Named alternative to the positional path. |
-| `--presentation-id` | yes in non-interactive mode | Creates `content/presentations/<id>/`. |
-| `--title` | yes in non-interactive mode | Presentation title. |
-| `--subtitle` | no | Subtitle. |
-| `--from-date` | yes in non-interactive mode | Period start. |
-| `--to-date` | no | Period end. |
-| `--summary` | no | Archive list summary. |
-| `--force` | no | Overwrite existing scaffold files for the same project/presentation. |
+| `[project-root]` (positional) | | Target directory. Defaults to current directory |
+| `--project-root` | | Alternative to the positional argument |
+| `--presentation-id` | non-interactive | Directory name under `presentations/` |
+| `--title` | non-interactive | Presentation title |
+| `--subtitle` | | Presentation subtitle |
+| `--from-date` | non-interactive | Reporting period start |
+| `--to-date` | | Reporting period end |
+| `--summary` | | Summary shown in the presentation list |
+| `--force` | | Overwrite existing files |
 
-Interactive `init` walks through titles, ids, period, summary, optional GitHub source, optional PAT, and optional branding fields.
+"non-interactive" means required only when running with flags instead of prompts.
 
 ## Output
 
-`content/site.yaml`, `content/presentations/index.yaml`, `content/presentations/<presentation-id>/presentation.yaml`, and `content/presentations/<presentation-id>/generated.yaml`.
+Creates these files under `content/`:
 
-Then run [validate](/cli/validate) before `build` or `serve`.
+```
+content/
+├── site.yaml
+├── presentations/
+│   ├── index.yaml
+│   └── <presentation-id>/
+│       ├── presentation.yaml
+│       └── generated.yaml
+```
+
+If `site.yaml` or `index.yaml` already exist, they are updated rather than overwritten (unless `--force` is used).

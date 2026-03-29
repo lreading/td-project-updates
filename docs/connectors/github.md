@@ -1,6 +1,10 @@
-# GitHub connector
+# GitHub
 
-GitHub is the only first-party data source today. Add it under `site.data_sources` in `content/site.yaml`:
+The GitHub connector populates `generated.yaml` with data from a GitHub repository.
+
+## Configuration
+
+Add a data source to `site.yaml`:
 
 ```yaml
 site:
@@ -9,10 +13,24 @@ site:
       url: https://github.com/OWNER/REPO
 ```
 
-Validation rules: `data_sources` is an array, at most one GitHub entry is allowed for `fetch`, and the URL must be on `github.com`.
+Then run [`fetch`](/cli/fetch) to populate `generated.yaml`.
 
-`fetch` pulls repository metadata, releases, merged PRs and closed issues in the window you pass, contributor history (for first-time contributor detection), and star snapshots for the current and previous periods. It does not author roadmap copy, spotlights, community notes, CTAs, or slide structure.
+## What it collects
 
-Use a PAT when you can. The CLI runs without one but hits rate limits and thinner coverage sooner; interactive flows can persist a token into `.env`.
+- Star counts (current and previous period)
+- Issues closed in the date window
+- PRs merged in the date window
+- Releases published in the date window
+- Contributors with PR counts and first-time detection
 
-Very large repos can make star history expensive; the CLI surfaces warnings when snapshots are partial.
+## Authentication
+
+A GitHub personal access token (PAT) is strongly recommended. Without one, requests hit public rate limits and return less data.
+
+The interactive `init` flow can save a token to `.env` for you.
+
+## Constraints
+
+- One GitHub data source per project
+- URL must be on `github.com`
+- Very large repos may produce partial star history (the CLI warns when this happens)

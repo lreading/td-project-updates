@@ -1,14 +1,16 @@
-# `serve`
+# serve
 
-`serve` builds the project and serves `dist/` locally.
+Builds the project, then starts a local preview server.
 
 ```bash
-npx @slide-spec/cli serve ./my-slides
+npx @slide-spec/cli serve
 ```
 
-| Flag | Notes |
-| --- | --- |
-| `--host` | Bind address. |
-| `--port` | Preferred port; the CLI may pick another if it is taken. |
+## Flags
 
-This is the supported preview path for packaged projects; you do not need a separate dev server inside the content repo.
+| Flag | Default | Description |
+| --- | --- | --- |
+| `[project-root]` (positional) | current directory | Target project |
+| `--host` | `127.0.0.1` | Bind address |
+| `--port` | `5173` | Port (picks another if taken) |
+| `--open` | | Open browser automatically |

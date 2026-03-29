@@ -1,11 +1,31 @@
-# `validate`
+# validate
 
-`validate` checks all project YAML against the live schema and template rules.
+Checks all YAML in a project against the schema and cross-file consistency rules.
 
 ```bash
-npx @slide-spec/cli validate ./my-slides
+npx @slide-spec/cli validate
 ```
 
-It loads `site.yaml`, `presentations/index.yaml`, each deck’s `presentation.yaml` and `generated.yaml`, checks cross-file consistency, and runs template-specific slide checks.
+Validates:
 
-Run it after substantive YAML edits, and before `build`, `serve`, or right after `fetch`.
+- `site.yaml` structure and required fields
+- `presentations/index.yaml` entries
+- Each presentation's `presentation.yaml` and `generated.yaml`
+- Cross-file consistency (matching ids, titles, subtitles between index and presentation files)
+- Template-specific slide content rules
+
+On success, prints `Content is valid`. On failure, prints the specific error and exits with code 1. For example:
+
+```
+site.yaml.site.title must not be blank.
+```
+
+or for a template issue:
+
+```
+presentation document.presentation.slides[2].content.sections is required.
+```
+
+The error tells you which file and field to fix. Correct the YAML and run `validate` again.
+
+Run after editing YAML and before `build` or `serve`.

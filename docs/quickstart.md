@@ -1,56 +1,55 @@
 # Quickstart
 
-From install to a served static site. You need **Node.js 24**, a writable directory, and a GitHub token only if you will use `fetch`.
+**Prerequisites:** Node.js 24+, npm 10+
 
-**1. Scaffold**
-
-```bash
-npx @slide-spec/cli init ./my-slides
-```
-
-Non-interactive example:
+## 1. Scaffold a project
 
 ```bash
-npx @slide-spec/cli init ./my-slides \
-  --presentation-id 2026-spring-briefing \
-  --title "My Product Brief" \
-  --subtitle "Spring 2026" \
-  --from-date 2026-03-01
+npx @slide-spec/cli init
 ```
 
-That writes `content/site.yaml`, `content/presentations/index.yaml`, `content/presentations/<id>/presentation.yaml`, and `content/presentations/<id>/generated.yaml`.
+The interactive prompts walk you through project setup: name, title, dates, and optional connector configuration.
 
-**2. Edit** the scaffold: start with `site.yaml`, `presentations/index.yaml`, and the new `presentation.yaml`. For a full line-by-line walkthrough, use the [tutorial example](/examples/tutorial-example).
+This creates a `content/` directory with:
 
-**3. Validate**
+- `site.yaml` - global branding, navigation, links
+- `presentations/index.yaml` - presentation registry
+- `presentations/<id>/presentation.yaml` - slides and content
+- `presentations/<id>/generated.yaml` - generated data (metrics, releases, contributors)
+
+## 2. Edit your content
+
+Start with `site.yaml` (branding and links), then `presentations/index.yaml` (listing metadata), then the `presentation.yaml` for your deck.
+
+See the [concepts](/concepts) page for an overview of how these files work together, or the [schema reference](/schema/) for every field.
+
+## 3. Validate
 
 ```bash
-npx @slide-spec/cli validate ./my-slides
+npx @slide-spec/cli validate
 ```
 
-**4. Build** — output goes to `<project-root>/dist`:
+## 4. Build
 
 ```bash
-npx @slide-spec/cli build ./my-slides
+npx @slide-spec/cli build
 ```
 
-**5. Serve** (builds first, then serves `dist/`):
+Output goes to `./dist/` - static HTML, CSS, and JS.
+
+## 5. Preview locally
 
 ```bash
-npx @slide-spec/cli serve ./my-slides
+npx @slide-spec/cli serve
 ```
 
-**6. Optional: GitHub-backed `generated.yaml`**
+## 6. (Optional) Connect external data
 
-Add a GitHub data source under `site.data_sources` in `content/site.yaml` (see [GitHub connector](/connectors/github)), then:
+Slide Spec supports connectors that populate `generated.yaml` with live data. See [connectors](/connectors/) for available options.
 
-```bash
-npx @slide-spec/cli fetch ./my-slides \
-  --presentation-id 2026-spring-briefing \
-  --from-date 2026-03-01 \
-  --to-date 2026-05-31
-```
+## Next steps
 
-A PAT is strongly recommended; without one you risk rate limits and thinner data. Interactive init can write a local `.env` when you supply a token.
-
-**Next:** [Schema](/schema/) for every file and field, [templates](/templates/) for slide layouts, [manual data example](/examples/manual-data-example) if you skip GitHub entirely.
+- [Concepts](/concepts) - understand how Slide Spec projects work
+- [Schema reference](/schema/) - every YAML file and field
+- [Templates](/templates/) - the available slide layouts
+- [Examples](/examples/) - real-world project walkthroughs

@@ -1,17 +1,36 @@
-# CLI reference
+# CLI
 
-The CLI is how you scaffold, validate, build, and preview slide-spec projects. It ships its own static runtime for `build` and `serve`, so the project does not need a copy of the web app source.
+The Slide Spec CLI handles everything from project setup to building your final site.
 
-**Requirements:** Node.js **24** or newer (see `engines` in the CLI package).
+**Requires:** Node.js 24+
 
-Typical order: `init` → edit YAML → `validate` → optional `fetch` → `build` or `serve`.
+**Typical workflow:** [init](/cli/init) → edit YAML → [validate](/cli/validate) → [fetch](/cli/fetch) (optional) → [build](/cli/build) or [serve](/cli/serve)
 
-Commands: [init](/cli/init), [fetch](/cli/fetch), [build](/cli/build), [serve](/cli/serve), [validate](/cli/validate).
+## Running the CLI
+
+```bash
+npx @slide-spec/cli
+```
+
+Running without arguments starts the interactive mode, which walks you through project setup. This is the same as running `npx @slide-spec/cli init` without arguments. If you prefer declarative flags, see the [init](/cli/init) documentation.
 
 ## Project root
 
-Every command takes a project root: either the first positional argument (`npx @slide-spec/cli validate ./my-slides`) or `--project-root`.
+By default, all commands use your current working directory. To target a different directory, pass it as the first argument:
 
-## Interactive mode
+```bash
+npx @slide-spec/cli validate ./my-slides
+```
 
-`slide-spec` with no subcommand opens interactive mode. `slide-spec init` with no flags runs interactive init.
+Or use the `--project-root` flag:
+
+```bash
+npx @slide-spec/cli validate --project-root ./my-slides
+```
+
+## Global options
+
+| Flag | Description |
+| --- | --- |
+| `--log-path <file>` | Write sanitized logs to a file |
+| `--help`, `-h` | Show usage. `help <command>` for subcommand help |

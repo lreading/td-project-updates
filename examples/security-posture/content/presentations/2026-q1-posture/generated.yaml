@@ -1,0 +1,72 @@
+generated:
+  id: 2026-q1-posture
+  period:
+    start: 2026-01-01
+    end: 2026-03-31
+  stats:
+    vulnerabilities_remediated:
+      label: Vulnerabilities remediated
+      current: 89
+      previous: 62
+      delta: 27
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    mean_time_to_patch:
+      label: Mean time to patch (days)
+      current: 3
+      previous: 12
+      delta: -9
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    compliance_controls:
+      label: SOC 2 controls passing
+      current: 94
+      previous: 81
+      delta: 13
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    audit_findings:
+      label: Open audit findings
+      current: 2
+      previous: 7
+      delta: -5
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases:
+    - id: sa-2026-003
+      version: SA-2026-003
+      published_at: "2026-03-08"
+      url: https://sentinel.example.com/advisories/sa-2026-003
+      summary_bullets:
+        - Patched XSS vulnerability in the dashboard search component
+        - Updated Content-Security-Policy headers across all services
+    - id: sa-2026-002
+      version: SA-2026-002
+      published_at: "2026-02-14"
+      url: https://sentinel.example.com/advisories/sa-2026-002
+      summary_bullets:
+        - Remediated SSRF in the webhook delivery system
+        - Added allowlist validation for outbound webhook URLs
+  contributors:
+    total: 8
+    authors:
+      - login: dana-appsec
+        name: Dana Torres
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=dana
+        merged_prs: 14
+        first_time: false
+      - login: raj-compliance
+        name: Raj Patel
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=raj
+        merged_prs: 6
+        first_time: false
+      - login: yuki-infra
+        name: Yuki Tanaka
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=yuki
+        merged_prs: 9
+        first_time: false
+  merged_prs: []
