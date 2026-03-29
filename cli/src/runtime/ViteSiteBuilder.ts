@@ -1,6 +1,8 @@
 import { cp, mkdir, readFile, rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
+import autoprefixer from 'autoprefixer'
+import tailwindcss from 'tailwindcss'
 import vue from '@vitejs/plugin-vue'
 import { build as viteBuild } from 'vite'
 import { parse } from 'yaml'
@@ -31,6 +33,16 @@ export class ViteSiteBuilder {
         configFile: false,
         logLevel: 'error',
         plugins: [vue()],
+        css: {
+          postcss: {
+            plugins: [
+              tailwindcss({
+                config: resolve(workspace.appRoot, 'tailwind.config.cjs'),
+              }),
+              autoprefixer(),
+            ],
+          },
+        },
         build: {
           outDir: resolve(workspace.appRoot, 'dist'),
           emptyOutDir: true,

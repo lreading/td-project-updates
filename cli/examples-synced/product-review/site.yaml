@@ -1,0 +1,62 @@
+site:
+  title: Meridian Product Reviews
+  project_badge:
+    label: Internal
+    fa_icon: fa-lock
+    icon_position: before
+  presentation_logo:
+    url: https://api.dicebear.com/9.x/shapes/svg?seed=meridian-logo
+    alt: Meridian logo
+  navigation:
+    brand_title: Meridian Reviews
+    home_label: Home
+    presentations_label: Reviews
+    latest_presentation_label: Latest Review
+    toggle_label: Toggle navigation
+  presentation_chrome:
+    mark_label: Meridian
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
+  home_hero:
+    title_primary: Meridian
+    title_accent: Reviews
+    subtitle: Product Team
+  home_intro: Quarterly product reviews for the Meridian platform team.
+  home_cta_label: View latest review
+  presentations_cta_label: View all reviews
+  presentations_page:
+    title: All reviews
+    search_label: Search
+    search_placeholder: Search reviews...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open review
+    empty_title: No matching reviews
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    page_of_label: of
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: review
+    presentation_plural_label: reviews
+  links:
+    repository:
+      label: Jira Board
+      url: https://meridian.atlassian.net/browse/MER
+      eyebrow: Project Tracker
+    docs:
+      label: Product Wiki
+      url: https://meridian.example.com/wiki
+      eyebrow: Documentation
+    owasp:
+      label: Roadmap
+      url: https://meridian.example.com/roadmap
+      eyebrow: Planning

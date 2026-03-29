@@ -1,0 +1,89 @@
+generated:
+  id: 2026-q1-review
+  period:
+    start: 2026-01-01
+    end: 2026-03-31
+  stats:
+    stories_completed:
+      label: Stories completed
+      current: 142
+      previous: 118
+      delta: 24
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    epics_closed:
+      label: Epics closed
+      current: 8
+      previous: 5
+      delta: 3
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    customer_nps:
+      label: Customer NPS
+      current: 72
+      previous: 65
+      delta: 7
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    bugs_resolved:
+      label: Bugs resolved
+      current: 63
+      previous: 48
+      delta: 15
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases:
+    - id: workspace-v2
+      version: Workspace v2
+      published_at: "2026-03-10"
+      url: https://meridian.example.com/changelog/workspace-v2
+      summary_bullets:
+        - Customizable layouts with drag-and-drop panels
+        - Saved views for different project phases
+    - id: api-v3
+      version: API v3
+      published_at: "2026-02-18"
+      url: https://meridian.example.com/changelog/api-v3
+      summary_bullets:
+        - RESTful endpoints with OpenAPI 3.1 spec
+        - Breaking change migration CLI for partners
+    - id: onboarding-launch
+      version: Self-Serve Onboarding
+      published_at: "2026-01-25"
+      url: https://meridian.example.com/changelog/onboarding
+      summary_bullets:
+        - Guided setup wizard for teams under 50
+        - Template library with 12 pre-built project types
+  contributors:
+    total: 14
+    authors:
+      - login: priya-design
+        name: Priya Sharma
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=priya
+        merged_prs: 18
+        first_time: false
+      - login: marcus-api
+        name: Marcus Johnson
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=marcus
+        merged_prs: 15
+        first_time: false
+      - login: lin-growth
+        name: Lin Wei
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=lin
+        merged_prs: 12
+        first_time: false
+      - login: jordan-qa
+        name: Jordan Kim
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=jordan
+        merged_prs: 8
+        first_time: false
+      - login: casey-data
+        name: Casey Flores
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=casey
+        merged_prs: 6
+        first_time: true
+  merged_prs: []
