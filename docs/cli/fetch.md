@@ -1,55 +1,33 @@
-# `fetch`
+# fetch
 
-`fetch` populates `generated.yaml` from the configured GitHub data source.
-
-## Usage
+Populates `generated.yaml` for a presentation using the connector configured in `site.yaml`.
 
 ```bash
-npx @slide-spec/cli fetch ./my-slides \
+npx @slide-spec/cli fetch \
   --presentation-id 2026-spring-briefing \
   --from-date 2026-03-01 \
   --to-date 2026-05-31
 ```
 
-## Required inputs
+## Flags
 
-| Flag | Required | Notes |
+| Flag | Required | Description |
 | --- | --- | --- |
-| positional `project-root` or `--project-root` | yes | Target project. |
-| `--presentation-id` | yes | Which presentation to update. |
-| `--from-date` | yes | Start of the measured period. |
-| `--to-date` | no | End of the measured period. Defaults to the current date when omitted. |
+| `[project-root]` (positional) | | Target project. Defaults to current directory |
+| `--presentation-id` | yes | Presentation to update |
+| `--from-date` | yes | Period start date |
+| `--to-date` | | Period end date (defaults to today) |
+| `--no-previous-period` | | Skip previous-period comparison |
+| `--timings` | | Print timing for each fetch step |
+| `--dry-run` | | Preview without writing `generated.yaml` |
 
-## Optional flags
+## What it writes
 
-| Flag | Notes |
-| --- | --- |
-| `--no-previous-period` | Skip previous-period comparison. |
-| `--timings` | Print per-step fetch timing. |
+`fetch` overwrites `content/presentations/<id>/generated.yaml` with data from the configured connector: metrics, releases, contributors, and related details.
+
+It does not touch slide titles, roadmap content, spotlights, or CTAs.
 
 ## Requirements
 
-- `content/site.yaml` must contain exactly one GitHub data source today.
-- a GitHub PAT is recommended for reliable metrics
-
-## Output
-
-`fetch` updates:
-
-- `content/presentations/<presentation-id>/generated.yaml`
-
-## What gets fetched today
-
-- repository metadata
-- releases
-- merged pull requests in the period
-- closed issues in the period
-- contributor history used for first-time contributor detection
-- star snapshots for current and previous periods
-
-## What does not get authored for you
-
-- slide titles
-- roadmap copy
-- spotlight summaries
-- call-to-action text
+- `site.yaml` must define a data source (see [connectors](/connectors/))
+- Authentication credentials may be required depending on the connector

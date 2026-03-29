@@ -1,29 +1,24 @@
 # Accessibility
 
-slide-spec runs an automated accessibility audit against the main app surfaces as part of the standard app gate.
+## Web app
 
-## Current Scope
-
-The automated audit covers:
-
-- the home page
-- the presentations index
-- the standard presentation view
-- presentation mode
-- a keyboard-only focus path through the main home-page navigation flow
-
-The audit is implemented with Playwright and axe-core.
-
-## Local Command
+The slide-spec app runs automated axe audits in CI (Playwright + `@axe-core/playwright`), covering the home page, presentations index, presentation view, presentation mode, and keyboard navigation.
 
 ```bash
 cd app
 npm run a11y
 ```
 
-## Current Status
+This is an automated check, not a WCAG conformance certification.
 
-- automated audit: passing
-- keyboard navigation spot checks: passing for the main home-page flow and presentation navigation
+## Documentation site
 
-This status is intentionally conservative. It is an automated audit signal, not a formal WCAG compliance claim.
+The docs site runs the same axe audit stack against a production build:
+
+```bash
+cd docs
+npm run a11y:install   # first time only
+npm run a11y
+```
+
+Syntax highlighting uses `github-light-high-contrast` and `github-dark-high-contrast` Shiki themes for AA contrast compliance. Images open in a lightbox on click (Escape or click outside to dismiss).

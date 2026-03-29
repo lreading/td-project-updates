@@ -1,16 +1,21 @@
 :root {
-  --vp-c-brand-1: #ec4e2c;
-  --vp-c-brand-2: #d93f1f;
-  --vp-c-brand-3: #b7371c;
-  --vp-home-hero-name-color: #f5f7fb;
-  --vp-home-hero-text-color: #d2d7e2;
-  --vp-home-hero-image-background-image: radial-gradient(circle at top, rgba(236, 78, 44, 0.22), transparent 50%);
-  --vp-home-hero-image-filter: blur(18px);
+  /* Meets WCAG 2.1 AA contrast for normal text on white and on default inline-code backgrounds. */
+  --vp-c-brand-1: #b8321a;
+  --vp-c-brand-2: #9c2a16;
+  --vp-c-brand-3: #832214;
+  /* Language label on fenced code blocks (default --vp-c-text-3 fails on code block chrome). */
+  --vp-code-lang-color: #4a4a4f;
+  --vp-home-hero-name-color: #111827;
+  --vp-home-hero-text-color: #374151;
 }
 
-.VPHomeHero .image-src {
-  border-radius: 22px;
-  box-shadow: 0 24px 60px rgba(7, 10, 22, 0.28);
+.dark {
+  --vp-c-brand-1: #e8654e;
+  --vp-c-brand-2: #d4563f;
+  --vp-c-brand-3: #c04834;
+  --vp-code-lang-color: #b8bcc8;
+  --vp-home-hero-name-color: #f5f7fb;
+  --vp-home-hero-text-color: #d2d7e2;
 }
 
 .VPFeature {
@@ -22,22 +27,31 @@
   border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.hero-flow {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 2rem;
+/* Doc and home content images: open lightbox on click (see ImageLightbox.vue). */
+#VPContent .vp-doc img,
+#VPContent .VPHomeHero img.image-src {
+  cursor: zoom-in;
 }
 
-.hero-step {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1rem 1.1rem;
-  background: rgba(10, 12, 24, 0.38);
+/* Template docs: reference screenshots stay inside the prose column (no vw breakout — that overflows with the doc sidebar). */
+.vp-doc .template-doc-shot {
+  margin: 1.5rem 0 2.25rem;
+  padding: 0;
+  border: none;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.hero-step strong {
-  color: var(--vp-c-text-1);
+.vp-doc .template-doc-shot img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   display: block;
-  margin-bottom: 0.25rem;
+  border-radius: 14px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 12px 32px rgba(15, 18, 28, 0.1);
+}
+
+.dark .vp-doc .template-doc-shot img {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }

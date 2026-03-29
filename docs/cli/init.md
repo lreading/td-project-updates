@@ -1,57 +1,51 @@
-# `init`
+# init
 
-`init` scaffolds a new project directory.
-
-## Usage
+Scaffolds a new Slide Spec project.
 
 ```bash
-npx @slide-spec/cli init ./my-slides
+npx @slide-spec/cli init
 ```
 
-## Required inputs
+Running `init` without flags starts interactive mode, which walks you through project titles, reporting period, optional connector configuration, and branding.
 
-- project root
-- presentation id
-- title
-- from-date
+For CI or scripting, pass required flags directly:
 
-These can come from flags or the interactive prompt flow.
+```bash
+npx @slide-spec/cli init \
+  --presentation-id 2026-spring-briefing \
+  --title "Spring Product Brief" \
+  --subtitle "Spring 2026" \
+  --from-date 2026-03-01
+```
 
-## Common flags
+## Flags
 
-| Flag | Required | Notes |
+| Flag | Required | Description |
 | --- | --- | --- |
-| positional `project-root` | yes | Target directory for the project. |
-| `--project-root` | no | Named alternative to the positional argument. |
-| `--presentation-id` | no in interactive mode, yes otherwise | Creates `content/presentations/<id>/`. |
-| `--title` | no in interactive mode, yes otherwise | Presentation title. |
-| `--subtitle` | no | Presentation subtitle. |
-| `--from-date` | no in interactive mode, yes otherwise | Start of the reporting period. |
-| `--to-date` | no | End of the reporting period. |
-| `--summary` | no | Presentation summary used in the archive list. |
-| `--force` | no | Overwrite existing scaffold files for the same project/presentation. |
+| `[project-root]` (positional) | | Target directory. Defaults to current directory |
+| `--project-root` | | Alternative to the positional argument |
+| `--presentation-id` | non-interactive | Directory name under `presentations/` |
+| `--title` | non-interactive | Presentation title |
+| `--subtitle` | | Presentation subtitle |
+| `--from-date` | non-interactive | Reporting period start |
+| `--to-date` | | Reporting period end |
+| `--summary` | | Summary shown in the presentation list |
+| `--force` | | Overwrite existing files |
 
-## Interactive flow
-
-Interactive init collects essentials first, then offers optional advanced setup:
-
-- site title and presentation title
-- presentation id
-- period start/end
-- summary
-- optional GitHub data source
-- optional PAT creation
-- optional advanced branding/link fields
+"non-interactive" means required only when running with flags instead of prompts.
 
 ## Output
 
-`init` creates:
+Creates these files under `content/`:
 
-- `content/site.yaml`
-- `content/presentations/index.yaml`
-- `content/presentations/<presentation-id>/presentation.yaml`
-- `content/presentations/<presentation-id>/generated.yaml`
+```
+content/
+├── site.yaml
+├── presentations/
+│   ├── index.yaml
+│   └── <presentation-id>/
+│       ├── presentation.yaml
+│       └── generated.yaml
+```
 
-## Next step
-
-Run [validate](/cli/validate) before you build or serve.
+If `site.yaml` or `index.yaml` already exist, they are updated rather than overwritten (unless `--force` is used).

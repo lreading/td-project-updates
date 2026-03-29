@@ -1,55 +1,89 @@
 # Progress Timeline
 
-The `progress-timeline` template renders one roadmap stage against the full shared roadmap model.
+Focuses a single roadmap stage. The progress strip shows all four stages; detail columns show items and themes for the active stage only.
 
-![Progress timeline reference slide](/screenshots/template-progress-timeline-reference.png)
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-progress-timeline-reference.png" alt="Progress timeline slide showing roadmap stages with the active stage expanded" />
+</figure>
 
-## Example YAML
+## Example
+
+### Slide (in `presentation.yaml`)
 
 ```yaml
-template: progress-timeline
-enabled: true
-title: "Roadmap: Completed"
-subtitle: Delivered work
-content:
-  stage: completed
+- template: progress-timeline
+  enabled: true
+  title: "Roadmap: Completed"
+  subtitle: Delivered work
+  content:
+    stage: completed
 ```
 
-## Field reference
+### Roadmap data (in the same `presentation.yaml`, under `presentation:`)
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `title` | yes | string |
-| `subtitle` | no | string |
-| `content.stage` | yes | string |
+```yaml
+presentation:
+  roadmap:
+    agenda_label: Roadmap
+    deliverables_heading: Key deliverables
+    focus_areas_heading: Focus areas
+    footer_link_label: View roadmap on GitHub
+    sections:
+      completed:
+        label: Completed
+        summary: Work that shipped during this period.
+        items:
+          - Published a new starter kit for launch checklists.
+          - Added exportable PDF summaries.
+        themes:
+          - category: Operator UX
+            target: Make release review easier to audit.
+          - category: Exportability
+            target: Support polished handoff artifacts.
+      in-progress:
+        label: In Progress
+        summary: Active work continuing into the next cycle.
+        items:
+          - Hardening permission-aware dashboards.
+        themes:
+          - category: Access Control
+            target: Support larger teams with clearer roles.
+      planned:
+        label: Planned
+        summary: Scoped for the next cycle.
+        items:
+          - Environment-aware checklists for staging and production.
+        themes:
+          - category: Templates
+            target: Shorten setup time for common patterns.
+      future:
+        label: Future
+        summary: Depends on the current architecture pass.
+        items:
+          - Shared APIs for third-party integrations.
+        themes:
+          - category: Integrations
+            target: Easier embedding into existing workflows.
+```
 
-Allowed `content.stage` values:
+## Data sources
 
-- `completed`
-- `in-progress`
-- `planned`
-- `future`
+| Region | Source |
+| --- | --- |
+| Progress strip | All stages from `presentation.roadmap.sections` |
+| Active stage highlight | Matches `content.stage` |
+| Deliverables column | `roadmap.deliverables_heading` + `sections.<stage>.items` |
+| Focus areas column | `roadmap.focus_areas_heading` + `sections.<stage>.themes` |
+| Footer link | `roadmap.footer_link_label` with href `site.links.repository.url` |
 
-## Also rendered from `presentation.roadmap`
+If `subtitle` is omitted, the active stage's `summary` is used instead.
 
-- `agenda_label`
-- `deliverables_heading`
-- `focus_areas_heading`
-- `footer_link_label`
-- `sections.completed`
-- `sections.in-progress`
-- `sections.planned`
-- `sections.future`
+## Fields
 
-## Visible regions
+| Field | Required | Type | Values |
+| --- | --- | --- | --- |
+| `title` | yes | string | |
+| `subtitle` | | string | |
+| `content.stage` | yes | string | `completed`, `in-progress`, `planned`, `future` |
 
-1. Shared roadmap timeline with all four stages
-2. Active stage highlight from `content.stage`
-3. Stage summary from `presentation.roadmap.sections.<stage>.summary`
-4. Deliverables list from `items`
-5. Focus areas from `themes`
-
-## Omitted behavior
-
-- The template requires `presentation.roadmap`.
-- Only one stage is active per slide.
+The roadmap schema is documented in [presentation.yaml](/schema/presentation#roadmap).

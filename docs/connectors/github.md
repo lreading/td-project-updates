@@ -1,10 +1,10 @@
-# GitHub Connector
+# GitHub
 
-GitHub is the only built-in data source today.
+The GitHub connector populates `generated.yaml` with data from a GitHub repository.
 
-## Configure the source
+## Configuration
 
-Add this to `content/site.yaml`:
+Add a data source to `site.yaml`:
 
 ```yaml
 site:
@@ -13,35 +13,24 @@ site:
       url: https://github.com/OWNER/REPO
 ```
 
-Rules enforced by the validator:
+Then run [`fetch`](/cli/fetch) to populate `generated.yaml`.
 
-- `data_sources` must be an array
-- only one GitHub source is supported for fetch
-- the URL must point to `github.com`
+## What it collects
 
-## What the connector fetches
+- Star counts (current and previous period)
+- Issues closed in the date window
+- PRs merged in the date window
+- Releases published in the date window
+- Contributors with PR counts and first-time detection
 
-- repository metadata
-- releases
-- merged pull requests
-- closed issues
-- contributor history used for first-time contributor detection
-- star snapshots for the current and previous periods
+## Authentication
 
-## What still stays authored
+A GitHub personal access token (PAT) is strongly recommended. Without one, requests hit public rate limits and return less data.
 
-- roadmap narrative
-- spotlight summaries
-- community mentions
-- CTA copy
-- template structure
+The interactive `init` flow can save a token to `.env` for you.
 
-## Token guidance
+## Constraints
 
-- A PAT is recommended.
-- The CLI can continue without one, but rate-limiting or reduced coverage is more likely.
-- When provided interactively, the CLI can write the local `.env` file for you.
-
-## Current limitation
-
-Very large repositories can still make historical star snapshots expensive because exact star history is costly to reconstruct. The CLI records warnings and metadata when those snapshot paths become partial or unavailable.
+- One GitHub data source per project
+- URL must be on `github.com`
+- Very large repos may produce partial star history (the CLI warns when this happens)

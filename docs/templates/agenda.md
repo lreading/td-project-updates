@@ -1,38 +1,31 @@
 # Agenda
 
-The `agenda` template renders a derived list of enabled slides.
+Auto-generated table of contents. Each row comes from a later enabled slide in the deck. No `content` block needed.
 
-![Agenda reference slide](/screenshots/template-agenda-reference.png)
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-agenda-reference.png" alt="Agenda slide showing a list of upcoming slides" />
+</figure>
 
-## Visible regions
-
-1. Slide title from `slide.title`
-2. Optional subtitle from `slide.subtitle`
-3. Agenda items derived from the rest of the enabled slides
-4. Shared presentation chrome from `site.presentation_logo` and `site.presentation_chrome.mark_label`
-
-## Example YAML
+## Example
 
 ```yaml
-template: agenda
-enabled: true
-title: Agenda
-subtitle: What this briefing covers
-content: {}
+- template: agenda
+  enabled: true
+  title: Agenda
+  subtitle: What this briefing covers
 ```
 
-## Field reference
+## How rows are generated
 
-`agenda` has no template-specific `content` fields.
+Row labels come from each subsequent enabled slide's `title`. Two exceptions:
 
-Required slide envelope fields:
+- **Closing** slides use `content.heading` when `title` is omitted
+- The first **progress-timeline** slide uses `presentation.roadmap.agenda_label` instead of its `title`
+
+## Fields
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
-| `subtitle` | no | string |
-
-## Omitted behavior
-
-- If `subtitle` is omitted, the subtitle line is removed.
-- Disabled slides are not included in the generated agenda list.
+| `subtitle` | | string |
+| `content` | | Omit or `{}` |

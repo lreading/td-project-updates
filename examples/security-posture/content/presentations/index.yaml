@@ -1,0 +1,8 @@
+presentations:
+  - id: 2026-q1-posture
+    year: 2026
+    title: "Security Posture: Q1 2026"
+    subtitle: Sentinel Corp
+    summary: Vulnerability remediation, SOC 2 audit progress, and dependency supply chain improvements.
+    published: true
+    featured: true

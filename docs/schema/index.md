@@ -1,24 +1,14 @@
-# Schema Reference
+# Schema
 
-slide-spec uses four YAML documents:
+A Slide Spec project uses four YAML files (only the `.yaml` extension is supported):
 
-- `content/site.yaml`
-- `content/presentations/index.yaml`
-- `content/presentations/<id>/presentation.yaml`
-- `content/presentations/<id>/generated.yaml`
+| File | Purpose |
+| --- | --- |
+| `content/site.yaml` | Global branding, navigation, links |
+| `content/presentations/index.yaml` | Presentation registry |
+| `content/presentations/<id>/presentation.yaml` | Slides and authored content |
+| `content/presentations/<id>/generated.yaml` | Generated data from connectors or manual entry |
 
-The app validates all four documents together.
+`presentation.yaml` is what you write - your slides, titles, and content. `generated.yaml` holds data produced by a [connector](/connectors/) or authored by hand: metrics, releases, contributors. Keeping them separate means automation and humans never conflict.
 
-## Reading order
-
-1. [site.yaml](/schema/site)
-2. [presentations/index.yaml](/schema/presentations-index)
-3. [presentation.yaml](/schema/presentation)
-4. [generated.yaml](/schema/generated)
-
-## Important split
-
-- `presentation.yaml` is authored narrative and layout
-- `generated.yaml` is structured metric/release/contributor data
-
-That split is intentional. It keeps machine-produced data reviewable without mixing it into slide copy.
+Read in order: [site.yaml](/schema/site) → [presentations/index.yaml](/schema/presentations-index) → [presentation.yaml](/schema/presentation) → [generated.yaml](/schema/generated).

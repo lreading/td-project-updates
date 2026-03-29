@@ -1,74 +1,94 @@
-# Metrics And Links
+# Metrics and Links
 
-The `metrics-and-links` template combines generated metrics with authored community or ecosystem references.
+Two-column layout: authored mention cards on the left, metric tiles on the right. Metrics are pulled from `generated.stats` by key.
 
-![Metrics and links reference slide](/screenshots/template-metrics-and-links-reference.png)
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-metrics-and-links-reference.png" alt="Metrics and links slide showing mention cards and stat tiles" />
+</figure>
 
-## Visible regions
+## Example
 
-1. Slide title and optional subtitle
-2. Optional left-column section heading from `content.section_heading`
-3. One mention card per `content.mentions[]`
-4. Mention type label from `content.mentions[].type`
-5. Mention body from `content.mentions[].title`
-6. Optional mention link label from `content.mentions[].url_label`
-7. Optional right-column stats heading from `content.stats_heading`
-8. One metric card per key listed in `content.stat_keys`
-9. Metric value and label from `generated.stats.<metric>`
-10. Optional trend line from generated delta plus `content.trend_suffix`
-
-## Example YAML
+### Slide (in `presentation.yaml`)
 
 ```yaml
-template: metrics-and-links
-enabled: true
-title: Community activity
-subtitle: Signals pulled from generated data and authored references
-content:
-  section_heading: External signals
-  stats_heading: This period
-  trend_suffix: vs previous period
-  show_deltas: true
-  stat_keys:
-    - stars
-    - issues_closed
-    - prs_merged
-    - new_contributors
-  mentions:
-    - type: Case study
-      title: The customer rollout playbook now includes the new checklist workflow and export review cadence.
-      url_label: Read the guide
-      url: https://example.com/docs/rollout-playbook
+- template: metrics-and-links
+  enabled: true
+  title: Community activity
+  subtitle: Signals from generated data and authored references
+  content:
+    section_heading: External signals
+    stats_heading: This period
+    trend_suffix: vs previous period
+    show_deltas: true
+    stat_keys:
+      - stars
+      - issues_closed
+      - prs_merged
+      - new_contributors
+    mentions:
+      - type: Case study
+        title: The rollout playbook now includes the new checklist workflow.
+        url_label: Read the guide
+        url: https://example.com/docs/rollout-playbook
+      - type: Community post
+        title: Release overview on how teams use templates for consistent briefings.
+        url_label: Read the announcement
+        url: https://example.com/blog/spring-release
 ```
 
-## Field reference
+### Matching data (in `generated.yaml`)
+
+```yaml
+generated:
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 1840
+      previous: 1760
+      delta: 80
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    issues_closed:
+      label: Issues closed
+      current: 14
+      previous: 9
+      delta: 5
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+```
+
+## Data sources
+
+| Region | Source |
+| --- | --- |
+| Mentions column | `content.section_heading` + `mentions[]` |
+| Mention cards | `type` (eyebrow), `title`, optional `url_label` + `url` |
+| Stats column | `content.stats_heading` + one tile per `stat_keys[]` |
+| Metric tiles | `generated.stats.<key>`: `label`, `current`, `previous`, `delta` |
+| Trend line | Shown when `show_deltas` is true. Uses `delta`/`previous` + `trend_suffix` |
+
+## Fields
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
-| `subtitle` | no | string |
-| `content.section_heading` | no | string |
-| `content.stats_heading` | no | string |
-| `content.show_deltas` | no | boolean |
-| `content.trend_suffix` | no | string |
+| `subtitle` | | string |
 | `content.stat_keys` | yes | string[] |
 | `content.mentions` | yes | array |
+| `content.section_heading` | | string |
+| `content.stats_heading` | | string |
+| `content.show_deltas` | | boolean |
+| `content.trend_suffix` | | string |
 
 ### `content.mentions[]`
 
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `type` | yes | string | Small label on the mention card. |
-| `title` | yes | string | Main card copy. |
-| `url_label` | no | string | Must be paired with `url` when present. |
-| `url` | no | string | Must be paired with `url_label` when present. |
+| Field | Required | Type |
+| --- | --- | --- |
+| `type` | yes | string |
+| `title` | yes | string |
+| `url_label` | | string |
+| `url` | | string |
 
-## Also rendered from `generated.yaml`
-
-- metric keys named in `content.stat_keys`
-- each metric uses `label`, `current`, `previous`, `delta`, and `metadata`
-
-## Omitted behavior
-
-- If `show_deltas` is `false`, trend lines are hidden.
-- Mention cards without `url` and `url_label` remain non-clickable.
+`url` and `url_label` are paired: set both or omit both. Mentions without links render as plain text cards.

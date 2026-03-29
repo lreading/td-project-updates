@@ -1,41 +1,51 @@
 # Action Cards
 
-The `action-cards` template renders a grid of CTA cards with optional footer text.
+Grid of CTA cards with an optional footer strip.
 
-![Action cards reference slide](/screenshots/template-action-cards-reference.png)
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-action-cards-reference.png" alt="Action cards slide showing three CTA cards with descriptions and links" />
+</figure>
 
-## Visible regions
-
-1. Slide title and optional subtitle
-2. One surface card per `content.cards[]`
-3. Card title from `content.cards[].title`
-4. Card body from `content.cards[].description`
-5. Card action label from `content.cards[].url_label`
-6. Optional footer line from `content.footer_text`
-
-## Example YAML
+## Example
 
 ```yaml
-template: action-cards
-enabled: true
-title: How to help
-subtitle: Ways the wider team can support the next cycle
-content:
-  footer_text: Contribution options stay lightweight on purpose.
-  cards:
-    - title: Review docs
-      description: Tighten rollout notes, migration steps, and operator checklists before the next update ships.
-      url_label: Open docs backlog
-      url: https://example.com/docs/backlog
+- template: action-cards
+  enabled: true
+  title: How to help
+  subtitle: Ways to support the next cycle
+  content:
+    footer_text: Contribution options stay lightweight on purpose.
+    cards:
+      - title: Review docs
+        description: Tighten rollout notes and operator checklists.
+        url_label: Open docs backlog
+        url: https://example.com/docs/backlog
+      - title: Test templates
+        description: Run a project through the starter kit and note anything unclear.
+        url_label: Report feedback
+        url: https://example.com/feedback/templates
+      - title: Improve exports
+        description: Review PDFs and suggest spacing or readability improvements.
+        url_label: Share feedback
+        url: https://example.com/feedback/exports
 ```
 
-## Field reference
+## Data sources
+
+| Region | Source |
+| --- | --- |
+| Cards | `content.cards[]`: `title`, `description`, `url_label` / `url` |
+| Footer strip | Shown if `footer_text` or `site.links.repository` exists |
+| Footer text | `content.footer_text` |
+| Footer button | `site.links.repository.label` / `site.links.repository.url` |
+
+## Fields
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
-| `subtitle` | no | string |
-| `content.footer_text` | no | string |
+| `subtitle` | | string |
+| `content.footer_text` | | string |
 | `content.cards` | yes | array |
 
 ### `content.cards[]`
@@ -46,7 +56,3 @@ content:
 | `description` | yes | string |
 | `url_label` | yes | string |
 | `url` | yes | string |
-
-## Omitted behavior
-
-- If `footer_text` is omitted, the footer callout disappears.

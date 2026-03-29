@@ -1,0 +1,165 @@
+presentation:
+  id: 2026-q1-posture
+  year: 2026
+  title: "Security Posture: Q1 2026"
+  subtitle: Sentinel Corp
+  roadmap:
+    agenda_label: Security Roadmap
+    deliverables_heading: Completed initiatives
+    focus_areas_heading: Focus areas
+    footer_link_label: View security roadmap
+    sections:
+      completed:
+        label: Completed
+        summary: Closed in Q1 2026.
+        items:
+          - Migrated all services to automated dependency scanning
+          - Completed annual penetration test with zero critical findings
+          - Rolled out hardware security keys for all engineering staff
+        themes:
+          - category: Supply Chain
+            target: Eliminate unscanned dependencies from production.
+          - category: Authentication
+            target: Phishing-resistant credentials for all engineers.
+      in-progress:
+        label: In Progress
+        summary: Carrying into Q2.
+        items:
+          - SOC 2 Type II audit evidence collection
+          - Runtime application self-protection (RASP) pilot
+        themes:
+          - category: Compliance
+            target: Achieve SOC 2 Type II certification by Q3.
+          - category: Runtime Defense
+            target: Detect and block exploitation attempts in real time.
+      planned:
+        label: Planned
+        summary: Scoped for Q2.
+        items:
+          - Secrets rotation automation for all production services
+          - Bug bounty program launch
+          - SBOM generation for all release artifacts
+        themes:
+          - category: Secrets Management
+            target: Eliminate long-lived credentials from production.
+          - category: Community
+            target: Leverage external researchers for vulnerability discovery.
+      future:
+        label: Future
+        summary: Under evaluation.
+        items:
+          - Zero-trust network segmentation
+          - AI-assisted code review for security patterns
+        themes:
+          - category: Network
+            target: Limit lateral movement in the event of a breach.
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Security
+        title_accent: Posture
+        subtitle_prefix: Q1 2026
+        quote: Security is not a feature. It is a foundation.
+    - template: agenda
+      enabled: true
+      title: Agenda
+      subtitle: Quarterly security review
+    - template: section-list-grid
+      enabled: true
+      title: Key initiatives
+      subtitle: Security work completed in Q1
+      content:
+        sections:
+          - title: Dependency scanning
+            bullets:
+              - Automated scanning enabled on all 47 production services
+              - Zero unpatched critical CVEs in production dependencies
+              - Average remediation time reduced from 12 days to 3
+          - title: Penetration testing
+            bullets:
+              - Annual pentest completed by an external firm
+              - Zero critical findings, 3 medium findings remediated
+              - Attack surface mapping updated for all public endpoints
+          - title: Hardware security keys
+            bullets:
+              - YubiKey 5 series deployed to all 120 engineering staff
+              - Phishing-resistant WebAuthn enabled on all internal tools
+              - Legacy TOTP disabled for engineering accounts
+    - template: timeline
+      enabled: true
+      title: Security releases
+      subtitle: Patches and advisories from Q1
+      content:
+        latest_badge_label: Latest
+        footer_link_label: View all advisories
+        featured_release_ids:
+          - sa-2026-003
+          - sa-2026-002
+    - template: progress-timeline
+      enabled: true
+      title: "Roadmap: Completed"
+      subtitle: Q1 security initiatives
+      content:
+        stage: completed
+    - template: people
+      enabled: true
+      title: Security team
+      subtitle: People driving our security posture
+      content:
+        banner_prefix: Secured by
+        contributors_link_label: team members
+        banner_suffix: across engineering, compliance, and infrastructure.
+        spotlight:
+          - login: dana-appsec
+            summary: Led the dependency scanning rollout and reduced remediation time by 75%.
+          - login: raj-compliance
+            summary: Managed SOC 2 evidence collection and coordinated the external audit.
+          - login: yuki-infra
+            summary: Deployed hardware security keys and disabled legacy authentication.
+    - template: metrics-and-links
+      enabled: true
+      title: Security metrics
+      subtitle: Posture indicators for Q1
+      content:
+        section_heading: Compliance and audits
+        stats_heading: This quarter
+        trend_suffix: vs Q4 2025
+        show_deltas: true
+        stat_keys:
+          - vulnerabilities_remediated
+          - mean_time_to_patch
+          - compliance_controls
+          - audit_findings
+        mentions:
+          - type: Audit
+            title: "SOC 2 Type II readiness assessment scored 94% control coverage."
+          - type: Certification
+            title: "ISO 27001 certification renewed for another year."
+            url_label: View certificate
+            url: https://sentinel.example.com/compliance/iso27001
+    - template: action-cards
+      enabled: true
+      title: Remediation priorities
+      subtitle: What needs attention in Q2
+      content:
+        footer_text: Security is everyone's responsibility.
+        cards:
+          - title: Secrets rotation
+            description: Identify and rotate all long-lived credentials in production services by end of Q2.
+            url_label: View the plan
+            url: https://sentinel.example.com/security/secrets-rotation
+          - title: Bug bounty prep
+            description: Review scope, rules, and reward tiers before the public launch.
+            url_label: Draft program
+            url: https://sentinel.example.com/security/bug-bounty-draft
+          - title: SBOM generation
+            description: Integrate SBOM generation into CI/CD for all release pipelines.
+            url_label: Implementation guide
+            url: https://sentinel.example.com/security/sbom-guide
+    - template: closing
+      enabled: true
+      content:
+        heading: Stay vigilant
+        message: Q1 showed strong progress. Q2 is about building on that foundation with automation and external validation.
+        quote: Defense in depth, every layer matters.

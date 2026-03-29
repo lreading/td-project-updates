@@ -1,14 +1,8 @@
-# Tutorial Example
+# Tutorial
 
-This tutorial creates a small presentation project from scratch and shows exactly what to edit.
+Build a full presentation from scratch. The YAML shown here matches the [reference project](https://github.com/lreading/slide-spec/tree/main/docs/fixtures/reference-project) in the repo.
 
-The final reference project used for the docs lives under:
-
-- `docs/fixtures/reference-project/`
-
-The walkthrough below is the human-readable version of that same project.
-
-## Step 1: Scaffold the project
+## 1. Scaffold
 
 ```bash
 npx @slide-spec/cli init ./acorn-cloud-updates \
@@ -19,18 +13,16 @@ npx @slide-spec/cli init ./acorn-cloud-updates \
   --to-date 2026-05-31
 ```
 
-## Step 2: Add branding assets
+## 2. Add branding assets
 
-Create:
+Place logos in `content/assets/`:
 
 - `content/assets/slide-spec-logo.svg`
 - `content/assets/slide-spec-mascot.svg`
 
-Local assets are the easiest option because they build and serve without external dependencies.
+Local paths avoid network calls during build.
 
-## Step 3: Replace `content/site.yaml`
-
-Update the scaffolded file so it looks like this:
+## 3. Edit `content/site.yaml`
 
 ```yaml
 site:
@@ -104,7 +96,7 @@ site:
       eyebrow: Website
 ```
 
-## Step 4: Replace `content/presentations/index.yaml`
+## 4. Edit `content/presentations/index.yaml`
 
 ```yaml
 presentations:
@@ -117,56 +109,29 @@ presentations:
     featured: true
 ```
 
-## Step 5: Author `presentation.yaml`
+## 5. Edit `presentation.yaml`
 
-The full tutorial file is longer than this page should duplicate. Use the tracked reference file directly:
+Copy from the reference fixture. It includes one slide per template with full roadmap data:
 
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
+[`presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
 
-That file shows:
+## 6. Edit `generated.yaml`
 
-- one slide per current template
-- global roadmap data
-- authored slide titles, subtitles, and content blocks
+Use the reference fixture for stable hand-authored metrics, releases, and contributors:
 
-## Step 6: Author `generated.yaml`
+[`presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
 
-This tutorial uses hand-authored generated data so the example stays stable.
-
-Use:
-
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
-
-That file demonstrates:
-
-- `period`
-- `previous_presentation_id`
-- complete metric metadata
-- releases
-- contributors
-- merged pull requests
-
-## Step 7: Validate
+## 7. Validate, build, serve
 
 ```bash
 npx @slide-spec/cli validate ./acorn-cloud-updates
-```
-
-## Step 8: Build
-
-```bash
 npx @slide-spec/cli build ./acorn-cloud-updates
-```
-
-## Step 9: Serve
-
-```bash
 npx @slide-spec/cli serve ./acorn-cloud-updates
 ```
 
-## Optional Step 10: Add a GitHub source later
+## Adding GitHub data later
 
-If you later want generated metrics from GitHub, add:
+Replace hand-authored `generated.yaml` with live data by adding a connector:
 
 ```yaml
 site:
@@ -175,10 +140,4 @@ site:
       url: https://github.com/OWNER/REPO
 ```
 
-Then run `fetch`.
-
-## What this tutorial proves
-
-- You can author every visible part of the site from YAML.
-- You do not need a GitHub source to use slide-spec.
-- The app still validates and builds cleanly from manually-authored generated data.
+Then run [`fetch`](/cli/fetch) to populate `generated.yaml` automatically.

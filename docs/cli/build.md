@@ -1,29 +1,20 @@
-# `build`
+# build
 
-`build` produces a static site.
-
-## Usage
+Generates a static site into `dist/`.
 
 ```bash
-npx @slide-spec/cli build ./my-slides
+npx @slide-spec/cli build
 ```
 
-With sitemap generation:
+## Flags
 
-```bash
-npx @slide-spec/cli build ./my-slides --deployment-url https://updates.example.com
-```
+| Flag | Description |
+| --- | --- |
+| `[project-root]` (positional) | Target project. Defaults to current directory |
+| `--deployment-url <url>` | Public URL for sitemap generation |
 
 ## Output
 
-- writes `<project-root>/dist`
-- always generates `robots.txt`
-- generates `sitemap.xml` only when a real deployment URL is provided
-
-The build output is static HTML, CSS, and JS. No backend is required.
-
-## Notes
-
-- `build` uses the packaged runtime shipped with the CLI.
-- The target project does not need a local copy of the app source.
-- If no deployment URL is configured, the build does not generate a sitemap.
+- `dist/` - static HTML, CSS, and JS. Host anywhere.
+- `robots.txt` - always generated
+- `sitemap.xml` - generated when a deployment URL is provided via `--deployment-url` or `site.yaml`'s `deployment_url` field (with `sitemap_enabled: true`)

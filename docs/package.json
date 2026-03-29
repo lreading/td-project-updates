@@ -1,15 +1,23 @@
 {
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "node --import tsx scripts/generate-site-files.ts && vitepress build",
     "preview": "vitepress preview",
     "screenshots": "node --import tsx scripts/generate-doc-assets.ts",
+    "a11y": "npm run build && playwright test",
+    "a11y:install": "playwright install chromium",
     "spellcheck": "npx -y cspell@9.7.0 lint \"README.md\" \"**/*.md\" --gitignore --config ../.cspell.json",
     "verify": "npm run build && npm run spellcheck"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.58.2",
     "playwright": "^1.55.0",
     "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
     "vitepress": "^1.6.4"
   }
 }

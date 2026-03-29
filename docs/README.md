@@ -17,7 +17,12 @@ VitePress site for Slide Spec covering schema reference, templates, CLI usage, a
 | `npm run spellcheck` | Spelling check |
 | `npm run verify` | Standard gate (build + spellcheck) |
 
-## Quality gates
+Accessibility check (build + axe against `vitepress preview`):
+
+```bash
+npx playwright install chromium   # first time
+npm run a11y
+```
 
 `npm run verify` before you push.
 

@@ -1,26 +1,20 @@
-# `generated.yaml`
+# generated.yaml
 
-This file contains structured data for metrics, releases, contributors, and merged pull requests.
+Generated data for a presentation - metrics, releases, and contributors. Populated by a [connector](/connectors/) or authored by hand.
 
-It can be authored manually or populated by the CLI.
+For a complete example, see the [reference generated.yaml](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml).
 
-## Example
+## Top level
 
-See the full reference file:
-
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
-
-## Root fields
-
-| Field | Required | Type |
-| --- | --- | --- |
-| `generated.id` | yes | string |
-| `generated.period` | yes | object |
-| `generated.previous_presentation_id` | no | string |
-| `generated.stats` | yes | object |
-| `generated.releases` | yes | array |
-| `generated.contributors` | yes | object |
-| `generated.merged_prs` | no | array |
+| Field | Required | Type | Description |
+| --- | --- | --- | --- |
+| `generated.id` | yes | string | Must match the presentation id |
+| `generated.period` | yes | object | Reporting period |
+| `generated.stats` | yes | object | Metric values keyed by id |
+| `generated.releases` | yes | array | Release entries |
+| `generated.contributors` | yes | object | Contributor data |
+| `generated.previous_presentation_id` | | string | Links to the prior presentation for comparison |
+| `generated.merged_prs` | | array | Merged pull request entries |
 
 ## `generated.period`
 
@@ -31,14 +25,7 @@ See the full reference file:
 
 ## `generated.stats`
 
-`stats` is a record keyed by metric id. The current UI commonly uses keys like:
-
-- `stars`
-- `issues_closed`
-- `prs_merged`
-- `new_contributors`
-
-Each metric object uses the same shape:
+An object where each key is a metric id (e.g. `stars`, `issues_closed`, `stories_completed`). Key names are arbitrary - use whatever fits your data. Each value:
 
 | Field | Required | Type |
 | --- | --- | --- |
@@ -48,32 +35,39 @@ Each metric object uses the same shape:
 | `delta` | yes | number |
 | `metadata` | yes | object |
 
-### `generated.stats.<metric>`
+### `metadata`
 
-| Field | Required | Type | Notes |
+| Field | Required | Type | Values |
 | --- | --- | --- | --- |
-| `label` | yes | string | Human-facing label used by metric slides. |
-| `current` | yes | number | Current-period value. |
-| `previous` | yes | number | Previous-period value or fallback/unavailable placeholder. |
-| `delta` | yes | number | `current - previous`. |
-| `metadata` | yes | object | Comparison metadata used for audit/debugging. |
+| `comparison_status` | yes | string | `complete`, `partial`, `skipped`, `unavailable` |
+| `warning_codes` | yes | string[] | Empty array when no warnings |
 
-### `generated.stats.<metric>.metadata`
+Example:
 
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `comparison_status` | yes | string | One of `complete`, `partial`, `skipped`, or `unavailable`. |
-| `warning_codes` | yes | string[] | Machine-readable warnings for the metric. |
+```yaml
+generated:
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 1840
+      previous: 1760
+      delta: 80
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+```
 
-## `generated.releases[]`
+## `generated.releases`
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `id` | yes | string |
-| `version` | yes | string |
-| `published_at` | yes | string |
-| `url` | yes | string |
-| `summary_bullets` | yes | string[] |
+Array of release objects. The validator checks that `releases` is an array. Expected shape for each entry:
+
+| Field | Description |
+| --- | --- |
+| `id` | Unique release id (referenced by timeline slides) |
+| `version` | Display version string |
+| `published_at` | Publication date |
+| `url` | Link to the release |
+| `summary_bullets` | Array of summary strings |
 
 ## `generated.contributors`
 
@@ -82,27 +76,29 @@ Each metric object uses the same shape:
 | `total` | yes | number |
 | `authors` | yes | array |
 
-### `generated.contributors.authors[]`
+The validator checks structure only. Expected shape for each author:
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `login` | yes | string |
-| `name` | yes | string |
-| `avatar_url` | yes | string |
-| `merged_prs` | yes | number |
-| `first_time` | yes | boolean |
+| Field | Description |
+| --- | --- |
+| `login` | Username or handle |
+| `name` | Display name |
+| `avatar_url` | Avatar image URL |
+| `merged_prs` | Number of merged PRs or completed items |
+| `first_time` | Whether this is a first-time contributor |
 
-## `generated.merged_prs[]`
+## `generated.merged_prs`
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `number` | yes | number |
-| `title` | yes | string |
-| `merged_at` | yes | string |
-| `author_login` | yes | string |
+Optional. If present, must be an array. Expected shape per entry:
+
+| Field | Description |
+| --- | --- |
+| `number` | Item number |
+| `title` | Item title |
+| `merged_at` | Completion date |
+| `author_login` | Author's username |
 
 ## Notes
 
-- `generated.yaml` is not required to come from the GitHub connector.
-- The live validator only checks the shape, not the semantic truth of the values.
-- If you hand-author this file, keep labels and metric keys consistent with the slide content that consumes them.
+- The `id` in `generated.yaml` must match the presentation's `id` in both `presentation.yaml` and `index.yaml`
+- Keep metric keys aligned with `stat_keys` in any [metrics-and-links](/templates/metrics-and-links) slide that references them
+- This file does not have to come from a connector - hand-author it with data from any source

@@ -1,99 +1,157 @@
-# `presentation.yaml`
+# presentation.yaml
 
-This file defines authored presentation content and slide order.
+Defines the authored slide content and deck structure.
 
-## Example
+For a complete example, see the [reference presentation.yaml](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml).
 
-See the full reference file:
+## Top level
 
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
+| Field | Required | Type | Description |
+| --- | --- | --- | --- |
+| `presentation.id` | yes | string | Matches the directory name and index entry |
+| `presentation.title` | yes | string | Deck title |
+| `presentation.subtitle` | yes | string | Deck subtitle |
+| `presentation.year` | | number | Optional year |
+| `presentation.roadmap` | | object | Roadmap data for progress-timeline slides |
+| `presentation.slides` | yes | array | Ordered list of slides |
 
-## Root fields
+## Roadmap
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `presentation.id` | yes | string |
-| `presentation.year` | no | number |
-| `presentation.title` | yes | string |
-| `presentation.subtitle` | yes | string |
-| `presentation.roadmap` | no | object |
-| `presentation.slides` | yes | array |
-
-## `presentation.roadmap`
+When present, `roadmap` provides data for [progress-timeline](/templates/progress-timeline) slides and the agenda's roadmap row.
 
 | Field | Required | Type |
 | --- | --- | --- |
-| `agenda_label` | no | string |
-| `deliverables_heading` | no | string |
-| `focus_areas_heading` | no | string |
-| `footer_link_label` | no | string |
-| `sections` | yes | object |
+| `roadmap.agenda_label` | | string |
+| `roadmap.deliverables_heading` | | string |
+| `roadmap.focus_areas_heading` | | string |
+| `roadmap.footer_link_label` | | string |
+| `roadmap.sections` | yes | object |
 
-### `presentation.roadmap.sections`
+### `roadmap.sections`
 
-Required keys:
+Must contain exactly four keys:
 
-- `completed`
-- `in-progress`
-- `planned`
-- `future`
+| Key | Required |
+| --- | --- |
+| `completed` | yes |
+| `in-progress` | yes |
+| `planned` | yes |
+| `future` | yes |
 
-Each stage object uses:
+Each section:
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `label` | yes | string |
 | `summary` | yes | string |
 | `items` | yes | string[] |
-| `themes` | yes | array |
+| `themes` | yes | array of `{ category, target }` |
 
-Each `themes[]` item uses:
+Each `themes[]` entry has `category` (string, required) and `target` (string, required).
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `category` | yes | string |
-| `target` | yes | string |
+## Slides
 
-## `presentation.slides[]`
+Each slide in the `slides` array:
 
-Every slide shares the same envelope:
-
-| Field | Required | Type | Notes |
+| Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `template` | yes | string | Must be a supported template id. |
-| `enabled` | yes | boolean | Disabled slides are skipped by the renderer. |
-| `title` | sometimes | string | Required by most templates except `hero` and `closing`. |
-| `subtitle` | no | string | Optional template subtitle. |
-| `content` | yes | object | Template-specific content block. |
+| `template` | yes | string | One of the [nine template ids](/templates/) |
+| `enabled` | yes | boolean | Disabled slides are skipped |
+| `title` | varies | string | Required by most templates |
+| `subtitle` | | string | Optional on all templates |
+| `content` | varies | object | Shape depends on `template`. Required for all except `agenda` |
 
-Current template ids:
+## Template content validation
 
-- `hero`
-- `agenda`
-- `section-list-grid`
-- `timeline`
-- `progress-timeline`
-- `people`
-- `metrics-and-links`
-- `action-cards`
-- `closing`
+Each template enforces specific rules on `title` and `content`. Full authoring details are on each [template page](/templates/). The tables below summarize what the validator requires.
 
-## Template-specific `content`
+### hero
 
-The `content` block is different for each template. Those fields are fully documented on the matching template pages:
+| Field | Required | Notes |
+| --- | --- | --- |
+| `content.title_primary` | | At least one of `title_primary` or `title_accent` required |
+| `content.title_accent` | | |
+| `content.subtitle_prefix` | | |
+| `content.quote` | | |
 
-- [Hero](/templates/hero)
-- [Agenda](/templates/agenda)
-- [Section List Grid](/templates/section-list-grid)
-- [Timeline](/templates/timeline)
-- [Progress Timeline](/templates/progress-timeline)
-- [People](/templates/people)
-- [Metrics and Links](/templates/metrics-and-links)
-- [Action Cards](/templates/action-cards)
-- [Closing](/templates/closing)
+Slide-level `title` is not required.
 
-## Validation notes
+### agenda
 
-- `template` must be one of the supported template ids.
-- Template-specific required fields are enforced.
-- Empty optional fields may be omitted.
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content` | | Omit entirely or pass `{}`. Row text comes from other slides |
+
+### section-list-grid
+
+| Field | Required |
+| --- | --- |
+| `title` | yes |
+| `content.sections` | yes |
+
+Each `sections[]` entry: `{ title: string, bullets: string[] }`.
+
+### timeline
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.featured_release_ids` | yes | Array of release id strings (can be empty) |
+| `content.latest_badge_label` | | |
+| `content.footer_link_label` | | |
+| `content.empty_state_title` | | |
+| `content.empty_state_message` | | |
+
+### progress-timeline
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.stage` | yes | `completed`, `in-progress`, `planned`, or `future` |
+
+### people
+
+| Field | Required |
+| --- | --- |
+| `title` | yes |
+| `content.spotlight` | yes |
+| `content.banner_prefix` | |
+| `content.contributors_link_label` | |
+| `content.banner_suffix` | |
+
+Each `spotlight[]` entry: `{ login: string, summary: string }`.
+
+### metrics-and-links
+
+| Field | Required |
+| --- | --- |
+| `title` | yes |
+| `content.stat_keys` | yes |
+| `content.mentions` | yes |
+| `content.section_heading` | |
+| `content.stats_heading` | |
+| `content.show_deltas` | |
+| `content.trend_suffix` | |
+
+Each `mentions[]` entry: `{ type: string, title: string }` with optional paired `url` + `url_label`.
+
+### action-cards
+
+| Field | Required |
+| --- | --- |
+| `title` | yes |
+| `content.cards` | yes |
+| `content.footer_text` | |
+
+Each `cards[]` entry: `{ title, description, url_label, url }` (all required strings).
+
+### closing
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `content.heading` | yes | |
+| `content.message` | yes | |
+| `content.quote` | | |
+
+Slide-level `title` is not required.

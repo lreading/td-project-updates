@@ -1,34 +1,72 @@
 # People
 
-The `people` template renders a contributor spotlight slide.
+Contributor spotlight cards. Each `spotlight` entry is resolved against `generated.contributors.authors[]` for display name and avatar.
 
-![People reference slide](/screenshots/template-people-reference.png)
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-people-reference.png" alt="People slide showing contributor spotlight cards with avatars and summaries" />
+</figure>
 
-## Example YAML
+## Example
+
+### Slide (in `presentation.yaml`)
 
 ```yaml
-template: people
-enabled: true
-title: Contributor spotlight
-subtitle: Three contributors whose work clearly shaped this cycle
-content:
-  banner_prefix: Thanks to
-  contributors_link_label: contributors
-  banner_suffix: who handled product delivery, export polish, and rollout docs this season.
-  spotlight:
-    - login: ava-product
-      summary: Defined the starter-kit structure and coordinated the rollout checklist overhaul.
+- template: people
+  enabled: true
+  title: Contributor spotlight
+  subtitle: Contributors who shaped this cycle
+  content:
+    banner_prefix: Thanks to
+    contributors_link_label: contributors
+    banner_suffix: who drove this release forward.
+    spotlight:
+      - login: ava-product
+        summary: Defined the starter-kit structure and led the checklist overhaul.
+      - login: mo-rendering
+        summary: Improved export polish and PDF spacing.
+      - login: ren-docs
+        summary: Reworked migration notes for faster team adoption.
 ```
 
-## Field reference
+### Matching data (in `generated.yaml`)
+
+```yaml
+generated:
+  contributors:
+    total: 5
+    authors:
+      - login: ava-product
+        name: Ava Product
+        avatar_url: https://avatars.githubusercontent.com/u/1?v=4
+        merged_prs: 7
+        first_time: false
+      - login: mo-rendering
+        name: Mo Rendering
+        avatar_url: https://avatars.githubusercontent.com/u/2?v=4
+        merged_prs: 4
+        first_time: false
+```
+
+## Data sources
+
+| Region | Source |
+| --- | --- |
+| Cards | One per `spotlight[]`. Name from matching `authors[].name` (falls back to `login`) |
+| Avatar | `authors[].avatar_url` |
+| Summary | `spotlight[].summary` |
+| GitHub link | `https://github.com/{login}` |
+| Banner | `banner_prefix` + linked `{total} {contributors_link_label}` + `banner_suffix` |
+| Banner link | `site.links.repository.url/graphs/contributors` |
+
+## Fields
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
-| `subtitle` | no | string |
-| `content.banner_prefix` | no | string |
-| `content.contributors_link_label` | no | string |
-| `content.banner_suffix` | no | string |
+| `subtitle` | | string |
+| `content.banner_prefix` | | string |
+| `content.contributors_link_label` | | string |
+| `content.banner_suffix` | | string |
 | `content.spotlight` | yes | array |
 
 ### `content.spotlight[]`
@@ -38,19 +76,4 @@ content:
 | `login` | yes | string |
 | `summary` | yes | string |
 
-## Also rendered from `generated.yaml`
-
-- `generated.contributors.total`
-- `generated.contributors.authors[]`
-
-## Visible regions
-
-1. Banner prefix, contributors link, and suffix
-2. Contributor card title from generated contributor name/login
-3. Summary quote from `content.spotlight[].summary`
-4. Profile link built from the contributor login
-
-## Omitted behavior
-
-- If banner fields are omitted, the banner disappears.
-- Spotlight entries only control which contributors are featured and what summary text is shown.
+If a `login` has no match in `generated.contributors.authors[]`, the card renders using the login as the display name.

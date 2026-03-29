@@ -1,43 +1,23 @@
-# Manual Data Example
+# Manual Data
 
-You do not need GitHub to use slide-spec.
+Slide Spec does not require a connector. Author `generated.yaml` yourself when metrics come from spreadsheets, internal tools, or other systems.
 
-The current app treats `generated.yaml` as a structured data source, not as a file that must come from the CLI. That means you can create it yourself if your metrics come from somewhere else.
+## When to use this
 
-Good fits for a manual-data project:
+- Internal briefings with data from Jira, Linear, or other trackers
+- Repos hosted outside GitHub
+- Any pipeline that exports numbers you can map into the schema
 
-- internal product briefings
-- customer rollout decks
-- projects hosted outside GitHub
-- teams that export stats from another system
+## Workflow
 
-## Manual data workflow
+1. Run [`init`](/cli/init)
+2. Edit `site.yaml`, `presentations/index.yaml`, and `presentation.yaml`
+3. Write `generated.yaml` by hand (or generate it from your own pipeline)
+4. Run [`validate`](/cli/validate), then [`build`](/cli/build) or [`serve`](/cli/serve)
 
-1. Run `init`.
-2. Author `site.yaml`, `presentations/index.yaml`, and `presentation.yaml`.
-3. Write `generated.yaml` yourself.
-4. Run `validate`.
-5. Run `build` or `serve`.
+## Example `generated.yaml` snippet
 
-## Example data sources that are not GitHub
-
-- CSV exports from analytics tools
-- issue counts from Jira or Linear
-- release notes from an internal release process
-- contributor summaries from a spreadsheet or people-ops report
-
-## Remote asset example
-
-Local assets are recommended, but remote URLs are supported. Example:
-
-```yaml
-site:
-  presentation_logo:
-    url: https://raw.githubusercontent.com/lreading/slide-spec/main/app/public/slide-spec-mark.svg
-    alt: Slide Spec logo
-```
-
-## Manual metrics example
+Metric ids are arbitrary. Use whatever fits your data source:
 
 ```yaml
 generated:
@@ -46,16 +26,29 @@ generated:
     start: 2026-03-01
     end: 2026-05-31
   stats:
-    stars:
-      label: GitHub Stars
-      current: 1840
-      previous: 1760
-      delta: 80
+    issues_closed:
+      label: Issues closed
+      current: 14
+      previous: 9
+      delta: 5
       metadata:
         comparison_status: complete
         warning_codes: []
+  releases: []
+  contributors:
+    total: 0
+    authors: []
 ```
 
-The full reference file is here:
+For the full shape, see the [generated.yaml schema](/schema/generated) or the [reference fixture](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml).
 
-- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
+## Assets
+
+Prefer local files under `content/assets/`. HTTPS URLs work when you need a hosted image:
+
+```yaml
+site:
+  presentation_logo:
+    url: https://cdn.example.com/brand/logo.svg
+    alt: Company logo
+```
