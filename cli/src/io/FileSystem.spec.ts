@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
@@ -30,5 +30,38 @@ describe('NodeFileSystem', () => {
     const nestedFilePath = join(directory, 'nested', 'written.txt')
     await fileSystem.writeTextFile(nestedFilePath, 'written content')
     await expect(fileSystem.readTextFile(nestedFilePath)).resolves.toBe('written content')
+  })
+
+  it('copies directories and reports whether a directory exists', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'td-cli-fs-copy-'))
+    temporaryDirectories.push(tempDir)
+
+    const sourceDir = join(tempDir, 'source')
+    const destDir = join(tempDir, 'dest')
+    await mkdir(join(sourceDir, 'subdir'), { recursive: true })
+    await writeFile(join(sourceDir, 'subdir', 'file.txt'), 'copied content', 'utf8')
+
+    const fileSystem = new NodeFileSystem()
+
+    await fileSystem.copyDirectory(sourceDir, destDir)
+
+    await expect(fileSystem.fileExists(join(destDir, 'subdir', 'file.txt'))).resolves.toBe(true)
+    await expect(fileSystem.directoryExists(destDir)).resolves.toBe(true)
+    await expect(fileSystem.directoryExists(join(tempDir, 'nonexistent'))).resolves.toBe(false)
+  })
+
+  it('removes directories recursively', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'td-cli-fs-rm-'))
+    temporaryDirectories.push(tempDir)
+
+    const targetDir = join(tempDir, 'target')
+    await mkdir(join(targetDir, 'nested'), { recursive: true })
+    await writeFile(join(targetDir, 'nested', 'file.txt'), 'to be deleted', 'utf8')
+
+    const fileSystem = new NodeFileSystem()
+
+    await expect(fileSystem.directoryExists(targetDir)).resolves.toBe(true)
+    await fileSystem.removeDirectory(targetDir)
+    await expect(fileSystem.directoryExists(targetDir)).resolves.toBe(false)
   })
 })

@@ -69,3 +69,14 @@ export interface ValidateContentResult {
   valid: boolean
   errors: string[]
 }
+
+export interface InitFromExampleInput {
+  projectRoot?: string
+  exampleId: string
+  force?: boolean
+}
+
+export interface InitFromExampleResult {
+  exampleId: string
+  targetPath: string
+}

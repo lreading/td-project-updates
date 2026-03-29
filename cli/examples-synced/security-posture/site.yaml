@@ -1,0 +1,62 @@
+site:
+  title: Sentinel Security Reports
+  project_badge:
+    label: Confidential
+    fa_icon: fa-shield-halved
+    icon_position: before
+  presentation_logo:
+    url: https://api.dicebear.com/9.x/shapes/svg?seed=sentinel-logo
+    alt: Sentinel logo
+  navigation:
+    brand_title: Sentinel Security
+    home_label: Home
+    presentations_label: Reports
+    latest_presentation_label: Latest Report
+    toggle_label: Toggle navigation
+  presentation_chrome:
+    mark_label: Sentinel Corp
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
+  home_hero:
+    title_primary: Sentinel
+    title_accent: Security
+    subtitle: Posture Reports
+  home_intro: Quarterly security posture reports for Sentinel Corp engineering and leadership.
+  home_cta_label: View latest report
+  presentations_cta_label: View all reports
+  presentations_page:
+    title: All reports
+    search_label: Search
+    search_placeholder: Search reports...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open report
+    empty_title: No matching reports
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    page_of_label: of
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: report
+    presentation_plural_label: reports
+  links:
+    repository:
+      label: Security Dashboard
+      url: https://sentinel.example.com/security
+      eyebrow: Internal
+    docs:
+      label: Security Policies
+      url: https://sentinel.example.com/policies
+      eyebrow: Documentation
+    owasp:
+      label: OWASP Top 10
+      url: https://owasp.org/www-project-top-ten/
+      eyebrow: Reference

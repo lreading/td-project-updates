@@ -31,6 +31,14 @@ class MemoryFileSystem implements FileSystem {
   public async writeTextFile(path: string, content: string): Promise<void> {
     this.writes.set(path, content)
   }
+
+  public async directoryExists(_path: string): Promise<boolean> {
+    return false
+  }
+
+  public async copyDirectory(_source: string, _destination: string): Promise<void> {}
+
+  public async removeDirectory(_path: string): Promise<void> {}
 }
 
 function createService(): TdCliService {
@@ -38,6 +46,10 @@ function createService(): TdCliService {
     initPresentation: vi.fn().mockResolvedValue({
       presentationId: '2026-q1',
       createdPaths: [],
+    }),
+    initFromExample: vi.fn().mockResolvedValue({
+      exampleId: 'open-source-update',
+      targetPath: '/workspace/project/content',
     }),
     fetchPresentationData: vi.fn(),
     buildSite: vi.fn(),
@@ -88,6 +100,7 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
       promptSecret: vi.fn().mockResolvedValueOnce('secret-token'),
       promptBoolean: vi.fn()
+        .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true)
@@ -156,6 +169,7 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('2026-04-01')
         .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
       promptBoolean: vi.fn()
+        .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(false)
@@ -217,6 +231,7 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
       promptSecret: vi.fn().mockResolvedValue('new-token'),
       promptBoolean: vi.fn()
+        .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(false)
@@ -251,6 +266,34 @@ describe('InteractiveInitFlow', () => {
       repositoryUrl: 'https://github.com/OWASP/threat-dragon',
       githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
       force: false,
+    })
+  })
+
+  it('runs the from-example path and serves after init', async () => {
+    const service = createService()
+    const output = createOutput()
+    const prompter = createPrompter({
+      promptBoolean: vi.fn()
+        .mockResolvedValueOnce(true)   // Start from an example?
+        .mockResolvedValueOnce(false)  // Overwrite existing content
+        .mockResolvedValueOnce(true),  // Start local server
+      promptOptional: vi.fn()
+        .mockResolvedValueOnce('/workspace/project'),  // project root
+      promptRequired: vi.fn()
+        .mockResolvedValueOnce('open-source-update'),  // example ID
+    })
+
+    const flow = new InteractiveInitFlow(service, output, prompter, new MemoryFileSystem())
+
+    await expect(flow.run()).resolves.toBeUndefined()
+
+    expect(service.initFromExample).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
+      exampleId: 'open-source-update',
+    })
+    expect(service.serveSite).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
+      open: true,
     })
   })
 })

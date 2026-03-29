@@ -11,6 +11,10 @@ function createService(): TdCliService {
       presentationId: '2026-q1',
       createdPaths: [],
     }),
+    initFromExample: vi.fn().mockResolvedValue({
+      exampleId: 'open-source-update',
+      targetPath: '/tmp/content',
+    }),
     fetchPresentationData: vi.fn().mockResolvedValue({
       presentationId: '2026-q1',
       generatedPath: '/tmp/generated.yaml',
@@ -141,6 +145,7 @@ describe('CliCommandRunner', () => {
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01'),
       promptBoolean: vi.fn()
+        .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(false),
@@ -537,6 +542,46 @@ describe('CliCommandRunner', () => {
     expect(output.error).toHaveBeenCalledWith(
       'Missing required options: --presentation-id, --from-date.',
     )
+  })
+
+  it('runs init from example when --from-example <id> is passed', async () => {
+    const service = createService()
+    const output = createOutput()
+    const runner = new CliCommandRunner(service, output, createPrompter())
+
+    await expect(runner.run(['init', '--from-example', 'open-source-update'])).resolves.toBe(0)
+    expect(service.initFromExample).toHaveBeenCalledWith({ exampleId: 'open-source-update' })
+    expect(output.info).toHaveBeenCalledWith('Initialized from example "open-source-update".')
+  })
+
+  it('rejects unknown example ids', async () => {
+    const service = createService()
+    const output = createOutput()
+    const runner = new CliCommandRunner(service, output, createPrompter())
+
+    await expect(runner.run(['init', '--from-example', 'not-a-real-example'])).resolves.toBe(1)
+    expect(output.error).toHaveBeenCalledWith(expect.stringContaining('Unknown example'))
+  })
+
+  it('rejects --from-example combined with blank-project flags', async () => {
+    const service = createService()
+    const output = createOutput()
+    const runner = new CliCommandRunner(service, output, createPrompter())
+
+    await expect(runner.run(['init', '--from-example', 'open-source-update', '--title', 'My Title'])).resolves.toBe(1)
+    expect(output.error).toHaveBeenCalledWith(expect.stringContaining('--from-example cannot be combined'))
+  })
+
+  it('prompts for example id when --from-example is passed without a value', async () => {
+    const service = createService()
+    const output = createOutput()
+    const prompter = createPrompter({
+      promptRequired: vi.fn().mockResolvedValueOnce('open-source-update'),
+    })
+    const runner = new CliCommandRunner(service, output, prompter)
+
+    await expect(runner.run(['init', '--from-example'])).resolves.toBe(0)
+    expect(service.initFromExample).toHaveBeenCalledWith({ exampleId: 'open-source-update' })
   })
 
   it('supports a positional project root and rejects mixing it with --project-root', async () => {
