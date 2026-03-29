@@ -35,6 +35,20 @@ export class CliPackagePaths {
     return runtimeTemplateRoot
   }
 
+  public getExamplesRoot(): string {
+    const candidates = [
+      resolve(this.packageRoot, 'dist', 'examples'),
+      resolve(this.packageRoot, 'examples-synced'),
+    ]
+    const examplesRoot = candidates.find((candidate) => existsSync(candidate))
+
+    if (!examplesRoot) {
+      throw new Error('Missing bundled examples. Rebuild the CLI package before using --from-example.')
+    }
+
+    return examplesRoot
+  }
+
   private findPackageRoot(): string {
     const searchStart = dirname(fileURLToPath(import.meta.url))
     const candidates = [

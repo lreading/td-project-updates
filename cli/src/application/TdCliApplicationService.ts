@@ -1,3 +1,4 @@
+import { ExampleRegistry } from '../examples/ExampleRegistry'
 import { ContentConfigLoader } from '../config/ContentConfigLoader'
 import { DataSourceResolver } from '../config/DataSourceResolver'
 import { EnvLoader } from '../config/EnvLoader'
@@ -23,6 +24,8 @@ import type {
   BuildSiteResult,
   FetchPresentationDataInput,
   FetchPresentationDataResult,
+  InitFromExampleInput,
+  InitFromExampleResult,
   InitPresentationInput,
   InitPresentationResult,
   ServeSiteInput,
@@ -52,6 +55,7 @@ interface TdCliApplicationServiceOptions {
   browserOpener?: BrowserOpener
   fileSystem?: FileSystem
   logger?: CliLogger
+  exampleRegistry?: ExampleRegistry
 }
 
 export class TdCliApplicationService implements TdCliService {
@@ -73,6 +77,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly browserOpener: BrowserOpener
   private readonly fileSystem: FileSystem
   private readonly logger: CliLogger | undefined
+  private readonly exampleRegistry: ExampleRegistry
 
   public constructor(options: TdCliApplicationServiceOptions = {}) {
     this.defaultProjectRoot = options.projectRoot ?? process.cwd()
@@ -96,6 +101,7 @@ export class TdCliApplicationService implements TdCliService {
     this.contentValidator = options.contentValidator ?? new ProjectContentValidator()
     this.browserOpener = options.browserOpener ?? new BrowserOpener()
     this.fileSystem = options.fileSystem ?? new NodeFileSystem()
+    this.exampleRegistry = options.exampleRegistry ?? new ExampleRegistry()
   }
 
   public async initPresentation(input: InitPresentationInput): Promise<InitPresentationResult> {
@@ -153,6 +159,27 @@ export class TdCliApplicationService implements TdCliService {
     return {
       presentationId: input.presentationId,
       createdPaths,
+    }
+  }
+
+  public async initFromExample(input: InitFromExampleInput): Promise<InitFromExampleResult> {
+    const paths = this.getPaths(input.projectRoot)
+    const targetContentPath = paths.getContentRoot()
+    const exampleContentPath = this.exampleRegistry.resolveContentPath(input.exampleId)
+
+    if (await this.fileSystem.directoryExists(targetContentPath) && !input.force) {
+      throw new Error('content/ already exists. Use --force to overwrite.')
+    }
+
+    if (input.force) {
+      await this.fileSystem.removeDirectory(targetContentPath)
+    }
+
+    await this.fileSystem.copyDirectory(exampleContentPath, targetContentPath)
+
+    return {
+      exampleId: input.exampleId,
+      targetPath: targetContentPath,
     }
   }
 

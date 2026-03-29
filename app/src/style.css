@@ -8,10 +8,6 @@
 @import "@fontsource/roboto-mono/latin-700.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --page-background: #121824;
   --panel-background: rgba(18, 24, 36, 0.92);

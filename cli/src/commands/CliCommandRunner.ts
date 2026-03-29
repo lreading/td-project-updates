@@ -2,6 +2,7 @@ import { TdCliApplicationService } from '../application/TdCliApplicationService'
 import { ReadlineCliPrompter } from './CliPrompter'
 import { InteractiveInitFlow } from './InteractiveInitFlow'
 import { LogSanitizer } from '../logging/LogSanitizer'
+import { ExampleRegistry } from '../examples/ExampleRegistry'
 
 import type { TdCliService } from '../application/TdCliService'
 import type { CliCommandName, CliPrompter } from './CliPrompter'
@@ -30,6 +31,7 @@ export class CliCommandRunner {
   private readonly interactiveInitFlow: InteractiveInitFlow
   private readonly logger: CliLogger | undefined
   private readonly sanitizer: LogSanitizer
+  private readonly exampleRegistry: ExampleRegistry
 
   public constructor(
     private readonly service: TdCliService = new TdCliApplicationService(),
@@ -39,6 +41,7 @@ export class CliCommandRunner {
   ) {
     this.logger = logger
     this.sanitizer = new LogSanitizer()
+    this.exampleRegistry = new ExampleRegistry()
     this.interactiveInitFlow = new InteractiveInitFlow(
       this.service,
       this.output,
@@ -240,8 +243,49 @@ export class CliCommandRunner {
 
   private async runInit(args: string[]): Promise<void> {
     const parsed = this.parseCommandInput(args)
-    const required = this.requireStringOptions(parsed.options, ['presentation-id', 'title', 'from-date'])
     const projectRoot = this.readProjectRoot(parsed)
+    const fromExample = parsed.options['from-example']
+
+    if (fromExample !== undefined) {
+      const conflictingFlags = ['presentation-id', 'title', 'from-date', 'subtitle', 'to-date', 'summary']
+      const conflicting = conflictingFlags.filter((key) => parsed.options[key] !== undefined)
+      if (conflicting.length > 0) {
+        const flags = conflicting.map((key) => `--${key}`).join(', ')
+        throw new Error(
+          `--from-example cannot be combined with blank-project flags: ${flags}. These flags target the blank-project flow.`,
+        )
+      }
+
+      const force = this.readBooleanOption(parsed.options, 'force')
+
+      let exampleId: string
+      if (typeof fromExample === 'string') {
+        // --from-example <id>: validate and use directly
+        if (!this.exampleRegistry.findById(fromExample)) {
+          const ids = this.exampleRegistry.getAll().map((e) => e.id).join(', ')
+          throw new Error(`Unknown example "${fromExample}". Available examples: ${ids}.`)
+        }
+        exampleId = fromExample
+      } else {
+        // --from-example with no value: interactive selection
+        const examples = this.exampleRegistry.getAll()
+        this.info('Available examples:')
+        examples.forEach((example, index) => {
+          this.info(`  ${index + 1}. ${example.id} — ${example.description}`)
+        })
+        exampleId = await this.promptExampleId(examples)
+      }
+
+      await this.service.initFromExample({
+        ...(projectRoot !== undefined ? { projectRoot } : {}),
+        exampleId,
+        ...(force !== undefined ? { force } : {}),
+      })
+      this.info(`Initialized from example "${exampleId}".`)
+      return
+    }
+
+    const required = this.requireStringOptions(parsed.options, ['presentation-id', 'title', 'from-date'])
     const force = this.readBooleanOption(parsed.options, 'force')
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const summary = this.readStringOption(parsed.options, 'summary')
@@ -257,6 +301,17 @@ export class CliCommandRunner {
       ...(force !== undefined ? { force } : {}),
     })
     this.info(`Initialized ${result.presentationId}`)
+  }
+
+  private async promptExampleId(examples: Array<{ id: string }>): Promise<string> {
+    const validIds = examples.map((e) => e.id)
+    while (true) {
+      const value = await this.prompter.promptRequired('Example ID')
+      if (validIds.includes(value)) {
+        return value
+      }
+      this.info(`Unknown example "${value}". Valid IDs: ${validIds.join(', ')}`)
+    }
   }
 
   private async runInteractiveInit(): Promise<void> {
@@ -490,7 +545,7 @@ export class CliCommandRunner {
     switch (topic) {
       case 'init':
         return [
-          `Usage: ${CLI_BIN_NAME} init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--repository-url <url>] [--docs-url <url>] [--website-url <url>] [--github-data-source-url <url>] [--force]`,
+          `Usage: ${CLI_BIN_NAME} init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--repository-url <url>] [--docs-url <url>] [--website-url <url>] [--github-data-source-url <url>] [--force] [--from-example [id]]`,
           '',
           'Create a new presentation scaffold with starter presentation and generated YAML files.',
           'Use this before fetch when you are starting a new presentation id.',
@@ -513,10 +568,12 @@ export class CliCommandRunner {
           '  --website-url <url>           Optional. Project website/foundation link for site links',
           '  --github-data-source-url <url> Optional. GitHub repository to import stats from',
           '  --force                       Optional. Overwrite scaffold files if the presentation already exists',
+          '  --from-example [id]           Optional. Scaffold from a bundled example. Run without a value to list options.',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} init`,
           `  ${CLI_BIN_NAME} init /path/to/project --presentation-id 2026-apr --title "Community Update" --from-date 2026-04-01 --to-date 2026-04-30`,
+          `  ${CLI_BIN_NAME} init --from-example open-source-update`,
         ].join('\n')
       case 'fetch':
         return [
@@ -619,7 +676,7 @@ export class CliCommandRunner {
       `  ${CLI_BIN_NAME} <command> --help`,
       '',
       'Commands:',
-      '  init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force]',
+      '  init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force] [--from-example [id]]',
       '    Create a new presentation scaffold with starter presentation and generated YAML files. Run `init` with no flags for an interactive essentials-first prompt.',
       '  fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--dry-run]',
       '    Pull GitHub-derived metrics and write generated data for an existing presentation.',

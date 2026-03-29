@@ -10,11 +10,12 @@
   },
   "files": [
     "dist",
+    "dist/examples",
     "README.md"
   ],
   "scripts": {
     "cli": "node --import tsx src/index.ts",
-    "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && tsup src/index.ts --format esm --dts --out-dir dist --clean && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template",
+    "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && node --import tsx scripts/sync-examples.ts --out examples-synced && tsup src/index.ts --format esm --dts --out-dir dist --clean && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template && node --import tsx scripts/sync-examples.ts --out dist/examples",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
@@ -37,10 +38,10 @@
     "autoprefixer": "^10.4.27",
     "dotenv": "^17.2.3",
     "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^3.4.19",
     "vite": "^8.0.2",
     "vue": "^3.5.30",
-    "vue-router": "^5.0.3",
+    "vue-router": "^5.0.4",
     "yaml": "^2.8.3"
   },
   "devDependencies": {

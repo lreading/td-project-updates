@@ -3,7 +3,9 @@ import { FileSystemPaths } from '../io/FileSystemPaths'
 import { NodeFileSystem } from '../io/FileSystem'
 import { GitHubRepositoryValidator } from '../github/GitHubRepositoryValidator'
 import { LogSanitizer } from '../logging/LogSanitizer'
+import { ExampleRegistry } from '../examples/ExampleRegistry'
 
+import type { ExampleDefinition } from '../examples/ExampleRegistry'
 import type { CliOutput } from './CliCommandRunner'
 import type { CliPrompter } from './CliPrompter'
 import type { CliLogger } from '../logging/CliLogger.types'
@@ -14,6 +16,7 @@ export class InteractiveInitFlow {
   private readonly repositoryValidator: GitHubRepositoryValidator
   private readonly logger: CliLogger | undefined
   private readonly sanitizer: LogSanitizer
+  private readonly exampleRegistry: ExampleRegistry
 
   public constructor(
     private readonly service: TdCliService,
@@ -22,16 +25,29 @@ export class InteractiveInitFlow {
     private readonly fileSystem: FileSystem = new NodeFileSystem(),
     repositoryValidator?: GitHubRepositoryValidator,
     logger?: CliLogger,
+    exampleRegistry?: ExampleRegistry,
   ) {
     this.repositoryValidator = repositoryValidator ?? new GitHubRepositoryValidator({
       ...(logger ? { logger } : {}),
     })
     this.logger = logger
     this.sanitizer = new LogSanitizer()
+    this.exampleRegistry = exampleRegistry ?? new ExampleRegistry()
   }
 
   public async run(): Promise<void> {
     this.info('Interactive init creates a minimal scaffold first, then lets you fill in optional details.')
+
+    const fromExample = await this.promptBoolean(
+      'Start from an example? Choose "n" to scaffold a blank project.',
+      'Start from an example',
+      false,
+    )
+
+    if (fromExample) {
+      await this.runFromExample()
+      return
+    }
 
     const projectRoot = await this.promptOptional(
       'Target presentation project root. Leave blank to use the current working directory.',
@@ -139,6 +155,62 @@ export class InteractiveInitFlow {
         open: true,
       })
       this.info(`Serving at ${serveResult.url}`)
+    }
+  }
+
+  private async runFromExample(): Promise<void> {
+    const examples = this.exampleRegistry.getAll()
+    this.info('Available examples:')
+    examples.forEach((example, index) => {
+      this.info(`  ${index + 1}. ${example.id} — ${example.description}`)
+    })
+
+    const projectRoot = await this.promptOptional(
+      'Target project root. Leave blank to use the current working directory.',
+      'Project root (optional)',
+    )
+
+    const exampleId = await this.promptExampleId(examples)
+
+    const force = await this.promptBoolean(
+      'Overwrite the existing content/ directory if it already exists.',
+      'Overwrite existing content',
+      false,
+    )
+
+    await this.service.initFromExample({
+      ...(projectRoot !== undefined ? { projectRoot } : {}),
+      exampleId,
+      ...(force ? { force } : {}),
+    })
+
+    this.info(`Initialized from example "${exampleId}".`)
+
+    const shouldServe = await this.promptBoolean(
+      'Start the local server now so you can review what was created?',
+      'Start local server',
+      true,
+    )
+
+    if (shouldServe) {
+      const serveResult = await this.service.serveSite({
+        ...(projectRoot !== undefined ? { projectRoot } : {}),
+        open: true,
+      })
+      this.info(`Serving at ${serveResult.url}`)
+    }
+  }
+
+  private async promptExampleId(examples: ExampleDefinition[]): Promise<string> {
+    const validIds = examples.map((e) => e.id)
+    this.info(`Available example IDs: ${validIds.join(', ')}`)
+
+    while (true) {
+      const value = await this.prompter.promptRequired('Example ID')
+      if (validIds.includes(value)) {
+        return value
+      }
+      this.info(`Unknown example "${value}". Valid IDs: ${validIds.join(', ')}`)
     }
   }
 

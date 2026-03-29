@@ -3,6 +3,8 @@ import type {
   BuildSiteResult,
   FetchPresentationDataInput,
   FetchPresentationDataResult,
+  InitFromExampleInput,
+  InitFromExampleResult,
   InitPresentationInput,
   InitPresentationResult,
   ServeSiteInput,
@@ -13,6 +15,7 @@ import type {
 
 export interface TdCliService {
   initPresentation(input: InitPresentationInput): Promise<InitPresentationResult>
+  initFromExample(input: InitFromExampleInput): Promise<InitFromExampleResult>
   fetchPresentationData(input: FetchPresentationDataInput): Promise<FetchPresentationDataResult>
   buildSite(input: BuildSiteInput): Promise<BuildSiteResult>
   serveSite(input: ServeSiteInput): Promise<ServeSiteResult>

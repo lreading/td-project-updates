@@ -37,4 +37,26 @@ describe('CliPackagePaths', () => {
       'Missing embedded runtime template. Rebuild the CLI package before using build or serve.',
     )
   })
+
+  it('prefers the built examples and falls back to the synced examples', async () => {
+    const root = resolve(tmpdir(), `oss-slides-paths-examples-${Date.now()}`)
+    tempRoots.push(root)
+    await mkdir(resolve(root, 'dist', 'examples'), { recursive: true })
+
+    const paths = new CliPackagePaths(root)
+    expect(paths.getExamplesRoot()).toBe(resolve(root, 'dist', 'examples'))
+
+    await rm(resolve(root, 'dist'), { recursive: true, force: true })
+    await mkdir(resolve(root, 'examples-synced'), { recursive: true })
+    expect(paths.getExamplesRoot()).toBe(resolve(root, 'examples-synced'))
+  })
+
+  it('fails clearly when no bundled examples exist', () => {
+    const root = resolve(tmpdir(), `oss-slides-paths-examples-missing-${Date.now()}`)
+    const paths = new CliPackagePaths(root)
+
+    expect(() => paths.getExamplesRoot()).toThrow(
+      'Missing bundled examples. Rebuild the CLI package before using --from-example.',
+    )
+  })
 })

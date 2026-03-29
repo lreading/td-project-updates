@@ -25,6 +25,13 @@ class MemoryFileSystem implements FileSystem {
   public writeTextFile(_path: string, _content: string): Promise<void> {
     return Promise.resolve()
   }
+  public async directoryExists(_path: string): Promise<boolean> {
+    return false
+  }
+
+  public async copyDirectory(_source: string, _destination: string): Promise<void> {}
+
+  public async removeDirectory(_path: string): Promise<void> {}
 }
 
 describe('ContentConfigLoader', () => {

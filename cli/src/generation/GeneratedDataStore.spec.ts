@@ -31,6 +31,13 @@ class MemoryFileSystem implements FileSystem {
     this.files.set(path, content)
     return Promise.resolve()
   }
+  public async directoryExists(_path: string): Promise<boolean> {
+    return false
+  }
+
+  public async copyDirectory(_source: string, _destination: string): Promise<void> {}
+
+  public async removeDirectory(_path: string): Promise<void> {}
 }
 
 describe('GeneratedDataStore', () => {

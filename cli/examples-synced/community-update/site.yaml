@@ -1,0 +1,69 @@
+site:
+  title: Prism Community Updates
+  mascot:
+    url: https://api.dicebear.com/9.x/bottts-neutral/svg?seed=prism
+    alt: Prism mascot
+  project_badge:
+    label: Community
+    fa_icon: fa-users
+    icon_position: before
+  presentation_logo:
+    url: https://api.dicebear.com/9.x/shapes/svg?seed=prism-logo
+    alt: Prism logo
+  navigation:
+    brand_title: Prism Community
+    home_label: Home
+    presentations_label: Updates
+    latest_presentation_label: Latest Update
+    toggle_label: Toggle navigation
+  attribution:
+    enabled: true
+    label: Powered by Slide Spec
+    url: https://github.com/lreading/slide-spec
+  presentation_chrome:
+    mark_label: Prism Collective
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
+  home_hero:
+    title_primary: Prism
+    title_accent: Community
+    subtitle: DevRel Updates
+  home_intro: Quarterly community updates from the Prism Collective developer relations team.
+  home_cta_label: View latest update
+  presentations_cta_label: View all updates
+  presentations_page:
+    title: All updates
+    search_label: Search
+    search_placeholder: Search updates...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open update
+    empty_title: No matching updates
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    page_of_label: of
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: update
+    presentation_plural_label: updates
+  links:
+    repository:
+      label: GitHub
+      url: https://github.com/example/prism
+      eyebrow: Source Code
+    docs:
+      label: Community Hub
+      url: https://community.prism.example.com
+      eyebrow: Forum
+    owasp:
+      label: Events
+      url: https://prism.example.com/events
+      eyebrow: Calendar

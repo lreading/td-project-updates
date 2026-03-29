@@ -136,6 +136,7 @@ class StubReportingPeriodResolver {
 
 class MemoryFileSystem implements FileSystem {
   public readonly writes = new Map<string, string>()
+  public readonly removedDirectories: string[] = []
 
   public fileExists(_path: string): Promise<boolean> {
     return Promise.resolve(false)
@@ -148,6 +149,38 @@ class MemoryFileSystem implements FileSystem {
   public writeTextFile(path: string, content: string): Promise<void> {
     this.writes.set(path, content)
     return Promise.resolve()
+  }
+
+  public async directoryExists(_path: string): Promise<boolean> {
+    return false
+  }
+
+  public async copyDirectory(_source: string, _destination: string): Promise<void> {
+    // no-op
+  }
+
+  public async removeDirectory(path: string): Promise<void> {
+    this.removedDirectories.push(path)
+  }
+}
+
+class TrackingFileSystem extends MemoryFileSystem {
+  public readonly copies: Array<{ source: string; destination: string }> = []
+
+  public override async copyDirectory(source: string, destination: string): Promise<void> {
+    this.copies.push({ source, destination })
+  }
+}
+
+class ExistsDirectoryFileSystem extends TrackingFileSystem {
+  public override async directoryExists(_path: string): Promise<boolean> {
+    return true
+  }
+}
+
+class StubExampleRegistry {
+  public resolveContentPath(id: string): string {
+    return `/bundled/examples/${id}`
   }
 }
 
@@ -431,6 +464,61 @@ describe('TdCliApplicationService', () => {
     })
 
     expect(presentationIndexStore.writes).toHaveLength(0)
+  })
+
+  it('initFromExample copies the example content to the target project root', async () => {
+    const fileSystem = new TrackingFileSystem()
+    const exampleRegistry = new StubExampleRegistry()
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      fileSystem,
+      exampleRegistry: exampleRegistry as never,
+    })
+
+    const result = await service.initFromExample({ exampleId: 'open-source-update' })
+
+    expect(result).toEqual({
+      exampleId: 'open-source-update',
+      targetPath: '/repo/content',
+    })
+    expect(fileSystem.copies).toEqual([
+      { source: '/bundled/examples/open-source-update', destination: '/repo/content' },
+    ])
+  })
+
+  it('initFromExample refuses if content/ already exists without --force', async () => {
+    const fileSystem = new ExistsDirectoryFileSystem()
+    const exampleRegistry = new StubExampleRegistry()
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      fileSystem,
+      exampleRegistry: exampleRegistry as never,
+    })
+
+    await expect(service.initFromExample({ exampleId: 'open-source-update' })).rejects.toThrow(
+      'content/ already exists. Use --force to overwrite.',
+    )
+  })
+
+  it('initFromExample overwrites with --force even when content/ exists', async () => {
+    const fileSystem = new ExistsDirectoryFileSystem()
+    const exampleRegistry = new StubExampleRegistry()
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      fileSystem,
+      exampleRegistry: exampleRegistry as never,
+    })
+
+    const result = await service.initFromExample({ exampleId: 'open-source-update', force: true })
+
+    expect(result).toEqual({
+      exampleId: 'open-source-update',
+      targetPath: '/repo/content',
+    })
+    expect(fileSystem.removedDirectories).toEqual(['/repo/content'])
+    expect(fileSystem.copies).toEqual([
+      { source: '/bundled/examples/open-source-update', destination: '/repo/content' },
+    ])
   })
 
   it('builds to dist, serves built assets, and validates content directly', async () => {
