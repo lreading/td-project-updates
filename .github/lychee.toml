@@ -1,1 +1,2 @@
 verbose = "info"
+exclude = ["TODO-demo-url", "TODO-docs-url"]
