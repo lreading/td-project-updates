@@ -1,75 +1,86 @@
-# slide-spec
+<div align="center">
 
-[![Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
-[![TypeScript](https://img.shields.io/badge/code-TypeScript-3178c6.svg)](https://www.typescriptlang.org/)
-[![Vue 3](https://img.shields.io/badge/ui-Vue%203-42b883.svg)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/build-Vite-646cff.svg)](https://vite.dev/)
-[![Vitest](https://img.shields.io/badge/tests-Vitest-6e9f18.svg)](https://vitest.dev/)
-[![Playwright](https://img.shields.io/badge/e2e-Playwright-2ead33.svg)](https://playwright.dev/)
-[![Accessibility](https://img.shields.io/badge/accessibility-automated%20audit%20passing-2ea44f.svg)](./docs/meta/accessibility.md)
+# Slide Spec
+
+**Create beautiful slides from YAML, not PowerPoint.**
+
+<img src="assets/slide-spec-logo.svg" width="140" alt="Slide Spec logo" />
+
+[![npm](https://img.shields.io/npm/v/@slide-spec/cli)](https://www.npmjs.com/package/@slide-spec/cli)
+[![CI](https://img.shields.io/github/actions/workflow/status/lreading/slide-spec/main.yml?branch=main&label=CI)](https://github.com/lreading/slide-spec/actions/workflows/main.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235/badge)](https://www.bestpractices.dev/projects/12235)
 
-slide-spec is a data-driven slide system for community updates, roadmap reviews, and other recurring presentation decks.
+<!-- TODO: replace placeholder URLs for demo and docs once deployed -->
+[Live Demo](https://TODO-demo-url) · [Docs](https://TODO-docs-url) · [Example YAML](content/)
 
-It is built around three ideas:
-- authored YAML is the source of truth
-- generated data comes from scripts and CLI fetches
-- the app stays static so it can be deployed anywhere without a backend
+![](assets/readme-demo.mp4)
 
-Start here:
-- docs site: [docs/](./docs/)
-- docs workflow: [docs/README.md](./docs/README.md)
-- quickstart: [docs/quickstart.md](./docs/quickstart.md)
-- app guide: [app/README.md](./app/README.md)
-- CLI guide: [cli/README.md](./cli/README.md)
-- shared types: [shared/README.md](./shared/README.md)
+</div>
 
-## Project Layout
+<img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-- `app/`: Vue 3 presentation app and local dev server
-- `cli/`: standalone authoring CLI for init, fetch, build, serve, and validate
-- `shared/`: shared types and validation used by both app and CLI
-- `content/`: authored presentation data and generated outputs
-- `docs/`: VitePress docs site
-- `agents/`: implementation plans and work tracking
+Slide Spec turns structured YAML into a static slide deck you can host anywhere. Keep your presentations in the same repo as your code, reviewable in PRs and diffable like everything else.
 
-## Quickstart
+- Write slides as structured YAML you can diff, lint, and generate
+- Build a static site you can deploy to GitHub Pages, S3, or any CDN
+- No proprietary file formats or authoring tools
+- Validation baked into CI for a GitOps workflow
 
-If you want to see the UI right away:
+<img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-1. `cd app`
-2. `npm install`
-3. `npm run dev`
+## ⚡ Quickstart
 
-If you want to work on the authoring flow:
+Prereqs: Node 22+ and npm.
 
-1. `cd cli`
-2. `npm install`
-3. `npm run verify`
-4. `npm run build`
+```sh
+npx @slide-spec/cli init ./my-deck
+npx @slide-spec/cli serve ./my-deck
+```
 
-For the CLI usage and project-root workflow, see [cli/README.md](./cli/README.md).
-For the app commands and visual-regression gate, see [app/README.md](./app/README.md).
-For shared schema/validation helpers, see [shared/README.md](./shared/README.md).
+Open the URL printed in your terminal. You should have a working deck in under two minutes.
 
-## Quality Gates
+From there, edit the YAML under `my-deck/content/`, then validate and build:
 
-- `cd app && npm run verify`
-- `cd app && npm run coverage`
-- `cd app && npm run e2e`
-- `cd app && npm run a11y`
-- `cd app && npm run visual`
-- `cd cli && npm run verify`
-- `cd cli && npm run coverage`
-- `cd cli && npm run semgrep`
-- `cd cli && npm run spellcheck`
-- `cd docs && npm run verify`
+```sh
+npx @slide-spec/cli validate ./my-deck
+npx @slide-spec/cli build ./my-deck      # outputs to ./my-deck/dist
+```
 
-## Content Model
+Pass `--deployment-url` to `build` for `sitemap.xml` generation.
 
-- `content/site.yaml`: site-wide branding, links, and UX copy
-- `content/presentations/index.yaml`: presentation registry
-- `content/presentations/<id>/presentation.yaml`: authored slides and template content
-- `content/presentations/<id>/generated.yaml`: fetched/generated data
+<img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-The docs site under `docs/` is the long-form reference for schema, templates, connectors, and CLI usage.
+## Repository layout
+
+Monorepo with independent packages. Each has its own README with setup, development, and testing details.
+
+| Directory | Purpose | |
+|---|---|---|
+| [`app/`](app/) | Vue 3 + Vite presentation renderer | [README](app/README.md) |
+| [`cli/`](cli/) | Scaffold, validate, build, and serve | [README](cli/README.md) |
+| [`docs/`](docs/) | VitePress documentation site | [README](docs/README.md) |
+| [`shared/`](shared/) | Shared TypeScript types and validation | [README](shared/README.md) |
+| [`content/`](content/) | YAML for this repo's own slide decks | |
+
+<img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
+
+## Releases
+
+Slide Spec follows [semver](https://semver.org). The CLI is published to npm as [`@slide-spec/cli`](https://www.npmjs.com/package/@slide-spec/cli).
+
+> ⚠️ **v0 / alpha** - the project is pre-1.0 and minor versions may contain breaking changes without prior deprecation. Pin your version if you need stability.
+
+Tagged commits on `main` trigger the release pipeline. CI runs all quality gates, publishes to npm, and attaches a source tarball to the [GitHub release](https://github.com/lreading/slide-spec/releases).
+
+<img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to report bugs, request features, and submit code.
+
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
+
+## License
+
+[Apache 2.0](LICENSE)

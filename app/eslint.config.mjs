@@ -14,7 +14,14 @@ export default tseslint.config(
     ignores: ['coverage/**', 'dist/**'],
   },
   {
-    files: ['e2e/**/*.ts', 'playwright.config.ts'],
+    files: [
+      'e2e/**/*.ts',
+      'playwright.config.ts',
+      'playwright.visual.config.ts',
+      'playwright.demo.config.ts',
+      'playwright.readme-gif.config.ts',
+      'playwright.readme-cli.config.ts',
+    ],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       ecmaVersion: 'latest',
@@ -32,7 +39,14 @@ export default tseslint.config(
   },
   {
     files: ['**/*.{ts,mts,cts,tsx}'],
-    ignores: ['e2e/**/*.ts', 'playwright.config.ts'],
+    ignores: [
+      'e2e/**/*.ts',
+      'playwright.config.ts',
+      'playwright.visual.config.ts',
+      'playwright.demo.config.ts',
+      'playwright.readme-gif.config.ts',
+      'playwright.readme-cli.config.ts',
+    ],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       ecmaVersion: 'latest',

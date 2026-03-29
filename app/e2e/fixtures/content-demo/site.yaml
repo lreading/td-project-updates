@@ -1,15 +1,15 @@
 site:
   title: Acorn Cloud Updates
   mascot:
-    url: content/assets/slide-spec-mascot.svg
-    alt: Slide Spec mascot
+    url: content/assets/cupcake-mascot.png
+    alt: Demo mascot
   project_badge:
     label: YAML-First Slides
     fa_icon: fa-code
     icon_position: before
   presentation_logo:
-    url: content/assets/slide-spec-logo.svg
-    alt: Slide Spec logo
+    url: content/assets/cupcake-logo.png
+    alt: Demo logo
   navigation:
     brand_title: Acorn Cloud Updates
     home_label: Home
@@ -18,7 +18,7 @@ site:
     toggle_label: Toggle navigation
   attribution:
     enabled: true
-    label: Powered by Slide Spec
+    label: Powered by slide-spec
     url: https://github.com/lreading/slide-spec
   presentation_chrome:
     mark_label: Acorn Cloud
@@ -31,10 +31,10 @@ site:
     shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
     shortcut_help_dismiss_label: Do not show again
   home_hero:
-    title_primary: Acorn
-    title_accent: Cloud
-    subtitle: Product Briefings
-  home_intro: Team updates and product briefings, published from YAML with a static build.
+    title_primary: Quarterly
+    title_accent: Roadmap
+    subtitle: Product review
+  home_intro: Neutral demo content for screen recordings and README walkthroughs (no third-party product names).
   home_cta_label: View latest presentation
   presentations_cta_label: View all presentations
   presentations_page:
@@ -56,14 +56,14 @@ site:
     presentation_plural_label: presentations
   links:
     repository:
-      label: Product Repo
-      url: https://github.com/example/acorn-cloud
+      label: slide-spec
+      url: https://github.com/lreading/slide-spec
       eyebrow: Source Code
     docs:
-      label: User Docs
-      url: https://example.com/docs
-      eyebrow: Documentation
+      label: Documentation
+      url: https://github.com/lreading/slide-spec/tree/main/docs
+      eyebrow: Docs
     owasp:
-      label: Community Hub
-      url: https://example.com/community
-      eyebrow: Website
+      label: Discussions
+      url: https://github.com/lreading/slide-spec/discussions
+      eyebrow: Community
