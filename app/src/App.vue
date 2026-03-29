@@ -12,9 +12,13 @@ const syncFullscreenState = (): void => {
   fullscreenActive.value = Boolean(document.fullscreenElement)
 }
 
-const showChrome = computed(
-  () => !(route.name === 'presentation' && fullscreenActive.value),
-)
+const showChrome = computed(() => {
+  if (route.name !== 'presentation') {
+    return true
+  }
+
+  return !(fullscreenActive.value || route.query.mode === 'presentation')
+})
 
 onMounted(() => {
   syncFullscreenState()

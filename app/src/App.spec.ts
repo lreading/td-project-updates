@@ -34,7 +34,7 @@ describe('App', () => {
     expect(text).toContain('github.com/lreading/slide-spec')
   })
 
-  it('hides the nav during fullscreen presentation', async () => {
+  it('hides chrome when presentation mode is active', async () => {
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
       value: null,
@@ -52,8 +52,8 @@ describe('App', () => {
       },
     })
 
-    expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(true)
-    expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(false)
+    expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(false)
 
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
