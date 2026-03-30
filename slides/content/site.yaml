@@ -1,6 +1,6 @@
 site:
   title: Slide Spec Updates
-  deployment_url: https://slide-spec.dev
+  deployment_url: https://www.slide-spec.dev
   sitemap_enabled: true
   mascot:
     url: content/assets/slide-spec-mascot.svg

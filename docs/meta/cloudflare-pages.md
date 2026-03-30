@@ -1,8 +1,42 @@
 # Deploying to Cloudflare Pages
 
-This guide walks through setting up Cloudflare Pages to host a slide-spec site. It covers the one-time setup steps you need before the `Main` GitHub Actions workflow can deploy the slides and docs sites.
+For most slide-spec projects, the simplest deployment model is to connect your GitHub repository directly to Cloudflare Pages and let Pages run the build on each push.
 
-The instructions here are written for `slide-spec.dev` but apply to any custom domain.
+You do not need a GitHub Action just because you are using `@slide-spec/cli`.
+
+This guide assumes:
+
+- your project lives in a GitHub repository
+- `generated.yaml` is committed as point-in-time content
+- Cloudflare Pages should build the site from source
+
+If that matches your setup, this is the recommended approach.
+
+---
+
+## When direct Git deploys are the right fit
+
+Direct Git-connected Pages deploys are a good default when:
+
+- `presentation.yaml` and `generated.yaml` are already in the repo
+- you want deploys to reflect committed content only
+- you do not need a deploy-time `slide-spec fetch`
+- you want the fewest moving parts
+
+That is the common case for slide-spec sites.
+
+---
+
+## When GitHub Actions make sense instead
+
+Use a GitHub Action only if you need extra deployment logic that Cloudflare Pages should not own, for example:
+
+- fetching fresh GitHub data during deploy
+- generating artifacts from private systems
+- enforcing a custom promotion flow before deploy
+- publishing multiple outputs with one orchestrated pipeline
+
+If your site is meant to be a point-in-time snapshot, committing `generated.yaml` and building directly in Cloudflare Pages is the simpler model.
 
 ---
 
@@ -10,150 +44,130 @@ The instructions here are written for `slide-spec.dev` but apply to any custom d
 
 Before you start:
 
-- A Cloudflare account ([dash.cloudflare.com](https://dash.cloudflare.com))
-- Your domain (`slide-spec.dev`) added to Cloudflare with its nameservers pointing to Cloudflare
-- Admin access to the GitHub repository
+- a Cloudflare account
+- a GitHub repository containing your slide-spec project
+- your domain added to Cloudflare if you plan to use a custom domain
 
 ---
 
-## Step 1: Add your domain to Cloudflare
+## Step 1: Connect the repository to Cloudflare Pages
 
-If your domain is not already on Cloudflare:
+1. In the Cloudflare dashboard, open **Workers & Pages**.
+2. Create a new **Pages** project.
+3. Choose **Connect to Git**.
+4. Authorize GitHub if Cloudflare prompts you.
+5. Select the repository that contains your slide-spec project.
 
-1. Log in to [dash.cloudflare.com](https://dash.cloudflare.com) and click **Add a site**.
-2. Enter your domain name (`slide-spec.dev`) and click **Continue**.
-3. Choose a plan (the Free plan is sufficient).
-4. Cloudflare will scan your existing DNS records. Review and confirm.
-5. Update your domain registrar's nameservers to the two Cloudflare nameservers shown (e.g. `aria.ns.cloudflare.com`, `eli.ns.cloudflare.com`). This step takes 5–30 minutes to propagate.
+If your slides project lives in a subdirectory, that is fine. You will point Cloudflare at the right root/build settings in the next step.
 
 ---
 
-## Step 2: Create a Cloudflare Pages project
+## Step 2: Configure the build
 
-### Option A: Via the Cloudflare dashboard
+Use these settings for a standard slides site:
 
-1. In the Cloudflare dashboard, go to **Workers & Pages** → **Pages** → **Create a project**.
-2. Choose **Direct Upload** (you will push from GitHub Actions, not connect a Git repo).
-3. Name the project `slide-spec-homepage`. This name must match the `--project-name` flag in the deploy workflow.
-4. Click **Create project**. You can skip the initial upload — the GitHub Actions workflow will do the first deploy.
+| Setting | Value |
+|---|---|
+| Framework preset | `None` |
+| Build command | `npx @slide-spec/cli build` |
+| Build output directory | `dist` |
+| Root directory | your project root, for example `slides` |
 
-### Option B: Via the Wrangler CLI (local)
+If the slide-spec project is at the repository root, leave **Root directory** empty.
+
+If you want sitemap generation, set a deployment URL in your content or pass it through the build command instead:
 
 ```bash
-npm install -g wrangler
-wrangler login
-# Build first
-cd cli && npm ci && npm run build
-node dist/index.js build ../slides --deployment-url https://slide-spec.dev
-# Deploy
-wrangler pages deploy slides/dist --project-name=slide-spec-homepage
+npx @slide-spec/cli build --deployment-url https://updates.example.com
 ```
 
----
-
-## Step 3: Configure a custom domain
-
-1. In the Cloudflare dashboard, go to **Workers & Pages** → **slide-spec-homepage** → **Custom domains**.
-2. Click **Set up a custom domain**.
-3. Enter `slide-spec.dev` and click **Continue**.
-4. Cloudflare will automatically add a `CNAME` record pointing to `slide-spec-homepage.pages.dev`. Click **Activate domain**.
-
-For `www.slide-spec.dev` (optional), repeat the same steps with `www.slide-spec.dev`.
-
-> Cloudflare Pages custom domains always use Cloudflare's proxy (orange cloud), so no additional DNS setup is needed if the domain is already on Cloudflare.
+In most cases it is cleaner to set `site.deployment_url` in `content/site.yaml` and keep the build command simple.
 
 ---
 
-## Step 4: Configure GitHub Actions authentication
+## Step 3: Make sure the repo already contains generated content
 
-Choose **one** of the two authentication approaches below. OIDC is preferred because it requires no long-lived secrets.
+Cloudflare Pages should build from committed files. That means:
 
----
+- `presentation.yaml` should already exist
+- `generated.yaml` should already exist if the deck uses generated data
 
-### Option A: API Token (simpler)
+You can refresh generated content locally before committing:
 
-1. In the Cloudflare dashboard, go to **My Profile** → **API Tokens** → **Create Token**.
-2. Use the **Edit Cloudflare Workers** template, or create a custom token with these permissions:
-   - **Account** → **Cloudflare Pages** → Edit
-3. Under **Account Resources**, select your account.
-4. Click **Continue to summary** → **Create Token**.
-5. Copy the token value — you will not see it again.
+```bash
+npx @slide-spec/cli fetch --presentation-id 2026-launch --from-date 2026-03-15 --force
+npx @slide-spec/cli validate
+npx @slide-spec/cli build
+```
 
-Add the token to GitHub:
+Then commit the updated YAML and push.
 
-1. Go to your repository on GitHub → **Settings** → **Secrets and variables** → **Actions**.
-2. Click **New repository secret**.
-3. Name: `CF_API_TOKEN`, Value: the token you just copied.
+That keeps deployment deterministic: Cloudflare builds exactly what is in Git.
 
 ---
 
-### Option B: OIDC (recommended — no long-lived secrets)
+## Step 4: Configure a custom domain
 
-Cloudflare supports OIDC via Workload Identity Federation, allowing GitHub Actions to authenticate without storing a static API token.
+After the first successful deploy:
 
-#### 1. Enable OIDC in the deploy workflow
+1. Open your Pages project in Cloudflare.
+2. Go to **Custom domains**.
+3. Add your domain, for example `updates.example.com`.
+4. Let Cloudflare create the required DNS record.
 
-The `deploy-slides` job in the `Main` workflow already has `id-token: write` in its permissions block, which is required for OIDC.
+If the domain is already managed in Cloudflare, the setup is usually automatic.
 
-#### 2. Create a Cloudflare API token scoped for OIDC
-
-Even with OIDC you need a Cloudflare API token, but it is bound to a specific subject (your GitHub repository) rather than being a general secret.
-
-1. In the Cloudflare dashboard, go to **My Profile** → **API Tokens** → **Create Token**.
-2. Create a custom token with:
-   - **Account** → **Cloudflare Pages** → Edit
-3. Under **Client IP Address Filtering**, leave blank.
-4. Create the token and copy the value.
-
-#### 3. Set GitHub secrets
-
-Add these two secrets to your repository (**Settings** → **Secrets and variables** → **Actions** → **New repository secret**):
-
-| Secret name | Value |
-|---|---|
-| `CF_API_TOKEN` | The Cloudflare API token from step 2 |
-| `CF_ACCOUNT_ID` | Your Cloudflare account ID (found in the dashboard URL: `dash.cloudflare.com/<account-id>`) |
-
-> **Finding your account ID:** Go to the Cloudflare dashboard. The account ID is the alphanumeric string after `dash.cloudflare.com/` in the URL, e.g. `dash.cloudflare.com/abc123def456` → account ID is `abc123def456`. It is also shown on the right sidebar of any domain overview page under **Account ID**.
+Cloudflare Pages will provision TLS for the custom domain automatically.
 
 ---
 
-## Step 5: First deploy
+## Step 5: Ongoing workflow
 
-After completing Steps 2–4, trigger a deploy manually:
+Once the project is connected:
 
-1. Go to your repository on GitHub → **Actions** → **Main**.
-2. Click **Run workflow** → **Run workflow**.
+- every push to the configured branch triggers a build
+- preview deployments are created for pull requests and branch pushes
+- production deploys come from your production branch
 
-The workflow will:
-1. Run the full quality gate suite.
-2. In parallel, build and deploy the slides and docs sites.
-3. For the slides site: install and build the CLI, run `cli fetch --force` to refresh GitHub data, run `cli build`, then push `slides/dist/` to Cloudflare Pages.
-4. For the docs: run `npm run build` in `docs/`, then push `docs/.vitepress/dist/` to Cloudflare Pages.
+A practical workflow looks like this:
 
-Once it completes, visit `slide-spec.dev` to verify the site is live.
-
----
-
-## Step 6: SSL/TLS configuration
-
-Cloudflare handles TLS automatically for Pages custom domains. To verify:
-
-1. Go to **slide-spec-homepage** → **Custom domains** and confirm the status shows **Active**.
-2. Go to your domain in the Cloudflare dashboard → **SSL/TLS** → **Overview**.
-3. Set the encryption mode to **Full (strict)**.
-
-The site will be available at `https://slide-spec.dev` within a few minutes of the first successful deploy.
+1. Update `presentation.yaml` and `generated.yaml` locally.
+2. Run `npx @slide-spec/cli validate`.
+3. Run `npx @slide-spec/cli build` or `npx @slide-spec/cli serve` if you want a local preview.
+4. Commit and push.
+5. Let Cloudflare Pages build the committed snapshot.
 
 ---
 
-## Ongoing workflow
+## Optional: separate docs and slides projects
 
-After the one-time setup:
+If your repository contains both a slide-spec site and a docs site, create two separate Pages projects.
 
-- **Automatic deploys:** every push to `main` triggers the Main workflow, which deploys both the slides and docs sites after the quality gates pass.
-- **Manual deploys:** use the **Run workflow** button on the Main action.
-- **GitHub data:** `cli fetch --force` runs automatically on every deploy using the built-in `GITHUB_TOKEN`. No additional secrets are required for public repositories.
+Example:
+
+- slides project
+  Root directory: `slides`
+  Build command: `npx @slide-spec/cli build`
+  Output directory: `dist`
+- docs project
+  Root directory: `docs`
+  Build command: `npm ci && npm run build`
+  Output directory: `.vitepress/dist`
+
+Keep them separate unless you have a strong reason to deploy both from one pipeline.
+
+---
+
+## Optional: add CI without making CI the deploy path
+
+You can still use GitHub Actions for quality gates without using Actions for deployment.
+
+A good split is:
+
+- GitHub Actions runs lint, tests, accessibility checks, and visual regression
+- Cloudflare Pages handles preview and production deploys from Git
+
+That gives you a simple deployment model without giving up CI.
 
 ---
 
@@ -161,8 +175,8 @@ After the one-time setup:
 
 | Problem | Fix |
 |---|---|
-| Deploy step fails with `Authentication error` | Verify `CF_API_TOKEN` and `CF_ACCOUNT_ID` secrets are set correctly in GitHub. |
-| Deploy succeeds but custom domain shows the default Pages domain | Make sure you completed Step 3 (custom domain setup) and the status is **Active**. |
-| `wrangler pages deploy` fails with `project not found` | The project name in the workflow (`--project-name=slide-spec-homepage`) must exactly match the project name you created in Step 2. |
-| Site builds but shows wrong content | Run `cli validate slides` locally to check for YAML errors. |
-| Fetch step fails with rate limit errors | The built-in `GITHUB_TOKEN` is used. For private repositories or very large repos, you may need a `GH_PAT` secret with `repo` read scope. Add it under `env:` in the fetch step as `GITHUB_TOKEN` mapped to your PAT secret. |
+| Build fails because `@slide-spec/cli` is not found | Confirm the package is published and the Pages environment can install from npm. |
+| Site deploys but content is wrong | Run `npx @slide-spec/cli validate` locally and verify the committed YAML, especially `generated.yaml`. |
+| Sitemap is missing | Set `site.deployment_url` in `content/site.yaml`, or pass `--deployment-url` in the build command. |
+| Project is in a subdirectory and Pages cannot find it | Set the Pages root directory to that subdirectory, such as `slides`. |
+| You need fresh GitHub data on every deploy | That is the case where a GitHub Action or another external fetch pipeline may be worth adding. |
