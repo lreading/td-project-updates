@@ -10,7 +10,7 @@ describe('RoadmapSlideView', () => {
     (slide) => slide.template === 'progress-timeline',
   )
 
-  it('renders the active roadmap stage from shared deck roadmap data', () => {
+  it('renders the active roadmap stage from slide-local roadmap data', () => {
     const slide = roadmapSlides[1]
 
     if (!slide || slide.template !== 'progress-timeline') {
@@ -34,7 +34,7 @@ describe('RoadmapSlideView', () => {
     expect(wrapper.findAll('.progress-timeline__item--current')).toHaveLength(1)
   })
 
-  it('renders without fallback copy when roadmap data is unavailable', () => {
+  it('hides the footer link when the slide omits its own footer label', () => {
     const slide = roadmapSlides[0]
 
     if (!slide || slide.template !== 'progress-timeline') {
@@ -43,21 +43,23 @@ describe('RoadmapSlideView', () => {
 
     const wrapper = mount(RoadmapSlideView, {
       props: {
-        presentation: {
-          ...record.presentation,
-          roadmap: undefined,
-        },
+        presentation: record.presentation,
         site: contentRepository.getSiteContent(),
-        slide,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            footer_link_label: undefined,
+          },
+        },
         slideNumber: 4,
         slideTotal: 12,
       },
     })
 
     expect(wrapper.text()).toContain('Roadmap: Completed')
-    expect(wrapper.text()).not.toContain('Roadmap details are not available.')
-    expect(wrapper.find('.card-eyebrow').exists()).toBe(false)
-    expect(wrapper.find('.card-title').exists()).toBe(false)
+    expect(wrapper.find('.card-eyebrow').exists()).toBe(true)
+    expect(wrapper.find('.card-title').exists()).toBe(true)
     expect(wrapper.find('.footer-link').exists()).toBe(false)
   })
 })

@@ -138,10 +138,12 @@ export class TdCliApplicationService implements TdCliService {
       createdPaths.push(paths.getSiteConfigPath())
     }
     const presentationPath = paths.getPresentationPath(input.presentationId)
-    const generatedPath = paths.getGeneratedPath(input.presentationId)
+    const generatedPath = paths.resolveGeneratedPath({
+      id: input.presentationId,
+    })
 
     await this.yamlWriter.writeDocument(presentationPath, presentationDocument)
-    await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, generatedDocument)
+      await this.generatedDataStore.writeGeneratedData(paths, { id: input.presentationId }, generatedDocument)
     createdPaths.push(presentationPath, generatedPath)
 
     if (!existingPresentation) {
@@ -185,7 +187,14 @@ export class TdCliApplicationService implements TdCliService {
 
   public async fetchPresentationData(input: FetchPresentationDataInput): Promise<FetchPresentationDataResult> {
     const paths = this.getPaths(input.projectRoot)
-    const generatedPath = paths.getGeneratedPath(input.presentationId)
+    const entries = await this.presentationIndexStore.load(paths)
+    const existingPresentation = this.presentationIndexStore.findPresentationById(entries, input.presentationId)
+
+    if (!existingPresentation) {
+      throw new Error(`Presentation "${input.presentationId}" was not found in content/presentations/index.yaml.`)
+    }
+
+    const generatedPath = paths.resolveGeneratedPath(existingPresentation)
     if (!input.force && await this.fileSystem.fileExists(generatedPath)) {
       throw new Error(
         `generated.yaml already exists for "${input.presentationId}". Use --force to overwrite.`,
@@ -204,7 +213,7 @@ export class TdCliApplicationService implements TdCliService {
       repository,
     })
     if (input.write !== false) {
-      await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, buildResult.generated)
+      await this.generatedDataStore.writeGeneratedData(paths, existingPresentation, buildResult.generated)
     }
     const warnings = [
       ...buildResult.warnings,

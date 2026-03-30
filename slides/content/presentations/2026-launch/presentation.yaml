@@ -2,74 +2,14 @@ presentation:
   id: 2026-launch
   year: 2026
   title: Slide Spec Project Update
-  subtitle: Launch · Spring 2026
-  roadmap:
-    agenda_label: Roadmap
-    deliverables_heading: Delivered
-    focus_areas_heading: Themes
-    footer_link_label: View full roadmap
-    sections:
-      completed:
-        label: Completed
-        summary: Everything shipped in the launch sprint.
-        items:
-          - 9 slide templates (hero through closing)
-          - CLI with init, validate, fetch, build, serve
-          - Vue 3 app renderer with Vite
-          - Unit, E2E, a11y, and visual regression tests
-          - CI/CD with Semgrep, Trivy, and Gitleaks scanning
-          - OpenSSF Best Practices badge achieved
-          - VitePress documentation site
-        themes:
-          - category: Functionality
-            target: All table-stakes features for a usable v0.
-          - category: Quality
-            target: Ship with meaningful test coverage from day one.
-      in-progress:
-        label: In Progress
-        summary: Active work toward first stable release.
-        items:
-          - First stable release (v0.1.0)
-          - slide-spec.dev homepage (this site)
-          - docs.slide-spec.dev documentation site
-        themes:
-          - category: Stability
-            target: Remove alpha-stage rough edges before the first real users.
-          - category: Visibility
-            target: Give the project a home on the web.
-      planned:
-        label: Planned
-        summary: Near-term improvements after v0.1.0.
-        items:
-          - Complete schema documentation
-          - Port auto-detection for serve command
-          - Scaffold command for adding new presentations
-          - Example gallery with live demos
-        themes:
-          - category: Usability
-            target: Remove friction in the getting-started experience.
-          - category: Docs
-            target: Cover every field with clear examples.
-      future:
-        label: Future
-        summary: Longer-horizon ideas being explored.
-        items:
-          - WCAG accessibility baseline for generated sites
-          - Import from existing slide formats
-          - Multi-theme support
-          - Plugin or extension system
-        themes:
-          - category: Accessibility
-            target: Make generated sites usable by everyone.
-          - category: Interoperability
-            target: Meet users where their content already lives.
+  subtitle: Pre-Launch - Spring 2026
   slides:
     - template: hero
       enabled: true
       content:
         title_primary: Slide
         title_accent: Spec
-        subtitle_prefix: Launch · Spring 2026
+        subtitle_prefix: "Pre-Launch: Spring 2026"
         quote: Presentations should be as easy to version as code.
     - template: agenda
       enabled: true
@@ -96,7 +36,7 @@ presentation:
               - "fetch: pull GitHub stats into generated.yaml"
               - "build: compile to a static site"
               - "serve: local dev server with live reload"
-          - title: Quality infrastructure
+          - title: Infrastructure, Security & Quality
             bullets:
               - 80% unit test coverage thresholds
               - Playwright E2E, accessibility (axe), and visual regression suites
@@ -109,7 +49,7 @@ presentation:
       content:
         featured_release_ids: []
         empty_state_title: Pre-release
-        empty_state_message: Working toward v0.1.0. Watch the repo for the first release.
+        empty_state_message: Working toward an alpha. Watch the repo for the first release.
         footer_link_label: View releases
     - template: progress-timeline
       enabled: true
@@ -117,23 +57,67 @@ presentation:
       subtitle: Everything delivered in the launch sprint
       content:
         stage: completed
+        deliverables_heading: Delivered
+        focus_areas_heading: Themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Everything shipped in the launch sprint.
+          in-progress:
+            label: In Progress
+            summary: Active work toward first stable release.
+          planned:
+            label: Planned
+            summary: Near-term improvements after v1.0.0.
+          future:
+            label: Future
+            summary: Longer-horizon ideas being explored.
+        items:
+          - 9 slide templates (hero through closing)
+          - CLI with init, validate, fetch, build, serve
+          - Vue 3 app renderer with Vite
+          - Unit, E2E, a11y, and visual regression tests
+          - CI/CD with Semgrep, Trivy, and Gitleaks scanning
+          - OpenSSF Best Practices badge achieved
+          - VitePress documentation site
+        themes:
+          - category: Functionality
+            target: All table-stakes features for a usable v0.
+          - category: Quality
+            target: Ship with meaningful test coverage from day one.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
       subtitle: Active work right now
       content:
         stage: in-progress
-    - template: people
-      enabled: true
-      title: Contributors
-      subtitle: Who built this
-      content:
-        banner_prefix: Huge thanks to the
-        contributors_link_label: contributors
-        banner_suffix: who have sent PRs and filed issues.
-        spotlight:
-          - login: lreading
-            summary: Project creator. Designed the YAML schema, built the CLI and app, and shipped the initial feature set.
+        deliverables_heading: In Progress
+        focus_areas_heading: Themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Everything shipped in the launch sprint.
+          in-progress:
+            label: In Progress
+            summary: Active work toward first stable release.
+          planned:
+            label: Planned
+            summary: Near-term improvements after v1.0.0.
+          future:
+            label: Future
+            summary: Longer-horizon ideas being explored.
+        items:
+          - First stable release (v1.0.0)
+          - slide-spec.dev homepage (this site)
+          - docs.slide-spec.dev documentation site
+          - Usability & user acceptance testing
+        themes:
+          - category: Stability
+            target: Remove alpha-stage rough edges before the first real users.
+          - category: Visibility
+            target: Give the project a home on the web.
     - template: metrics-and-links
       enabled: true
       title: Project health
@@ -158,8 +142,8 @@ presentation:
       content:
         footer_text: The best contributions are the ones only you can make.
         cards:
-          - title: Try the CLI
-            description: Install with npm and scaffold your first presentation in under 5 minutes.
+          - title: Try the project!
+            description: Install with npm (soon) and scaffold your first presentation in under 5 minutes.
             url_label: Quickstart
             url: https://docs.slide-spec.dev/guide/quickstart
           - title: Read the docs

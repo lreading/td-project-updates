@@ -2,6 +2,12 @@ site:
   title: Slide Spec Updates
   deployment_url: https://slide-spec.dev
   sitemap_enabled: true
+  mascot:
+    url: content/assets/slide-spec-mascot.svg
+    alt: Slide Spec mascot
+  presentation_logo:
+    url: content/assets/slide-spec-logo.svg
+    alt: Slide Spec logo
   data_sources:
     - type: github
       url: https://github.com/lreading/slide-spec
