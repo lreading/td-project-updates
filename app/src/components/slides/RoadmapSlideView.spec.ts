@@ -87,8 +87,8 @@ describe('RoadmapSlideView', () => {
               ...slide.content.stages,
               planned: {
                 ...slide.content.stages.planned,
-                label: undefined,
-                summary: undefined,
+                label: '',
+                summary: '',
               },
             },
           },
