@@ -33,6 +33,7 @@ const documentationRoutes = [
   '/meta/accessibility',
   '/meta/ai',
   '/meta/agent-assistance',
+  '/meta/sbom',
   '/meta/supply-chain',
 ]
 
