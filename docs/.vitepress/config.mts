@@ -107,6 +107,7 @@ export default defineConfig({
             { text: 'Overview', link: '/meta/' },
             { text: 'Accessibility', link: '/meta/accessibility' },
             { text: 'AI-Friendly Docs', link: '/meta/ai' },
+            { text: 'SBOM', link: '/meta/sbom' },
             { text: 'Supply Chain', link: '/meta/supply-chain' },
             { text: 'Agent Assistance', link: '/meta/agent-assistance' },
             { text: 'Cloudflare Pages', link: '/meta/cloudflare-pages' },
