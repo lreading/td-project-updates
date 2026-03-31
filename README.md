@@ -4,15 +4,12 @@
 
 **Create beautiful slides from YAML, not PowerPoint.**
 
-<img src="assets/slide-spec-logo.svg" width="140" alt="Slide Spec logo" />
-
 [![npm](https://img.shields.io/npm/v/@slide-spec/cli)](https://www.npmjs.com/package/@slide-spec/cli)
 [![CI](https://img.shields.io/github/actions/workflow/status/lreading/slide-spec/main.yml?branch=main&label=CI)](https://github.com/lreading/slide-spec/actions/workflows/main.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235/badge)](https://www.bestpractices.dev/en/projects/12235/passing)
 
-<!-- TODO: replace placeholder URLs for demo and docs once deployed -->
-[Live Demo](https://TODO-demo-url) · [Docs](https://TODO-docs-url) · [Example YAML](content/)
+[Live Demo](https://www.slide-spec.dev) · [Docs](https://docs.slide-spec.dev) · [Example YAML](content/)
 
 https://github.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1
 

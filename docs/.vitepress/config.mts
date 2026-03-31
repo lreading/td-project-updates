@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 
-const siteUrl = (process.env.DOCS_SITE_URL ?? 'https://slide-spec.dev').replace(/\/$/, '')
+const siteUrl = (process.env.DOCS_SITE_URL ?? 'https://docs.slide-spec.dev').replace(/\/$/, '')
 
 export default defineConfig({
   markdown: {

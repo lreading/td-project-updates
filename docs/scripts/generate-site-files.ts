@@ -48,7 +48,7 @@ class DocumentationSiteFileGenerator {
   }
 
   private resolveSiteUrl(): URL {
-    const siteUrl = (process.env.DOCS_SITE_URL ?? 'https://slide-spec.dev').replace(/\/$/, '')
+    const siteUrl = (process.env.DOCS_SITE_URL ?? 'https://docs.slide-spec.dev').replace(/\/$/, '')
     return new URL(`${siteUrl}/`)
   }
 
