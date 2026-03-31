@@ -23,6 +23,9 @@ export default defineConfig({
     ['link', { rel: 'canonical', href: `${siteUrl}/` }],
   ],
   themeConfig: {
+    search: {
+      provider: 'local',
+    },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Quickstart', link: '/quickstart' },
