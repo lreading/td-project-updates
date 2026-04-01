@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-Slide Spec turns structured YAML into a static slide deck you can host anywhere. Keep your presentations in the same repo as your code, reviewable in PRs and diffable like everything else.
+Slide Spec turns structured YAML into a static slide deck you can host anywhere. Keep your presentations in the same repo as your code so teams can review them in PRs and diff changes like any other project artifact.
 
 - Write slides as structured YAML you can diff, lint, and generate
 - Build a static site you can deploy to GitHub Pages, S3, or any CDN
