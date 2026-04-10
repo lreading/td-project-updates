@@ -125,8 +125,20 @@ jobs:
           body_path: release-artifacts/release-notes-preface.md
           generate_release_notes: true
           prerelease: ${{ fromJSON(needs.prepare-release.outputs.prerelease) }}
+          draft: ${{ fromJSON(needs.prepare-release.outputs.prerelease) }}
           make_latest: ${{ needs.prepare-release.outputs.make-latest }}
           fail_on_unmatched_files: true
           files: |
             release-artifacts/source.tar.gz
             release-artifacts/sbom.cyclonedx.json
+      - name: Publish prerelease after asset upload
+        if: ${{ fromJSON(needs.prepare-release.outputs.prerelease) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_id="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" --jq '.id')"
+          gh api "repos/${GITHUB_REPOSITORY}/releases/${release_id}" \
+            --method PATCH \
+            -F draft=false \
+            -F prerelease=true \
+            -F make_latest=false

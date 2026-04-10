@@ -18,6 +18,7 @@ It currently:
 - publishes `@slide-spec/cli` to npm with provenance enabled
 - maps prereleases to explicit npm dist-tags
 - creates a GitHub Release with generated release notes plus a release metadata preface
+- publishes prereleases via a draft-first flow so assets can be attached on repositories with immutable releases enabled
 - attaches a source tarball and `sbom.cyclonedx.json`
 
 Latest release assets:
@@ -71,7 +72,8 @@ Recommended prerelease flow:
    - `git tag -v v0.0.1-alpha`
 4. Push the signed tag:
    - `git push origin v0.0.1-alpha`
-5. Confirm that npm publishes to the expected prerelease dist-tag and that GitHub marks the release as a prerelease.
+5. GitHub Actions creates the prerelease as a draft, uploads the assets, then publishes it.
+6. Confirm that npm publishes to the expected prerelease dist-tag and that GitHub marks the release as a prerelease.
 
 `git commit -S` only signs commits. It does not sign tags. If you want a signed release tag, use `git tag -s ...`.
 
