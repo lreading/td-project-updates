@@ -83,6 +83,8 @@ npx @slide-spec/cli build --deployment-url https://updates.example.com
 
 In most cases it is cleaner to set `site.deployment_url` in `content/site.yaml` and keep the build command simple.
 
+The build output includes static entry points for the presentations index and each published presentation, for example `dist/presentations/index.html` and `dist/presentations/2026-launch/index.html`. Those files let deep links and hard refreshes work on static hosts without switching the app to hash-based routing.
+
 ---
 
 ## Step 3: Make sure the repo already contains generated content
@@ -178,5 +180,6 @@ That gives you a simple deployment model without giving up CI.
 | Build fails because `@slide-spec/cli` is not found | Confirm the package is published and the Pages environment can install from npm. |
 | Site deploys but content is wrong | Run `npx @slide-spec/cli validate` locally and verify the committed YAML, especially `generated.yaml`. |
 | Sitemap is missing | Set `site.deployment_url` in `content/site.yaml`, or pass `--deployment-url` in the build command. |
+| Direct links under `/presentations` return 404 | Confirm the uploaded `dist` directory includes `presentations/index.html` and `presentations/<id>/index.html` for each published deck. |
 | Project is in a subdirectory and Pages cannot find it | Set the Pages root directory to that subdirectory, such as `slides`. |
 | You need fresh GitHub data on every deploy | That is the case where a GitHub Action or another external fetch pipeline may be worth adding. |
