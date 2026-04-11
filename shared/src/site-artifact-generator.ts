@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
 export interface SiteArtifactGeneratorOptions {
@@ -22,6 +22,7 @@ export class SiteArtifactGenerator {
       const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
       await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)
     }
+    await this.writeRouteEntrypoints(options.outputRoot, options.publishedPresentationIds)
   }
 
   private buildSitemap(siteUrl: URL, publishedPresentationIds: string[]): string {
@@ -75,5 +76,23 @@ export class SiteArtifactGenerator {
   private async writeOutput(path: string, contents: string): Promise<void> {
     await mkdir(dirname(path), { recursive: true })
     await writeFile(path, contents, 'utf8')
+  }
+
+  private async writeRouteEntrypoints(outputRoot: string, publishedPresentationIds: string[]): Promise<void> {
+    const indexHtml = await readFile(resolve(outputRoot, 'index.html'), 'utf8')
+
+    await this.writeOutput(resolve(outputRoot, 'presentations', 'index.html'), indexHtml)
+    await Promise.all(
+      publishedPresentationIds.map(async (presentationId) => {
+        this.assertSafeRouteSegment(presentationId)
+        await this.writeOutput(resolve(outputRoot, 'presentations', presentationId, 'index.html'), indexHtml)
+      }),
+    )
+  }
+
+  private assertSafeRouteSegment(segment: string): void {
+    if (segment === '.' || segment === '..' || segment.includes('/') || segment.includes('\\')) {
+      throw new Error(`Presentation id "${segment}" cannot be used as a static route segment.`)
+    }
   }
 }
