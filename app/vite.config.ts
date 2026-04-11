@@ -50,7 +50,10 @@ const llmsTxtPlugin = () => ({
 export default defineConfig({
   plugins: [llmsTxtPlugin(), vue()],
   server: {
-    allowedHosts: ['localhost', '06ed-64-223-218-131.ngrok-free.app']
+    allowedHosts: ['localhost', '06ed-64-223-218-131.ngrok-free.app'],
+    fs: {
+      allow: [appRoot, projectRoot],
+    },
   },
   test: {
     environment: 'jsdom',

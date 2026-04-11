@@ -391,6 +391,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           metadata: {
