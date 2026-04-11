@@ -8,6 +8,7 @@ For a complete example, see the [reference generated.yaml](https://github.com/lr
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
+| `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |
 | `generated.id` | yes | string | Must match the presentation id |
 | `generated.period` | yes | object | Reporting period |
 | `generated.stats` | yes | object | Metric values keyed by id |

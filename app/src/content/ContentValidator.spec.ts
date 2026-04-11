@@ -5,6 +5,7 @@ import { ContentValidator } from './ContentValidator'
 const validator = new ContentValidator()
 
 const createValidPresentationDocument = () => ({
+  schemaVersion: 1,
   presentation: {
     id: '2026-q1',
     year: 2026,
@@ -135,6 +136,7 @@ describe('ContentValidator', () => {
   it('accepts valid site, presentation index, presentation, and generated documents', () => {
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Threat Dragon Quarterly Updates',
           metadata: {
@@ -173,6 +175,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: 1,
         presentations: [
           {
             id: '2026-q1',
@@ -193,6 +196,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateGeneratedDocument({
+        schemaVersion: 1,
         generated: {
           id: '2026-q1',
           period: {
@@ -237,9 +241,45 @@ describe('ContentValidator', () => {
     ).not.toThrow()
   })
 
+  it('rejects missing, invalid, or unsupported schema versions', () => {
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: { label: 'R', url: 'https://example.com/r' },
+            docs: { label: 'D', url: 'https://example.com/d' },
+            community: { label: 'C', url: 'https://example.com/c' },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.schemaVersion must be a number.')
+
+    expect(() =>
+      validator.validateSiteDocument({
+        schemaVersion: 2,
+        site: {
+          title: 'Test',
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: { label: 'R', url: 'https://example.com/r' },
+            docs: { label: 'D', url: 'https://example.com/d' },
+            community: { label: 'C', url: 'https://example.com/c' },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.schemaVersion must be 1. This Slide Spec release does not support schema version 2.')
+  })
+
   it('rejects invalid site documents', () => {
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           home_intro: 'Intro',
@@ -265,6 +305,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           data_sources: [
@@ -296,6 +337,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           deployment_url: 'not-a-url',
@@ -322,6 +364,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           sitemap_enabled: true,
@@ -348,6 +391,7 @@ describe('ContentValidator', () => {
 
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           metadata: {
@@ -378,6 +422,7 @@ describe('ContentValidator', () => {
   it('rejects blank authored content and incomplete grouped fields', () => {
     expect(() =>
       validator.validateSiteDocument({
+        schemaVersion: 1,
         site: {
           title: 'Test',
           home_intro: 'Intro',
@@ -464,6 +509,7 @@ describe('ContentValidator', () => {
   it('rejects duplicate presentation ids in the index', () => {
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: 1,
         presentations: [
           {
             id: '2026-q1',
@@ -495,6 +541,7 @@ describe('ContentValidator', () => {
   it('rejects duplicate presentation paths in the index', () => {
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: 1,
         presentations: [
           {
             id: '2026-q1',
@@ -526,6 +573,7 @@ describe('ContentValidator', () => {
   it('rejects duplicate generated paths in the index', () => {
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: 1,
         presentations: [
           {
             id: '2026-q1',
@@ -571,6 +619,7 @@ describe('ContentValidator', () => {
   it('rejects invalid generated metric values', () => {
     expect(() =>
       validator.validateGeneratedDocument({
+        schemaVersion: 1,
         generated: {
           id: '2026-q1',
           period: {
@@ -602,6 +651,7 @@ describe('ContentValidator', () => {
   it('rejects invalid generated metric metadata', () => {
     expect(() =>
       validator.validateGeneratedDocument({
+        schemaVersion: 1,
         generated: {
           id: '2026-q1',
           period: {

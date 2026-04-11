@@ -1,3 +1,5 @@
+export { SLIDE_SPEC_SCHEMA_VERSION } from './schema-version'
+
 export interface DataSource {
   type: 'github'
   url: string

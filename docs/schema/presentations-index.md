@@ -5,6 +5,7 @@ Controls what appears on the presentations list page.
 ## Example
 
 ```yaml
+schemaVersion: 1
 presentations:
   - id: 2026-spring-briefing
     year: 2026
@@ -21,6 +22,7 @@ presentations:
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
+| `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |
 | `presentations` | yes | array | List of presentation entries |
 
 ### `presentations[]`

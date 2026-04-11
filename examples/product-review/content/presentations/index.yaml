@@ -1,3 +1,4 @@
+schemaVersion: 1
 presentations:
   - id: 2026-q1-review
     presentation_path: presentations/2026-q1-review/presentation.yaml

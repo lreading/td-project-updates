@@ -85,6 +85,7 @@ describe('resolveDocumentTitle', () => {
     contentRepository.replaceFiles({
       ...rawContentFiles,
       [sitePath as string]: `
+schemaVersion: 1
 site:
   title: Updated Threat Dragon Title
   home_intro: Intro

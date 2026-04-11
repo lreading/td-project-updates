@@ -44,6 +44,7 @@ describe('GeneratedDataStore', () => {
   it('loads optional previous generated data and writes generated documents', async () => {
     const fileSystem = new MemoryFileSystem({
       '/workspace/project/content/presentations/2025-q4/generated.yaml': `
+schemaVersion: 1
 generated:
   id: 2025-q4
   period:
@@ -89,6 +90,9 @@ generated:
       merged_prs: [],
     })).resolves.toBe('/workspace/project/content/presentations/2026-q1/generated.yaml')
 
+    expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
+      'schemaVersion:',
+    )
     expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
       'generated:',
     )

@@ -4,6 +4,7 @@ import { ContentRepository, selectContentFiles } from './ContentRepository'
 
 const files = {
   '/virtual/site.yaml': `
+schemaVersion: 1
 site:
   title: Test Site
   project_badge:
@@ -28,6 +29,7 @@ site:
       url: https://example.com/community
 `,
   '/virtual/presentations/index.yaml': `
+schemaVersion: 1
 presentations:
   - id: 2025-q4
     presentation_path: presentations/2025-q4/presentation.yaml
@@ -49,6 +51,7 @@ presentations:
     featured: true
 `,
   '/virtual/presentations/2026-q1/presentation.yaml': `
+schemaVersion: 1
 presentation:
   id: 2026-q1
   year: 2026
@@ -61,6 +64,7 @@ presentation:
         title_primary: Q1
 `,
   '/virtual/presentations/2026-q1/generated.yaml': `
+schemaVersion: 1
 generated:
   id: 2026-q1
   period:
@@ -73,6 +77,7 @@ generated:
     authors: []
 `,
   '/virtual/presentations/2025-q4/presentation.yaml': `
+schemaVersion: 1
 presentation:
   id: 2025-q4
   year: 2025
@@ -85,6 +90,7 @@ presentation:
         title_primary: Q4
 `,
   '/virtual/presentations/2025-q4/generated.yaml': `
+schemaVersion: 1
 generated:
   id: 2025-q4
   period:
@@ -149,6 +155,7 @@ describe('ContentRepository', () => {
     const repository = new ContentRepository({
       ...files,
       '/virtual/presentations/2026-q1/generated.yaml': `
+schemaVersion: 1
 generated:
   id: 2026-q2
   period:
@@ -183,6 +190,7 @@ generated:
     repository.replaceFiles({
       ...files,
       '/virtual/site.yaml': `
+schemaVersion: 1
 site:
   title: Updated Site
   home_intro: Intro

@@ -14,6 +14,7 @@ async function createProjectRoot(): Promise<string> {
   tempRoots.push(root)
   await mkdir(resolve(root, 'content', 'presentations', 'demo'), { recursive: true })
   await writeFile(resolve(root, 'content', 'site.yaml'), `
+schemaVersion: 1
 site:
   title: Demo
   home_intro: Intro
@@ -34,6 +35,7 @@ site:
       url: https://example.com/community
 `)
   await writeFile(resolve(root, 'content', 'presentations', 'index.yaml'), `
+schemaVersion: 1
 presentations:
   - id: demo
     presentation_path: presentations/demo/presentation.yaml
@@ -45,6 +47,7 @@ presentations:
     featured: true
 `)
   await writeFile(resolve(root, 'content', 'presentations', 'demo', 'presentation.yaml'), `
+schemaVersion: 1
 presentation:
   id: demo
   title: Demo Presentation
@@ -82,6 +85,7 @@ presentation:
             target: Target
 `)
   await writeFile(resolve(root, 'content', 'presentations', 'demo', 'generated.yaml'), `
+schemaVersion: 1
 generated:
   id: demo
   period:
@@ -117,6 +121,7 @@ describe('ProjectContentValidator', () => {
   it('rejects duplicate presentation paths in the index', async () => {
     const root = await createProjectRoot()
     await writeFile(resolve(root, 'content', 'presentations', 'index.yaml'), `
+schemaVersion: 1
 presentations:
   - id: demo-a
     presentation_path: presentations/shared/presentation.yaml
@@ -144,6 +149,7 @@ presentations:
   it('rejects duplicate generated paths in the index', async () => {
     const root = await createProjectRoot()
     await writeFile(resolve(root, 'content', 'presentations', 'index.yaml'), `
+schemaVersion: 1
 presentations:
   - id: demo-a
     presentation_path: presentations/demo-a/presentation.yaml

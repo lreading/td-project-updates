@@ -1,3 +1,4 @@
+import { SLIDE_SPEC_SCHEMA_VERSION } from '../../../shared/src/content'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
 import { YamlWriter } from '../io/YamlWriter'
 
@@ -31,6 +32,7 @@ export class PresentationIndexStore {
 
   public async write(paths: FileSystemPaths, entries: PresentationIndexEntry[]): Promise<void> {
     await this.yamlWriter.writeDocument(paths.getPresentationsIndexPath(), {
+      schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       presentations: entries,
     })
   }

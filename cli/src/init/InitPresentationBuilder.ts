@@ -1,3 +1,5 @@
+import { SLIDE_SPEC_SCHEMA_VERSION } from '../../../shared/src/content'
+
 import type {
   GeneratedPresentationData,
   PresentationIndexEntry,
@@ -5,6 +7,7 @@ import type {
 } from '../generation/Generation.types'
 
 export interface PresentationDocument {
+  schemaVersion: typeof SLIDE_SPEC_SCHEMA_VERSION
   presentation: {
     id: string
     title: string
@@ -14,6 +17,7 @@ export interface PresentationDocument {
 }
 
 export interface SiteDocument {
+  schemaVersion: typeof SLIDE_SPEC_SCHEMA_VERSION
   site: {
     title: string
     home_intro: string
@@ -78,6 +82,7 @@ export class InitPresentationBuilder {
     }
 
     return {
+      schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       site: {
         title: 'Slide Spec',
         home_intro: 'Create and publish data-driven slide decks.',
@@ -117,6 +122,7 @@ export class InitPresentationBuilder {
     const subtitle = input.subtitle ?? 'Replace with a subtitle before publishing.'
 
     return {
+      schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       presentation: {
         id: input.presentationId,
         title: input.title,
