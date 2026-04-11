@@ -1,3 +1,5 @@
+import { SLIDE_SPEC_SCHEMA_VERSION } from '../schema-version'
+
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -58,4 +60,13 @@ export function assertNoUnexpectedKeys(
   Object.keys(value).forEach((key) => {
     assert(allowed.has(key), `${path}.${key} is not allowed.`)
   })
+}
+
+export function assertSchemaVersion(value: unknown, path: string): void {
+  assertNumber(value, path)
+  assert(Number.isInteger(value), `${path} must be an integer.`)
+  assert(
+    value === SLIDE_SPEC_SCHEMA_VERSION,
+    `${path} must be ${String(SLIDE_SPEC_SCHEMA_VERSION)}. This Slide Spec release does not support schema version ${String(value)}.`,
+  )
 }

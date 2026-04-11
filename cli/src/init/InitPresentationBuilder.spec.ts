@@ -39,6 +39,7 @@ describe('InitPresentationBuilder', () => {
     expect(presentationDocument.presentation.subtitle).toBe('Replace with a subtitle before publishing.')
 
     expect(builder.buildSiteDocument()).toMatchObject({
+      schemaVersion: 1,
       site: {
         title: 'Slide Spec',
         home_intro: 'Create and publish data-driven slide decks.',

@@ -41,7 +41,8 @@ describe('ViteSiteBuilder', () => {
     await mkdir(resolve(projectRoot, 'content', 'presentations'), { recursive: true })
     await writeFile(
       resolve(projectRoot, 'content', 'site.yaml'),
-      `site:
+      `schemaVersion: 1
+site:
   title: Demo
   deployment_url: https://updates.example.com
   sitemap_enabled: true
@@ -62,7 +63,8 @@ describe('ViteSiteBuilder', () => {
     )
     await writeFile(
       resolve(projectRoot, 'content', 'presentations', 'index.yaml'),
-      `presentations:
+      `schemaVersion: 1
+presentations:
   - id: 2026-q1
     presentation_path: presentations/2026-q1/presentation.yaml
     title: Demo

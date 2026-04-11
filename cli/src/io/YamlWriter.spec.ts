@@ -34,11 +34,13 @@ describe('YamlWriter', () => {
     const writer = new YamlWriter(fileSystem)
 
     await writer.writeDocument('/tmp/generated.yaml', {
+      schemaVersion: 1,
       generated: {
         id: '2026-q1',
       },
     })
 
+    expect(fileSystem.writes.get('/tmp/generated.yaml')).toContain('schemaVersion:')
     expect(fileSystem.writes.get('/tmp/generated.yaml')).toContain('generated:')
     expect(fileSystem.writes.get('/tmp/generated.yaml')).toContain('id: 2026-q1')
   })

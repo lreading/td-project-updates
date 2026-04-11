@@ -1,3 +1,4 @@
+schemaVersion: 1
 presentations:
   - id: 2026-q1-update
     presentation_path: presentations/2026-q1-update/presentation.yaml

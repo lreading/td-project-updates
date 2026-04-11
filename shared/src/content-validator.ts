@@ -9,23 +9,28 @@ import {
   assertNumber,
   assertOptionalNumber,
   assertOptionalString,
+  assertSchemaVersion,
   assertStringArray,
   isRecord,
 } from './validation/assertions'
 
 interface PresentationIndexDocument {
+  schemaVersion: number
   presentations: PresentationIndexEntry[]
 }
 
 interface SiteDocument {
+  schemaVersion: number
   site: Record<string, unknown>
 }
 
 interface PresentationDocument {
+  schemaVersion: number
   presentation: Record<string, unknown>
 }
 
 interface GeneratedDocument {
+  schemaVersion: number
   generated: GeneratedPresentationData
 }
 
@@ -209,6 +214,8 @@ function validateSlide(value: unknown, path: string): void {
 export class ContentValidator {
   public validateSiteDocument(document: unknown): asserts document is SiteDocument {
     assert(isRecord(document), 'site.yaml must be an object.')
+    assertNoUnexpectedKeys(document, ['schemaVersion', 'site'], 'site.yaml')
+    assertSchemaVersion(document.schemaVersion, 'site.yaml.schemaVersion')
     assert(isRecord(document.site), 'site.yaml.site must be an object.')
     const site = document.site
     assertNonBlankString(site.title, 'site.yaml.site.title')
@@ -250,6 +257,8 @@ export class ContentValidator {
 
   public validatePresentationIndexDocument(document: unknown): asserts document is PresentationIndexDocument {
     assert(isRecord(document), 'presentations/index.yaml must be an object.')
+    assertNoUnexpectedKeys(document, ['schemaVersion', 'presentations'], 'presentations/index.yaml')
+    assertSchemaVersion(document.schemaVersion, 'presentations/index.yaml.schemaVersion')
     assert(Array.isArray(document.presentations), 'presentations/index.yaml.presentations must be an array.')
     const ids = new Set<string>()
     const presentationPaths = new Set<string>()
@@ -282,6 +291,8 @@ export class ContentValidator {
 
   public validatePresentationDocument(document: unknown): asserts document is PresentationDocument {
     assert(isRecord(document), 'presentation document must be an object.')
+    assertNoUnexpectedKeys(document, ['schemaVersion', 'presentation'], 'presentation document')
+    assertSchemaVersion(document.schemaVersion, 'presentation document.schemaVersion')
     assert(isRecord(document.presentation), 'presentation document.presentation must be an object.')
     const presentation = document.presentation
     assertNoUnexpectedKeys(presentation, ['id', 'year', 'title', 'subtitle', 'slides'], 'presentation document.presentation')
@@ -295,6 +306,8 @@ export class ContentValidator {
 
   public validateGeneratedDocument(document: unknown): asserts document is GeneratedDocument {
     assert(isRecord(document), 'generated document must be an object.')
+    assertNoUnexpectedKeys(document, ['schemaVersion', 'generated'], 'generated document')
+    assertSchemaVersion(document.schemaVersion, 'generated document.schemaVersion')
     assert(isRecord(document.generated), 'generated document.generated must be an object.')
     const generated = document.generated
     assertNonBlankString(generated.id, 'generated document.generated.id')

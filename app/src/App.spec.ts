@@ -119,6 +119,7 @@ describe('App', () => {
     contentRepository.replaceFiles({
       ...rawContentFiles,
       [sitePath as string]: `
+schemaVersion: 1
 site:
   title: Updated Demo
   home_intro: Updated intro

@@ -17,6 +17,12 @@ Validates:
 On success, prints `Content is valid`. On failure, prints the specific error and exits with code 1. For example:
 
 ```
+site.yaml.schemaVersion must be 1. This Slide Spec release does not support schema version 2.
+```
+
+or:
+
+```
 site.yaml.site.title must not be blank.
 ```
 

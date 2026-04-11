@@ -440,10 +440,12 @@ describe('TdCliApplicationService', () => {
       ],
     })
 
+    expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('schemaVersion:')
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://github.com/example/project')
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://example.com/docs')
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://example.com')
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('data_sources:')
+    expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('schemaVersion:')
     expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('template: hero')
     expect(generatedDataStore.writes).toHaveLength(1)
     expect(presentationIndexStore.writes).toHaveLength(1)

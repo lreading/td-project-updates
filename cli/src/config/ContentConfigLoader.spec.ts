@@ -39,20 +39,53 @@ describe('ContentConfigLoader', () => {
     const paths = new FileSystemPaths('/workspace/project')
     const loader = new ContentConfigLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/site.yaml': `
+schemaVersion: 1
 site:
+  title: Demo
+  home_intro: Intro
+  home_cta_label: Start
+  presentations_cta_label: Browse
   data_sources:
     - type: github
       url: https://github.com/OWASP/threat-dragon
+  links:
+    repository:
+      label: Repo
+      url: https://github.com/OWASP/threat-dragon
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    community:
+      label: Community
+      url: https://example.com/community
 `,
     })))
 
     await expect(loader.loadSiteConfig(paths)).resolves.toEqual({
+      title: 'Demo',
+      home_intro: 'Intro',
+      home_cta_label: 'Start',
+      presentations_cta_label: 'Browse',
       data_sources: [
         {
           type: 'github',
           url: 'https://github.com/OWASP/threat-dragon',
         },
       ],
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://github.com/OWASP/threat-dragon',
+        },
+        docs: {
+          label: 'Docs',
+          url: 'https://example.com/docs',
+        },
+        community: {
+          label: 'Community',
+          url: 'https://example.com/community',
+        },
+      },
     })
   })
 
@@ -63,7 +96,7 @@ site:
     })))
 
     await expect(loader.loadSiteConfig(paths)).rejects.toThrow(
-      'content/site.yaml must contain a top-level site object.',
+      'site.yaml.title is not allowed.',
     )
   })
 })

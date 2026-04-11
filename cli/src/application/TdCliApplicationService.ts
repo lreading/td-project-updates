@@ -150,7 +150,7 @@ export class TdCliApplicationService implements TdCliService {
     })
 
     await this.yamlWriter.writeDocument(presentationPath, presentationDocument)
-      await this.generatedDataStore.writeGeneratedData(paths, { id: input.presentationId }, generatedDocument)
+    await this.generatedDataStore.writeGeneratedData(paths, { id: input.presentationId }, generatedDocument)
     createdPaths.push(presentationPath, generatedPath)
 
     if (!existingPresentation) {

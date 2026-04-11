@@ -1,3 +1,4 @@
+schemaVersion: 1
 presentations:
   - id: readme-demo
     presentation_path: presentations/readme-demo/presentation.yaml

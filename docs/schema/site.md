@@ -5,6 +5,7 @@ Global branding, navigation labels, footer links, and page copy.
 ## Minimal example
 
 ```yaml
+schemaVersion: 1
 site:
   title: My Project Updates
   home_intro: Team updates published from YAML.
@@ -30,6 +31,7 @@ For a complete example, see the [reference site.yaml](https://github.com/lreadin
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
+| `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |
 | `site.title` | yes | string | Site title for the app shell and document title |
 | `site.home_intro` | yes | string | Home page intro paragraph |
 | `site.home_cta_label` | yes | string | Primary home page button label |

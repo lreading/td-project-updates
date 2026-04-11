@@ -1,3 +1,4 @@
+import { SLIDE_SPEC_SCHEMA_VERSION } from '../../../shared/src/content'
 import { YamlReader } from '../io/YamlReader'
 import { YamlWriter } from '../io/YamlWriter'
 
@@ -49,6 +50,7 @@ export class GeneratedDataStore {
   ): Promise<string> {
     const generatedPath = paths.resolveGeneratedPath(entry)
     await this.yamlWriter.writeDocument(generatedPath, {
+      schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       generated,
     })
     return generatedPath

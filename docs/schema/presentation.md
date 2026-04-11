@@ -10,6 +10,7 @@ Each slide owns its own `content` block. If two slides need the same copy or lab
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
+| `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |
 | `presentation.id` | yes | string | Presentation identifier used by the catalog entry |
 | `presentation.title` | yes | string | Deck title |
 | `presentation.subtitle` | yes | string | Deck subtitle |

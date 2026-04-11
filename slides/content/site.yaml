@@ -1,3 +1,4 @@
+schemaVersion: 1
 site:
   title: Slide Spec
   deployment_url: https://www.slide-spec.dev
