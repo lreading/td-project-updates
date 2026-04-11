@@ -110,11 +110,15 @@ Before handoff, run every local command needed to give high confidence that the 
 - Do not blindly agree with a weak technical direction. Push back with concrete reasoning, then follow the human's final decision.
 - Understand the relevant architecture before editing. Read code and nearby docs first.
 - Prefer existing repo scripts and conventions over inventing one-off workflows.
-- Use multiple agents when the task splits cleanly into parallel, non-overlapping work.
+- Prefer one task per clean git worktree. Treat the active worktree as the edit boundary unless the human explicitly asks otherwise.
+- Keep context narrow and tool-driven: use targeted search and file reads instead of asking the human to paste large repo context.
+- Keep routine outputs concise. Report changed files, checks run, and unresolved risks; do not repeat unchanged code or full file contents unless asked.
 - Choose model size and reasoning effort deliberately:
   - high-effort, stronger models for documentation, architecture, release policy, and broad synthesis
   - medium effort for most implementation work
   - smaller or lower-effort agents for bounded side tasks to control token and inference cost
+- Do not assume model routing happens automatically in the main session. If the selected model or effort is insufficient, say so and ask to switch, or use a scoped subagent only when the task splits cleanly. Inversely, if the selected model or effort is clearly overkill, please stop and ask for permission to continue.
+- Do not use fast mode or other more expensive models unless explicitly instructed
 - Ask before using an especially expensive high-end model for unusually complex work.
 
 ## Done criteria
