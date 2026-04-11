@@ -85,6 +85,17 @@ In most cases it is cleaner to set `site.deployment_url` in `content/site.yaml` 
 
 The build output includes static entry points for the presentations index and each published presentation, for example `dist/presentations/index.html` and `dist/presentations/2026-launch/index.html`. Those files let deep links and hard refreshes work on static hosts without switching the app to hash-based routing.
 
+The build output also includes a root-level `dist/404.html` for Cloudflare Pages' not-found handling. If you deploy the same output through Wrangler as Workers Static Assets instead of a Pages project, set `assets.not_found_handling` to `404-page` in `wrangler.jsonc`:
+
+```jsonc
+{
+  "assets": {
+    "directory": "dist",
+    "not_found_handling": "404-page"
+  }
+}
+```
+
 ---
 
 ## Step 3: Make sure the repo already contains generated content
@@ -190,6 +201,6 @@ That gives you a simple deployment model without giving up CI.
 | Site deploys but content is wrong | Run `npx @slide-spec/cli validate` locally and verify the committed YAML, especially `generated.yaml`. |
 | Sitemap is missing | Set `site.deployment_url` in `content/site.yaml`, or pass `--deployment-url` in the build command. |
 | Direct links under `/presentations` return 404 | Confirm the uploaded `dist` directory includes `presentations/index.html` and `presentations/<id>/index.html` for each published deck. |
-| Unmatched routes show the default host 404 page | Confirm the uploaded `dist` directory includes `404.html`. |
+| Unmatched routes show the default host 404 page | Confirm the uploaded `dist` directory includes `404.html`. For Workers Static Assets deployments, also set `assets.not_found_handling` to `404-page` in `wrangler.jsonc`. |
 | Project is in a subdirectory and Pages cannot find it | Set the Pages root directory to that subdirectory, such as `slides`. |
 | You need fresh GitHub data on every deploy | That is the case where a GitHub Action or another external fetch pipeline may be worth adding. |
