@@ -104,3 +104,9 @@ updates:
           - "*"
         update-types:
           - minor
+      github-actions-major:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - major
